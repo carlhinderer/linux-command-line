@@ -1,0 +1,18 @@
+Simple Commands
+
+# Date and Time
+date
+cal
+
+# Free Disk Space
+df
+
+# Free Memory
+free
+
+# Virtual Terminals
+  # To enter
+  Cntl+Alt+F1-F6
+
+  #To go back to XServer Console
+  Cntl+Alt+F7
