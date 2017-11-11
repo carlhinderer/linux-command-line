@@ -1,0 +1,26 @@
+# File System Commands
+pwd
+cd
+ls
+
+# In Windows, each storage device has its own file system tree
+# In Linux, there is a single tree, and separate storage devices can be mounted at any point in it.
+
+# /usr/bin = Place where most programs are installed
+
+# Absolute pathnames are defined from the root of the file tree
+
+# Relative pathnames are defined from the current working directory
+    . refers to current directory
+    .. refers to parent directory
+
+# cd Shortcuts
+cd    # Changes to your home directory
+cd -  # Changes to previous directory
+cd ~username    # Changes to home directory of different user
+
+# Filenames that begin with . are hidden
+
+# Linux has no concept of file extensions.  Many applications do, however.
+
+# Only use periods, dashes, and underscores in filenames. Other special characters cause problems.
