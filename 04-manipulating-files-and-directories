@@ -1,0 +1,138 @@
+# More file commands
+cp      # Copy files and directories
+mv      # Move/rename files and directories
+mkdir   # Create directory
+rm      # Remove files and directories
+ln      # Create hard and symbolic links
+
+# Wildcards
+*           # Matches any characters
+?           # Matches any single characters
+[chars]     # Matches any character in the set chars
+[!chars]    # Matches any character not in the set chars
+[[:class]]  # Matches any character in the class
+
+# Wildcard Classes
+[:alnum]
+[:alpha]
+[:digit]
+[:lower]
+[:upper]
+** Note: You can also use the standard classes like [a-z] and [A-Z], but you're better off
+**         not using them, because they may not be configured correctly.
+
+# Wildcard Examples
+*           # All files
+g*          # Any file beginning with 'g'
+b*.txt      # Any file beginning with 'b' and ending with '.txt'
+Data???     # 'Data' followed by any 3 characters
+[abc]*      # Any file beginning with 'a', 'b', or 'c'
+
+BACKUP.[0-9][0-9][0-9]      # Any file with 'BACKUP' followed by 3 numbers
+[[:upper]]*                 # Any file beginning with an uppercase letter
+[![:digit]]*                # Any file beginning with a numeral
+*[[:lower:]123]             # Any file ending with either a lowercase letter, or 1, 2, or 3
+
+
+# mkdir Example
+mkdir dir1 dir2 dir3
+
+
+# cp Command Flags
+-a, --archive               # Copies files and directories, and all their attributes, including
+                            #   ownerships and permissions.  Without this flag, copies take on 
+                            #   the default attributes of the user performing the copy.
+
+-i, --interactive           # Prompts the user for confirmation before overwriting an existing
+                            #   file.  If not set, just silently overwrites.
+
+-r, --recursive             # Recursively copies directories and their contents.  Either this
+                            #   flag or -a is required when copying directories.
+
+-u, --update                # Only copy files that are not included, or are newer than, files
+                            #   in the existing directory.
+
+-v, --verbose               # Display informative messages as the copy is performed.
+
+
+# cp Examples
+cp file1 file2              # Copy file1 into file2.  If file2 exists, it is overwritten.  If it
+                            #   doesn't exist, it is created.
+
+cp -i file1 file2           # Same, but prompts before overwriting file2.
+
+cp file1 file2 dir1         # Copies file1 and file2 into dir1.  dir1 must already exist.
+
+cp dir1/* dir2              # Copies all files from dir1 into dir2.  dir2 must already exist.
+
+cp -r dir1 dir2             # Copies all contents from dir1 into dir2.  If dir2 doesn't already
+                            #   exist, it will be created.
+
+
+# mv Command Flags
+-i
+-u
+-v
+
+
+# mv Examples
+mv file1 file2              # Move file1 to file2.  If file2 exists, it is overwritten.  If file2
+                            #   does not exist, it is created.  Either way, file1 no longer exists.
+
+mv -i file1 file2           # Prompts before overwriting.
+
+mv file1 file2 dir1         # Moves file1 and file2 into dir1.  dir1 must exist.
+
+mv dir1 dir2                # If dir2 doesn't exist, it is created.  If dir2 does exist, dir1 and
+                            #   its contents are moved into dir2.
+
+
+# rm Command Flags
+-i
+-r
+-v
+-f, --force                 # Ignores nonexistent files.
+
+
+# rm Command Examples
+rm file1                    # Delete file1 silently.
+rm -i file1                 # Delete file1 with prompt.
+
+rm -r file1 dir1            # Delete file1 and dir1 and its contents.
+rm -rf file1 dir1           # Same, but stay silent even if file1 or dir1 doesn't exist.
+
+
+# ln Command
+ln file1 link1              # Create a hard link
+ln -s file1 link1           # Create a symbolic(soft) link
+
+
+# Hard links are the original Unix links.  Every file has a single hard link that gives
+#   the file its name.  Adding a hard link makes an additional directory entry for a file.
+#        1. Hard links cannot refer to files outside of their own file system.
+#        2. Hard links cannot reference a directory.
+#
+# If a hard link is deleted, the file still exists.  The space for the file will only be
+#   deallocated when all hard links to it are gone.
+
+
+# Symbolic links are the modern preferred way to create links.  They were created to overcome
+#   the limitations of hard links.  They create a special type of file that contains a text
+#   pointer to the referenced file or directory.  They are similar in concept to Windows
+#   shortcuts.
+#
+# If you write to the sym link, you write to the file itself.
+# If you delete a link, you only delete the link, not the file.
+# If the file is deleted before the link is, the link is marked 'broken'.
+
+
+# ls -l  and  ls -li
+# 
+# If you use 'ls -l', it will show you which directory entries are sym links.
+# lrwxrwxrwx  # It's a sym link if first character is 'l'
+#
+# You cannot use this to determine which are hard links though.  For that, you have to look at
+#   the entries' inodes.  The inode is the pointer to the chain of disk blocks where the
+#   file is stored.  You can use 'ls -li' to include the inode for each file.  You know two entries 
+#   point to the same file if they have the same inode.
+# 12353538 -rw-r--r-- 4 me me 1650 2016-01-10 16:33 fun    # inode is first column
