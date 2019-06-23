@@ -1,18 +1,52 @@
-Simple Commands
+-------------------------------------------------
+CHAPTER 1 - THE SHELL
+-------------------------------------------------
 
-# Date and Time
-date
-cal
+- Shells and Terminals
 
-# Free Disk Space
-df
+    - The shell is a program that takes keyboard commands and passes them to the operating 
+        system to carry out. 
 
-# Free Memory
-free
+    - Almost all Linux distributions supply a shell program from the GNU Project called
+        bash. The name “bash” is an acronym for “Bourne Again SHell”, a reference to the fact
+        bash is an enhanced replacement for sh, the original Unix shell program written by
+        Steve Bourne.
 
-# Virtual Terminals
-  # To enter
-  Cntl+Alt+F1-F6
+    - When using a graphical user interface (GUI), we need another program called a terminal
+        emulator to interact with the shell. GNOME uses gnome-terminal.
 
-  # To go back to XServer Console
-  Cntl+Alt+F7
+
+
+- Normally, we'll see a $ at the prompt when we log in.  If we see a #, it means we logged in
+    as root and have superuser privileges.
+
+
+
+- Simple Commands
+
+    # Get the current date and time
+    $ date
+
+    # Get the calendar for the current month
+    $ cal
+
+    # Free Disk Space
+    $ df
+
+    # Free Memory
+    $ free
+
+
+
+- Virtual Terminals
+
+    - Even if we have no terminal emulator running, several terminal sessions continue
+        to run behind the graphical desktop. 
+
+    - We can access these sessions, called virtual terminals or virtual consoles, by 
+        pressing Ctrl-Alt-F1 through Ctrl-Alt-F6 on most Linux distributions. When a 
+        session is accessed, it presents a login prompt into which we can enter our 
+        username and password. 
+
+    - To switch from one virtual console to another, press Alt-F1 through Alt-F6. On 
+        most system we can return to the graphical desktop by pressing Alt-F7.
