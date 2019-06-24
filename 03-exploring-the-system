@@ -1,99 +1,171 @@
-# More file commands
-file   # Determine file type
-less   # Print contents of the file
+-------------------------------------------------
+CHAPTER 3 - EXPLORING THE SYSTEM
+-------------------------------------------------
 
-# Advanced use of ls
-ls -l     # List files in long form
-ls -lt    # List files in long form, sorted by time
-ls -lt --reverse     # Sorted by time, in reverse order
+- Advanced use of ls
 
-# Shell commands
-   # Take the form
-   command -options arguments
+    # List files in long form
+    $ ls -l
 
-# ls -l Detail
--rw-r--r-- 1 root root 1186219 2007-04-03 11:05 kubuntu-leaflet.png
+    # List files in long form, sorted by time
+    $ ls -lt
 
-  # -rw-r--r--          1st bit is for file or directory
-                        2-4th bits are rwx for file's owner
-                        5-7th bits are rwx for group members
-                        8--10th bits are rwx for everyone else
-
-  # 1                   The file's number of hard links
-
-  # root                The username of the file's owner
-
-  # root                The name of the group that owns the file
-
-  # 1186219             The size of the file in bytes
-
-  # 2007-04-03 11:05    Date and time of last modification 
-
-  # ubuntu-leaflet.png  Filename
-
-
-# Important Linux Directories
-/               # The root directory
-/bin            # Binaries necessary for the system to boot and run
-
-/boot           # Contains the Linux kernel, the initial RAM image (with the drivers needed for booting),
-                #   and the boot loader
-/boot/vmlinuz   # The Linux kernel
-/boot/grub/menu.lst   # The boot loader configuration
-
-/dev            # Contains device nodes.  "Everything is a file" also applies to devices.  This is where
-                #   the kernel maintains a list of all the devices it understands.
-
-/etc            # Contains all the system-wide configuration files.  Also contains the shell scripts that 
-                #   start all the system services at boot time.  
-/etc/crontab    # Defines when automated jobs will run
-/etc/fstab      # Table of storage devices and their associated mount points.
-/ect/passwd     # A list of the user accounts
-
-/home           # Each user is given a home directory.  Normal users can only write to files in their
-                #   home directory.
-
-/lib            # Contains shared library files used by the core system programs.
-
-/lost+found     # Used in case of a file system corruption event.  Will normally be empty.
-
-/media          # On modern systems, this contains the mount points for removable media, such
-                #   as USB drives and CR-ROMS, that are mounted automatically.
-
-/mnt            # On older systems, this contains the mount points that were mounted manually.
-
-/opt            # Used to install optional software, like commercial products you may install.
-
-/proc           # Virtual file system maintained by the Linux kernel.  The 'files' it contains are 
-                #   peepholes into the kernel itself.
-
-/root           # This is the home directory for the root account.
-
-/sbin           # Contains system binaries.  These are vital system tasks reserved for the superuser.
-
-/tmp            # Used for storing temporary, transient files created by various programs.
-
-/usr            # Contains all the programs and support files used by regular users.
-/usr/bin        # Contains the executable programs installed by your Linux distribution.
-/usr/lib        # The shared libraries for programs in usr/bin
-/usr/local      # Programs not included with your distro, but are intended for system-wide use.  Will
-                #   be empty on a newly installed system.
-/usr/sbin       # Contains more system administration programs.
-/usr/share      # Contains all the shared data used by programs in /usr/bin.  These are things like
-                #   default config files, icons, screen backgrounds, sound files, etc.
-/usr/share/doc  # Documentation for packages installed on system.
-
-/var            # This is where data that is likely to change is stored, like databases, spool files, 
-                    and user mail is stored.
-/var/log        # Log files
+    # Sorted by time, in reverse order
+    ls -lt --reverse
 
 
 
-# Symbolic Links
-# When we see something like this in a directory:
-lrwxrwxrwx 1 root root 11 2007-08-11 07:34 libc.so.6 -> libc-2.6.so
+- Options and arguments
 
-# The 'l' at the beginning means it is a symbolic link (aka a 'soft link' or 'sym link').
-# They allow us to do things like update a library without having to find everywhere the library is
-#   used and update them all.  We can just create a sym link to the new library.
+   # Shell commands take the form
+   $ command -options arguments
 
+   # List all files with long form in reversed order
+   $ ls -lt --reverse
+
+
+
+-  ls -l Detail
+
+    -rw-r--r-- 1 root root 1186219 2007-04-03 11:05 kubuntu-leaflet.png
+
+     # -rw-r--r--          1st bit is for file or directory
+                           2-4th bits are rwx for file's owner
+                           5-7th bits are rwx for group members
+                           8--10th bits are rwx for everyone else
+
+    # 1                   The file's number of hard links
+
+    # root                The username of the file's owner
+
+    # root                The name of the group that owns the file
+
+    # 1186219             The size of the file in bytes
+
+    # 2007-04-03 11:05    Date and time of last modification 
+
+    # ubuntu-leaflet.png  Filename
+
+
+
+- Important Linux Directories
+
+    /               # The root directory
+
+    /bin            # Binaries necessary for the system to boot and run
+    
+    /boot           # Contains the Linux kernel, the initial RAM image (with the drivers needed for booting),
+                    #   and the boot loader
+
+    /boot/vmlinuz         # The Linux kernel
+
+    /boot/grub/menu.lst   # The boot loader configuration
+    
+    /dev            # Contains device nodes.  "Everything is a file" also applies to devices.  This is where
+                    #   the kernel maintains a list of all the devices it understands.
+    
+    /etc            # Contains all the system-wide configuration files.  Also contains the shell scripts that
+                    #   start all the system services at boot time.  
+
+    /etc/crontab    # Defines when automated jobs will run
+
+    /etc/fstab      # Table of storage devices and their associated mount points.
+
+    /ect/passwd     # A list of the user accounts
+    
+    /home           # Each user is given a home directory.  Normal users can only write to files in their
+                    #   home directory.
+    
+    /lib            # Contains shared library files used by the core system programs.
+    
+    /lost+found     # Used in case of a file system corruption event.  Will normally be empty.
+    
+    /media          # On modern systems, this contains the mount points for removable media, such
+                    #   as USB drives and CR-ROMS, that are mounted automatically.
+    
+    /mnt            # On older systems, this contains the mount points that were mounted manually.
+    
+    /opt            # Used to install optional software, like commercial products you may install.
+    
+    /proc           # Virtual file system maintained by the Linux kernel.  The 'files' it contains are 
+                    #   peepholes into the kernel itself.
+    
+    /root           # This is the home directory for the root account.
+    
+    /sbin           # Contains system binaries.  These are vital system tasks reserved for the superuser.
+    
+    /tmp            # Used for storing temporary, transient files created by various programs.
+    
+    /usr            # Contains all the programs and support files used by regular users.
+
+    /usr/bin        # Contains the executable programs installed by your Linux distribution.
+
+    /usr/lib        # The shared libraries for programs in usr/bin
+
+    /usr/local      # Programs not included with your distro, but are intended for system-wide use.  Will
+                    #   be empty on a newly installed system.
+
+    /usr/sbin       # Contains more system administration programs.
+
+    /usr/share      # Contains all the shared data used by programs in /usr/bin.  These are things like
+                    #   default config files, icons, screen backgrounds, sound files, etc.
+
+    /usr/share/doc  # Documentation for packages installed on system.
+    
+    /var            # This is where data that is likely to change is stored, like databases, spool files, 
+                        and user mail is stored.
+
+    /var/log        # Log files
+
+
+
+- Determining a File's Type with 'file'
+
+    # Get the type of a file
+    $ file filename
+
+    # JPEG type
+    $ file picture.jpg
+
+    picture.jpg: JPEG image data, JFIF standard 1.01
+
+
+
+- Viewing File Contents with 'less'
+
+    The 'less' program is used to view text files (one-to-one mappings of characters to integers).
+
+    # View file
+    $ less /etc/passwd
+
+
+    less Commands
+
+    Command             Action
+    -------------------------------------
+    Page Up or b        Scroll back one page
+    Page Down or space  Scroll forward one page
+    Up arrow            Scroll up one line
+    Down arrow          Scroll down one line
+    G                   Move to the end of the text file
+    1G or g             Move to the beginning of the text file
+    /characters         Search forward to the next occurrence of characters
+    n                   Search for the next occurrence of the previous search
+    h                   Display help screen
+    q                   Quit less
+
+
+
+- Symbolic Links
+
+    When we see something like this in a directory:
+
+    lrwxrwxrwx 1 root root 11 2007-08-11 07:34 libc.so.6 -> libc-2.6.so
+
+    The 'l' at the beginning means it is a symbolic link (aka a 'soft link' or 'sym link'). They allow
+      us to do things like update a library without having to find everywhere the library is
+      used and update them all.  We can just create a sym link to the new library.
+
+    For instance, it's a good idea to have a file name 'foo-2.6' when we are using version 2.6.  When
+      we install 'foo-2.7', we won't want to update every place that refers to 'foo', so we just 
+      create a sym link 'foo' that points to 'foo-2.6'.
