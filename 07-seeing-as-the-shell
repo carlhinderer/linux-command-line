@@ -27,7 +27,7 @@ CHAPTER 7 - SEEING THE WORLD AS THE SHELL SEES IT
 
 - Pathname Expansion
 
-    - The mechanism by which wildcards work is called 'pathname expansion'.  
+    The mechanism by which wildcards work is called 'pathname expansion'.  
 
 
       $ ls
@@ -54,9 +54,9 @@ CHAPTER 7 - SEEING THE WORLD AS THE SHELL SEES IT
 
 - Tilde Expansion
 
-    - When the tilde character is used as the beginning of a word, it expands into the name of the
-        home directory of the named user (or the home directory of the current user is no user is
-        specified).
+    When the tilde character is used as the beginning of a word, it expands into the name of the
+      home directory of the named user (or the home directory of the current user is no user is
+      specified).
 
 
       # Home directory of current user
@@ -72,8 +72,8 @@ CHAPTER 7 - SEEING THE WORLD AS THE SHELL SEES IT
 
 - Arithmetic Expansion
 
-    - The shell allows arithmetic to be performed by expansion.  This allows us to use the shell prompt
-        as a calculator.
+    The shell allows arithmetic to be performed by expansion.  This allows us to use the shell prompt
+      as a calculator.
 
 
       # Arithmetic expansion uses the following form
@@ -98,7 +98,7 @@ CHAPTER 7 - SEEING THE WORLD AS THE SHELL SEES IT
 
 - Brace Expansion
 
-    - With brace expansion, we can create multiple text strings from a pattern.
+    With brace expansion, we can create multiple text strings from a pattern.
 
 
     # Create 3 different strings
@@ -140,3 +140,88 @@ CHAPTER 7 - SEEING THE WORLD AS THE SHELL SEES IT
 
     # See list of all environment variables
     printenv | less
+
+
+
+- Command Substitution
+
+    Command substitution allows us to use the output of a command as an expansion.
+
+
+    # Print the result of the ls command
+    $ echo $(ls)
+
+
+    # Pass results of 'which' command to 'ls'
+    $ ls -l $(which cp)
+
+
+    # Entire pipelines can be used in command substitutions
+    $ file $(ls -d /usr/bin/* | grep zip)
+
+
+    # In older bash programs, backticks may be used for command substitution instead
+    $ ls -l `which cp`
+
+
+
+- Quoting
+
+    Now that we know how to use expansion, we can look at controlling it.  Here are examples where
+      expansion goes wrong:
+
+
+    # Extra whitespace is removed
+    $ echo this is a          test
+
+    this is a test
+
+
+    # The $1 is an undefined variable
+    $ echo The total is $100.00
+
+    The total is 00.00
+
+
+
+- Double Quotes
+
+    If we place text inside of double quotes, all special characters used by the shell lose their
+      special meaning and are treated as ordinary characters (except for $, \, and `).  
+
+    This means that word-splitting, pathname expansion, tilde expansion, and brace expansion are
+      suppressed.  However, parameter expansion, arithmetic expansion, and command substitution are 
+      still carried out.
+
+
+    # Keep formatting in strings
+    $ echo "this is a       test"
+
+
+    # Handle spaces in filenames
+    $ ls -l "two words.txt"
+
+
+
+- Single Quotes
+
+    If we need to suppress all expansions, we use single quotes.
+
+
+    # Suppress all expansions
+    $ echo 'text ~/*.txt {a,b} $(echo foo) $((2+2)) $USER'
+
+    text ~/*.txt {a,b} $(echo foo) $((2+2)) $USER
+
+
+
+- Escaping Characters
+
+    Sometimes, we want to quote only a single character.  To do this, we can precede a character with
+      a backslash.  Often this is done inside double quotes to selectively prevent an expansion.
+
+
+    # Escape a single character
+    $ echo "The balance for user $USER is: \$5.00"
+
+    The balance for user me is: $5.00
