@@ -71,7 +71,7 @@ CHAPTER 3 - EXPLORING THE SYSTEM
 
     /etc/fstab      # Table of storage devices and their associated mount points.
 
-    /ect/passwd     # A list of the user accounts
+    /etc/passwd     # A list of the user accounts
     
     /home           # Each user is given a home directory.  Normal users can only write to files in their
                     #   home directory.
