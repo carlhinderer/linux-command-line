@@ -151,3 +151,103 @@ CHAPTER 6 - REDIRECTION
 
 
       We can see that this is the same as passing a single filename argument.
+
+
+
+- Pipelines
+
+    - The capability of commands to read data from stdin and send to stdout is utilized by a shell 
+        feature called 'pipelines'.  Using the pipe operator '|', the stdout of one command can
+        be piped into the stdin of another command.
+
+
+      # Pipe one command's output to another's input
+      $ command1 | command2
+
+      # Example
+      $ ls -l /usr/bin | less
+
+
+
+- Filters
+
+    - Pipelines are often used to perform complex operations on data.  Frequently, commands used this
+        way are referred to as 'filters'.
+
+      $ command1 | command2
+
+
+
+- The 'sort' Command
+
+      # The 'sort' command will take the listing from both directories and sort into a single list
+      $ ls /bin /usr/bin | sort | less
+
+
+
+- The 'uniq' Command
+
+      # The 'uniq' command accepts a sorted list and removes any duplicates from the list
+      $ ls /bin /usr/bin | sort | uniq | less
+
+
+      # If we want to see the list of duplicates instead of removing them, use 'uniq -d'
+      $ ls /bin /usr/bin | sort | uniq -d | less
+
+
+
+- The 'wc' Command
+
+      # The 'wc' command displays the number of lines, words, and bytes contained in files
+      $ wc ls-output.txt
+
+
+      # The 'wc -l' command counts lines instead of words
+      $ ls /bin /usr/bin | sort | uniq | wc -l
+
+
+
+- The 'grep' Command
+
+      # The 'grep' command is used to find text patterns within files
+      $ grep pattern [file...]
+
+      # Get the items from our list that contain the string 'zip'
+      $ ls /bin /usr/bin | sort | uniq | grep zip
+
+
+      grep options
+      ----------------
+      -i      Ignore Case
+      -v      Only print lines that don't match the pattern
+
+
+
+- The 'head' and 'tail' Commands
+
+      # Display the first 5 lines of a file
+      $ head -n 5 ls-output.txt
+
+
+      # Display the last 5 lines of a file
+      $ tail -n 5 ls-output.txt
+
+
+    The 'tail' command has an option that allows us to view files in real time.  This is useful for
+      watching the progress of log files as they are being written.  
+
+      # View file in real time
+      $ tail -f /var/log/messages
+
+
+
+- The 'tee' Command
+
+    In keeping with the plumbing metaphors, Linux provides a command called 'tee' which creates a tee
+      fitting on our pipe.  The 'tee' program reads stdin and copies it to both stdout (allowing data
+      to continue down the pipeline) and to one or more files.  This is useful for capturing a pipeline's
+      contents at an intermediate stage of processing.
+
+
+      # Save to file before running grep
+      $ ls /usr/bin | tee ls.txt | grep zip
