@@ -1,0 +1,69 @@
+----------------------------------------------------
+CHAPTER 7 - SEEING THE WORLD AS THE SHELL SEES IT
+----------------------------------------------------
+
+- Expansion
+
+    - Each time we type a command and press the 'Enter' key, bash performs several substitutions upon
+        the text before it carries out our command.  This process is called 'expansion'.
+
+
+    - To demonstrate how this works, we look at the 'echo' command.  'echo' is a shell built-in that 
+        just prints its text arguments on stdout.
+
+
+      # Print 'this is a test'
+      $ echo this is a test
+
+
+      # Print the files in the directory
+      $ echo *
+
+
+      The shell expands the '*' into the list of files in the directory before the 'echo' command is
+        executed.
+
+
+
+- Pathname Expansion
+
+    - The mechanism by which wildcards work is called 'pathname expansion'.  
+
+
+      $ ls
+      Desktop    ls-output.txt  Pictures  Templates
+      Documents  Music          Public    Videos
+
+
+      $ echo D*
+      Desktop Documents
+
+
+      $ echo *s
+      Documents Pictures Templates Videos
+
+
+      $ echo [[:upper:]]*
+      Desktop Documents Music Pictures Public Templates Videos
+
+
+      $ echo /usr/*/share
+      /usr/kerberos/share /usr/local/share
+
+
+
+- Tilde Expansion
+
+    - When the tilde character is used as the beginning of a word, it expands into the name of the
+        home directory of the named user (or the home directory of the current user is no user is
+        specified).
+
+
+      # Home directory of current user
+      $ echo ~
+      /home/me
+
+
+      # Home directory of another user
+      $ echo ~foo
+      /home/foo
