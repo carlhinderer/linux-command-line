@@ -67,3 +67,76 @@ CHAPTER 7 - SEEING THE WORLD AS THE SHELL SEES IT
       # Home directory of another user
       $ echo ~foo
       /home/foo
+
+
+
+- Arithmetic Expansion
+
+    - The shell allows arithmetic to be performed by expansion.  This allows us to use the shell prompt
+        as a calculator.
+
+
+      # Arithmetic expansion uses the following form
+      $ $((expression))
+
+
+      # Example
+      $ echo $((2 + 2))
+
+
+    - Arithmetic Operators
+
+        +  -  *  /  %  **
+
+
+      # More complex example
+      $ echo Five divided by two equals $((5/2)) with $((5%2)) left over.
+
+      Five divided by two equals 2 with 1 left over.
+
+
+
+- Brace Expansion
+
+    - With brace expansion, we can create multiple text strings from a pattern.
+
+
+    # Create 3 different strings
+    $ echo Front-{A, B, C}-Back
+    Front-A-Back  Front-B-Back  Front-C-Back
+
+
+    # Create 5 different strings
+    $ echo Number_{1..5}
+    Number_1 Number_2 Number_3 Number_4 Number_5
+
+
+    # Pad numbers with zeros
+    $ echo {01..15}
+    01 02 03 04 05 06 07 08 09 10 11 12 13 14 15
+
+
+    # Pad numbers with 2 zeros
+    $ echo {001..15}
+    001 002 003 004 005 006 007 008 009 010 011 012 013 014 015
+
+
+    # Letters in reverse order
+    $ echo {Z..A}
+    Z Y X W V U T S R Q P O N M L K J I H G F E D C B A
+
+
+    # Brace expansions can be nested
+    $ echo a{A{1,2},B{3,4}}
+    baA1b aA2b aB3b aB4b
+
+
+
+- Parameter Expansion
+
+    # Print the contents of an environment variable
+    $ echo $USER
+
+
+    # See list of all environment variables
+    printenv | less
