@@ -1,0 +1,153 @@
+-------------------------------------------------
+CHAPTER 6 - REDIRECTION
+-------------------------------------------------
+
+- Standard Input, Output, and Error
+
+    - Many of the programs we have used so far produce output of some kind.  The output often consists
+        of 2 types:
+
+        1. The program's results
+        2. Status and error messages
+
+
+    - If we look at a command like 'ls', we can see it displays its results and error messages to the 
+        screen.  Keeping with the Unix theme of 'everything is a file', ls actually sends its results
+        to a special file called 'standard output (stdout)' and its status messages to another file
+        called 'standard error (stderr)'.  By default, both standard output and standard error are
+        linked to the screen and not saved in a disk file.
+
+
+    - In addition, many programs take input from a facility called 'standard input (stdin)', which is
+        attached to the keyboard by default.
+
+
+    - IO Redirection allows us to change where output goes and where input comes from.  Normally, output
+        goes to the screen and input comes from the keyboard, but with IO redirection we can change that.
+
+
+
+- Redirecting Standard Output
+
+    - To redirect standard output to another file instead of the screen, we use the '>' redirection
+        operator.  
+
+      # Redirect stdout to a file
+      $ ls -l /usr/bin > ls-output.txt
+
+
+    - Now, we'll try running the command on a directory that doesn't exist:
+
+      # /bin/usr doesn't exist
+      $ ls -l /bin/usr > ls-output.txt
+
+      Here, we'll see that an error is printed to the screen, and out 'ls-output.txt' file now has
+        zero length.  This is because the '>' operator always rewrites the destination file from the
+        beginning.  
+
+
+    - We can even truncate a file or create a new empty file with the '>' operator.
+
+      # Truncate a file
+      $ > ls-output.txt
+
+
+    - If we want to append to an existing file instead of overwriting it, the '>>' redirection operator
+        is used.
+
+      # Append to the file instead
+      $ ls -l /usr/bin >> ls-output.txt
+
+
+
+- Redirecting Standard Error
+
+    - Redirecting stderr lacks the ease of a dedicated redirection operator.  To redirect stderr, we
+        must refer to its 'file descriptor'.  
+
+      A program can produce output on any of several numbered file streams.  The shell references the
+        stdin, stdout, and stderr streams internally as file descriptors, 0, 1, and 2. 
+
+
+      # Redirect stderr from this command
+      $ ls -l /bin/usr 2> ls-error.txt
+
+
+
+- Redirecting stdout and stderr to One File
+
+    - We can capture all of the output of a command to a single file.  To do this, we must redirect
+        stdout and stderr at the same time.  There are 2 ways to do this:
+
+
+      # First way (traditional)
+      $ ls -l /bin/usr > ls-output.txt 2>&1
+
+
+      # Second way (in more recent versions of bash)
+      $ ls -l /bin/usr &> ls-output.txt
+
+
+      # Second way, with appending instead of overwriting
+      $ ls -l /bin/usr &>> ls-output.txt
+
+
+
+- Disposing of Unwanted Output
+
+    - Sometimes, we just want to throw the output from a command away.  This applies particularly
+        to error and status messages.  We can do this by redirecting to a special file called '/dev/null'.
+        This file is often referred to as a 'bit bucket', which accepts input and does nothing with
+        it.  
+
+
+      # Suppress error messages from a command
+      $ ls -l /bin/usr 2> /dev/null
+
+
+
+- Redirecting stdin using 'cat'
+
+    - To demonstrate this, we introduce our first command that uses stdin.  The 'cat' command reads one
+        or more files and copies them to stdout.
+
+
+      # Print file to stdout
+      $ cat ls-output.txt
+
+
+    - Since 'cat' can accept more than one file as an argument, it can be used to join (concatenate)
+        files together.  
+
+      For instance, say we download a movie file that has been split into pieces, and we want to join
+        them back together.  If the files are named 'movie.mpeg.001' to 'movie.mpeg.099', we could 
+        join them together with:
+
+
+      # Join movie file back together
+      $ cat movie.mpeg.0* > movie.mpeg
+
+
+      Since wildcards always expand in sorted order, the arguments will be arranged in the correct 
+        order.
+
+
+    - Now, we can enter cat with no arguments:
+
+
+      # No arguments
+      $ cat
+
+
+      It appears to just hang, but that's what it's supposed to do.  It's waiting for stdin, which is
+        attached to the keyboard by default.  Anything we type will be echoed to the screen.
+
+
+    - Now that we know that cat accepts standard input and filenames, we can redirect stdin:
+
+
+      # Change stdin to 'lazy_dog.txt'
+      $ cat < lazy_dog.txt
+
+
+      We can see that this is the same as passing a single filename argument.
