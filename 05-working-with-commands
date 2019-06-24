@@ -1,124 +1,153 @@
-# Command commands
-type        # Indicate how a command name is interpreted
-which       # Display which executable program will be executed
-help        # Get help for shell built-ins
+-------------------------------------------------
+CHAPTER 5 - WORKING WITH COMMANDS
+-------------------------------------------------
 
-man         # Display a command's manual page
-apropos     # Display a list of appropriate commands
-info        # Display a command's info entry
-whatis      # Displays a very brief description of a command
+- What are commands?
 
-alias       # Create an alias for a command
-
-
-# What are commands?
-#
-#  1. An EXECUTABLE PROGRAM like the ones in /usr/bin.  They can either be compiled 
-#       binaries (such as programs written in C or C++) or programs written in 
-#       scripting languages (like shell, perl, python, ruby).
-#
-#  2. A BUILT-IN SHELL COMMAND.  bash has a bunch of internal commands (cd for example)
-#       called shell built-ins.
-#
-#  3. A SHELL FUNCTION, which is a minature shell script incorporated into the 
-#       environment.  
-#
-#  4. An ALIAS, which is a command we define ourselves, built from other commands.
-
-
-# The type command will tell you which of the 4 types an executable is.
-$ type type
-type is a shell builtin
-$ type ls
-ls is aliased to `ls --color=tty'
-$ type cp
-cp is /bin/cp
-
-
-# The which command displays the location of an executable program.
-# 
-$ which ls
-/bin/ls
-
-
-# The help command displays the help page for a shell built-in.
-#
-$ help cd
-cd: cd [-L|[-P [-e]]] [dir] 
-Change the shell working directory.
-...
-
-* Note: The square brackets indicate optional arguments.
-
-
-# Many executable programs support a “--help” option that displays a description of the
-#   command's supported syntax and options. 
-#
-$ mkdir --help
-Usage: mkdir [OPTION] DIRECTORY...
-Create the DIRECTORY(ies), if they do not already exist.
-...
-
-
-# Most executables meant for command-line use have a document called a manual or man page.
-#   Most systems display the man page using less, so the same less commands work to page
-#   through them.
-#
-$ man ls
-
-# The manual that man displays is broken down into sections:
-#   1. User commands
-#   2. Programming interfaces for kernel system calls
-#   3. Programming interfaces to the C library
-#   4. Special files such as device nodes and drivers
-#   5. File formats
-#   6. Games and amusements
-#   7. Miscellaneous
-#   8. System administration commands
-#
-# If there are multiple versions of a command, you must specify the section of the command
-#   you want to see.  If you don't specify the section, the first version of the command is
-#   displayed.
-$ man 5 passwd
-
-
-# The apropos command searches the system's man pages for a search term.
-$ apropos floppy
-
-
-# The whatis command displays a brief description of a command.
-$ whatis ls
-ls                   (1)  - list directory contents
-
-
-# Info pages are the GNU Project's alternative to man pages.  They are hyperlinked, similar
-#   to web pages.  The info command is used to display them.
-#
-$ info coreutils
-
-
-# Note that many packages installed on your system have README files located at /usr/share/doc
-#   also, if you need more information.
+   1. An EXECUTABLE PROGRAM like the ones in /usr/bin.  They can either be compiled 
+        binaries (such as programs written in C or C++) or programs written in 
+        scripting languages (like shell, perl, python, ruby).
+ 
+   2. A BUILT-IN SHELL COMMAND.  bash has a bunch of internal commands (cd for example)
+        called shell built-ins.
+ 
+   3. A SHELL FUNCTION, which is a minature shell script incorporated into the 
+        environment.  
+ 
+   4. An ALIAS, which is a command we define ourselves, built from other commands.
 
 
 
-# The alias command is used to define your own commands.
-#
-$ alias foo='cd /usr; ls; cd -'
+- The 'type' Command
 
-$ foo
-bin  games    kerberos  lib64    local  share  tmp
-etc  include  lib       libexec  sbin   src
-/home/me
+    The 'type' command will tell you which of the 4 types an executable is.
 
-$ type foo
-foo is aliased to `cd /usr; ls; cd -'
+      $ type type
+      type is a shell builtin
 
-$ unalias foo
+      $ type ls
+      ls is aliased to `ls --color=tty'
 
-$ foo
-bash: type: foo: not found
+      $ type cp
+      cp is /bin/cp
 
-$ alias
-# Displays all defined aliases
 
+
+- The 'which' Command
+
+    The 'which' command displays the location of an executable program.  This is particulary helpful
+      when more than one version of an executable is installed.
+ 
+    $ which ls
+    /bin/ls
+
+
+
+- The 'help' Command
+
+    The help command displays the help page for a shell built-in.
+
+    $ help cd
+
+    cd: cd [-L|[-P [-e]]] [dir] 
+    Change the shell working directory.
+    ...
+
+
+    Many executable programs support a “--help” option that displays a description of the command's
+      supported syntax and options. 
+
+    $ mkdir --help
+
+    Usage: mkdir [OPTION] DIRECTORY...
+    Create the DIRECTORY(ies), if they do not already exist.
+    ...
+
+
+
+- The 'man' Command
+
+    Most executables meant for command-line use have a document called a manual or man page. Most 
+      systems display the man page using less, so the same less commands work to page through them.
+
+    $ man ls
+
+
+    The manual that man displays is broken down into sections:
+      1. User commands
+      2. Programming interfaces for kernel system calls
+      3. Programming interfaces to the C library
+      4. Special files such as device nodes and drivers
+      5. File formats
+      6. Games and amusements
+      7. Miscellaneous
+      8. System administration commands
+
+
+    # Get section 5 of the 'passwd' man page
+    $ man 5 passwd
+
+
+
+- The 'apropos' Command
+
+    The apropos command searches the system's man pages for a search term.
+
+    # Search system man pages for the term 'floppy'
+    $ apropos floppy
+
+
+
+- The 'whatis' Command
+
+    The whatis command displays a brief description of a command.
+
+    # Get brief description of the 'whatis' command
+    $ whatis ls
+
+    ls                   (1)  - list directory contents
+
+
+
+- The 'info' Command
+
+    Info pages are the GNU Project's alternative to man pages.  They are hyperlinked, similar
+      to web pages.  The info command is used to display them.
+
+
+    # Most the commands we've used so far are in GNU's 'coreutils' package
+    $ info coreutils
+
+
+
+-  Note that many packages installed on your system have README files located at /usr/share/doc
+     also, if you need more information.
+
+
+
+- The 'alias' Command
+
+    The alias command is used to define your own commands.
+
+    # Define the custom 'foo' command
+    $ alias foo='cd /usr; ls; cd -'
+
+
+    # Use the foo command
+    $ foo
+    bin  games    kerberos  lib64    local  share  tmp
+    etc  include  lib       libexec  sbin   src
+    /home/me
+
+
+    # Get the type of the foo command
+    $ type foo
+    foo is aliased to `cd /usr; ls; cd -'
+
+
+    # Remove the aliased command
+    $ unalias foo
+
+    
+    # Display all defined aliases
+    $ alias
