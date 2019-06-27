@@ -125,3 +125,102 @@ CHAPTER 9 - PERMISSIONS
 
         # Remove read and write permissions for anyone besides the owner and group owner
         $ chmod o-rw foo.txt
+
+
+
+- The 'umask' Command
+
+    - The 'umask' command controls the default permissions given to a file when it is created.  It
+        uses octal notation to express a 'mask' of bits to be removed from the file's mode attributes.
+
+        $ umask
+        0002
+
+        # Create file
+        $ > foo.txt
+
+        # Attributes of new file (world gets only read permission)
+        $ ls -l foo.txt
+        -rw-rw-r--
+
+        [Original File Mode    --- rw- rw- rw-]
+        [Mask                  000 000 000 010]
+        [Result                --- rw- rw- r--]
+
+
+        # Now, set the umask manually
+        $ umask 0000
+
+        # Create another file
+        $ > bar.txt
+
+        # Attributes of new file (world now gets write permission)
+        $ ls -l bar.txt
+        -rw-rw-rw-
+
+        [Original File Mode    --- rw- rw- rw-]
+        [Mask                  000 000 000 000]
+        [Result                --- rw- rw- rw-]
+
+
+    - Basically, everywhere 1 appears in the binary mask, an attribute was removed.  'umask 0022' is
+        also commonly used, which will set new files to '--- rw- r-- r--'.
+
+
+    - The first digit of the 4-digit number contains some special permissions.  
+
+        1. The 'setuid bit' (octal 4000)
+
+             - When applied to an executable file, it sets the 'effective user ID' from that of the
+                 real user to that of the program's owner.  This is given to a few programs owned
+                 by the superuser.
+
+             - When an ordinary user runs a program that is 'setuid root', the program runs with the
+                 effective privileges of the superuser.  This allows the program to access files and
+                 directories that an ordinary user would normally be prohibited from accessing.
+                 Because this raises security concerns, the number of 'setuid' programs must be held to
+                 an absolute minimum.
+
+
+        2. The 'setgid bit' (octal 2000)
+
+             - The 'setgid bit' changes the effective group ID from the real group ID to that of the file
+                 owner.  If the 'setgid' bit is set on a directory, newly created files in the directory
+                 will be given the group ownership of the directory rather than the group ownership
+                 of the file's creator.
+
+             - This is useful in a shared directory when members of a common group need access to all
+                 the files in a directory, regardless of the file owner's primary group.
+
+
+        3. The 'sticky bit' (octal 1000)
+
+             - This is a holdover from ancient Unix, where it was possible to mark an executable file as
+                 'not swappable'.  On files, Linux ignores the sticky bit, but if applied to a directory,
+                 it prevents users from deleting or renaming files unless the user is either the owner
+                 of the directory, the owner of the file, or the superuser.
+
+             - This is often used to control access to a shared directory, such as '/tmp'.
+
+
+        Examples:
+
+        # Assign a setuid to a program
+        $ chmod u+s program
+
+        $ ls -l program
+        -rwsr-xr-x
+
+
+        # Assign a setgid to a directory
+        $ chmod g+s dir
+
+        $ ls -l dir
+        drwxrwsr-x
+
+
+        # Assign the sticky bit to a directory
+        $ chmod +t dir
+
+        $ ls -l dir
+        drwxrwxrwt
