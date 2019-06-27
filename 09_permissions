@@ -315,3 +315,83 @@ CHAPTER 9 - PERMISSIONS
         to the 'root' account (by failing to set a password for the account) and instead uses 'sudo'
         to grant superuser privileges.  The initial user account is granted full access to superuser
         privileges via 'sudo' and may grant similar powers to subsequent user accounts.
+
+
+
+- The 'chown' Command
+
+    - The 'chown' command is used to change the owner and group owner of a file or directory.  Superuser
+        privileges are required for this command.  
+
+
+        # chown Syntax
+        chown [owner][:[group]] file...
+
+
+    - chown Argument Examples
+
+        Argument          Results
+        --------------------------------------------------------------------------------------
+        bob               Changes the ownership of the file from its current owner to user bob.
+
+        bob:users         Changes the ownership of the file from its current owner to user bob and 
+                            changes the file group owner to group users.
+
+        :admins           Changes the group owner to the group admins. The file owner is unchanged.
+
+        bob:              Changes the file owner from the current owner to user bob and changes the 
+                            group owner to the login group of user bob.
+
+
+    - chown Example
+
+        Let's say we have 2 users, 'janet' who has access to superuser privileges, and 'tony' who does
+          not.  janet wants to copy a file from her home directory to the home directory of user tony,
+          and wants tony to be able to edit the file.
+
+
+        # janet moves the file to tony's home directory
+        [janet@linuxbox ~]$ sudo cp myfile.txt ~tony
+        Password:
+
+
+        # Now, the file is owned by 'root' since janet used sudo
+        [janet@linuxbox ~]$ sudo ls -l ~tony/myfile.txt 
+        -rw-r--r-- 1 root  root  root 2018-03-20 14:30 /home/tony/myfile.txt
+
+
+        # janet changes the owner to tony so he can edit the file
+        [janet@linuxbox ~]$ sudo chown tony: ~tony/myfile.txt
+
+
+        # tony is now the owner
+        [janet@linuxbox ~]$ sudo ls -l ~tony/myfile.txt 
+        -rw-r--r-- 1 tony  tony  tony 2018-03-20 14:30 /home/tony/myfile.txt
+
+
+
+- The 'chgrp' Command
+
+    - In older versions of Unix, the 'chown' command was only used to change file ownership, not group
+        ownership.  The 'chgrp' command was used instead to change group ownership.
+
+
+
+- Changing Your Password
+
+    - To set or change a password, the 'passwd' command is used.
+
+        # passwd Syntax
+        passwd [user]
+
+
+      To change your password, you'll be prompted for your old password and new password.  
+
+
+    - The 'passwd' command will try to enforce use of 'strong' passwords.  This means it will refuse
+        to accept passwords that are too short, too similar to previous passwords, are dictionary words,
+        or are too easily guessed.
+
+
+    - If you have superuser privileges, you can specify a username as an argument to the 'passwd' command
+        to set the password for another user.
