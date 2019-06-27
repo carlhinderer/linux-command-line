@@ -1,0 +1,127 @@
+----------------------------------------------------
+CHAPTER 9 - PERMISSIONS
+----------------------------------------------------
+
+- Multi-User System
+
+    - Unix has a history of being a multi-user system, which means that more than one person can be using
+        the computer at the same time.  For example, if a computer is connected to a network, remote
+        users can log in via ssh and operate the computer.  
+
+    - In fact, remote users can even execute graphical applications and have the graphical output appear
+        on a remote display.  The XWindow system supports this as part of its basic design.  
+
+    - This is due to the environment in which Unix was created, where computers were large, expensive,
+        and centralized.  For instance, a typical university system consisted of a large central computer
+        located in one building and terminals that were located throughout the campus.
+
+    - To make this practical, a method had to be devised to protect the users from each other.
+
+
+
+- Owners, Group Members, and Everyone Else
+
+    - In the Unix security model, users may own files and directories.  When a user owns a file or
+        directory, the user has control over its access.  Users can, in turn, belong to a group consisting
+        of one or more users who are given access to files and directories by their owners.  
+
+    - In addition to granting access to a group, an owner may also grant some sort of access rights to 
+        everybody, which in Unix terms is referred to as 'the world'.
+
+
+    - To find out information about your identity, use the 'id' command:
+
+        # Get information about your user id and groups
+        $ id
+
+        uid=500(me) gid=500(me) groups=500(me)
+
+
+    - When user accounts are created, users are assigned a number (a 'uid'), which is then, for the sake
+        of humans, mapped to a username.  The user is assigned a primary group id (a 'gid') and may 
+        belong to additional groups.  
+
+
+    - User accounts are defined in the '/etc/passwd' file and groups are defined in the '/etc/group' file.
+        When user accounts and groups are created, these files are modified along with '/etc/shadow' which
+        holds information about the user's password.  
+
+      For each user account, '/etc/passwd' defines the username, uid, gid, account's real name, and login
+        shell.  
+
+
+
+- Reading, Writing, and Executing
+
+    - When we use 'ls -l', we see the line starts with 10 letters:
+
+        -rw-rw-r--
+
+      
+    - The first character is the file type.  It can be:
+
+        -    A regular file
+        d    A directory
+        l    A sym link
+        c    A character special file (handles data as a stream of bytes, like terminal or /dev/null)
+        b    A block special file (handles data in blocks, such as a hard drive or dvd drive)
+
+
+    - The next 9 characters are:
+
+        Owner rwx
+        Group rwx
+        World rwxl
+
+
+    - Note that 'x' allows files to be treated as a program and executed.  Program files written in
+        scripting languages must also be set as readable to be executed.
+
+
+
+- The 'chmod' Command
+
+    - The 'chmod' command is used to change the permissions of a file or directory.  'chmod' supports
+        2 distinct ways of specifying mode changes: octal representation or symbolic representation.
+
+
+    - File Modes in Octal
+
+        Octal    Binary    File Mode
+        --------------------------------
+        0        000       ---
+        1        001       --x
+        2        010       -w-
+        3        011       -wx
+        4        100       r--
+        5        101       r-x
+        6        110       rw-
+        7        111       rwx
+
+
+    - chmod Symbolic Notation
+
+        Symbol    Meaning
+        --------------------------------------------------------------------------
+        u         Short for “user” but means the file or directory owner.
+        g         Group owner.
+        o         Short for “others” but means world.
+        a         Short for “all.” This is the combination of “u”, “g”, and “o”.
+
+
+    - chmod Examples
+
+        # Add read permissions for owner and group
+        $ chmod 600 foo.txt
+
+        # Add execute permission for the owner
+        $ chmod u+x foo.txt
+
+        # Remove execute permission from the owner
+        $ chmod u-x foo.txt
+
+        # Add execute permissions for the owner, group, and world
+        $ chmod +x foo.txt
+
+        # Remove read and write permissions for anyone besides the owner and group owner
+        $ chmod o-rw foo.txt
