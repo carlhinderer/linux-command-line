@@ -224,3 +224,94 @@ CHAPTER 9 - PERMISSIONS
 
         $ ls -l dir
         drwxrwxrwt
+
+
+
+- Changing Identities
+
+    - At various times, we may find it necessary to take on the identity of another user.  Often, we want
+        to gain superuser privileges to carry out some administrative task.  It is also possible to 
+        'become' a regular user for things like testing an account.
+
+
+    - There are 3 ways to take on an alternate identity:
+
+        1. Log out and log back in as the alternate user
+        2. Use the 'su' commmand
+        3. Use the 'sudo' command
+
+
+    - The 'su' command allows us to assume the identity of a another user and either start a new shell
+        session with that user's ID, or to issue a single command as that user.
+
+
+    - The 'sudo' command allows an admin to set up a configuration file called '/etc/sudoers' and define
+        specific commands that particular users are permitted to execute under an assumed identity.
+
+
+
+- The 'su' Command
+
+    - The 'su' command is used to start a shell as another user.  
+
+        # Command syntax
+        su [-[l]] [user]
+
+
+        # Start a shell for the superuser
+        $ su -
+
+        # If we enter the password successfully, we'll get a # for the prompt
+
+
+        # Return to the previous shell
+        $ exit
+
+
+    - It's also possible to execute a single command rather than starting a new interactive session.
+
+        # Execute a single command
+        $ su -c 'command'
+
+
+        # Example
+        $ su -c 'ls -l /root/*'
+
+
+
+- The 'sudo' Command
+
+    - The 'sudo' command is like 'su' in many ways but also has some additional important capabilities.
+        The administrator can configure 'sudo' to allow an ordinary user to execute commands as a
+        different user (usually the superuser) in a controlled way.  In particular, a user may be 
+        restricted to one or more specific commands.
+
+
+    - Another important difference is that 'sudo' does not require access to the superuser's password.
+        Authenticating using 'sudo' just requires the user's own password.  
+
+
+        # Run a script as sudo
+        $ sudo backup_script
+
+
+        # List the privileges granted by sudo
+        $ sudo -l
+
+
+
+- Ubuntu and sudo
+
+    - There has always been a larger division between users and administrators in Unix than in Windows,
+        due to the multiuser heritage of Unix.  Since having a 'root' account is traditional in Unix,
+        most users would 'su' to the root user to complete administrative tasks.  
+
+
+    - Since many people were tired of getting the 'permission denied' messages, a lot of them started
+        just running as the 'root' user all the time.  This led to reduced security.
+
+
+    - When Ubuntu was introduced, its creators took a different tack.  By default, Ubuntu disables logins
+        to the 'root' account (by failing to set a password for the account) and instead uses 'sudo'
+        to grant superuser privileges.  The initial user account is granted full access to superuser
+        privileges via 'sudo' and may grant similar powers to subsequent user accounts.
