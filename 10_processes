@@ -189,7 +189,7 @@ CHAPTER 10 - PROCESSES
 
 
 
-- Sending Signals to Process with kill
+- Sending Signals to Process with 'kill'
 
     - The 'kill' command is used to send signals to programs.  
 
@@ -254,4 +254,100 @@ CHAPTER 10 - PROCESSES
 
 
 
-        
+- Other Common Signals
+
+    - In addition to the list of signals above, which are most often used with 'kill', there are other
+        signals frequently used by the system.
+
+
+        Number    Name     Meaning
+        ------------------------------------------------------------------------------
+        3         QUIT     Quit.
+
+        11        SEGV     Segmentation violation. This signal is sent if a program makes illegal use of
+                             memory, that is, if ittried to write somewhere it was not allowed to write.
+
+        28        WINCH    Window change. This is the signal sent by the system when a window changes 
+                             size. Some programs, such as top and less will respond to this signal by 
+                             redrawing themselves to fit the new window dimensions.
+
+
+
+- Sending Signals to Multiple Processes with 'killall'
+
+    - It's also possible to send signals to multiple processes matching a specifed program or username
+        by using the 'killall' command.
+
+
+        # killall Syntax
+        $ killall [-u user] [-signal] name...
+
+
+    - Example
+
+        # Start 2 instances of a program
+        $ xlogo &
+        $ xlogo &
+
+
+        # Kill both instances
+        $ killall xlogo
+
+        [1]-  Terminated              xlogo
+        [2]+  Terminated              xlogo
+
+
+
+- Shutting Down the System
+
+    - The process of shutting down the system involves the orderly termination of all the processes on
+        the system, as well as some vital housekeeping chores (like syncing all of the mounted file
+        systems) before the system powers off.  
+
+      There are 4 commands that can perform this function:
+
+        1. halt
+        2. poweroff
+        3. reboot
+        4. shutdown
+
+
+    - Examples
+
+        # Reboot the system
+        $ sudo reboot
+
+
+        # Shut down and specify a time delay
+        $ sudo shutdown -h now
+
+
+        # Reboot and specify a time delay
+        $ sudo shutdown -r now
+
+
+
+- More Process-Related Commands
+
+    - pstree
+
+        The 'pstree' command outputs a process list arranged in a tree-like pattern showing the 
+          parent-child relationships between processes.
+
+
+    - vmstat
+
+        The 'vmstat' command outputs a snapshot of system resource usage, including memory, swap, and
+          disk I/O.  To see a continuous display, follow the command with a time delay for updates
+          (ie 'vmstat 5').
+
+
+    - xload
+
+        The 'xload' command is a graphical program that draws a graph showing load over time.
+
+
+    - tload
+
+        The 'tload' command is similar to the 'xload' program but draws the graph in the terminal.
+          Terminate the output with 'Cntl-c'.
