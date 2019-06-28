@@ -129,3 +129,41 @@ CHAPTER 10 - PROCESSES
       PID    USER    PR   NI   VIRT   RES   SHR  S  %CPU  %MEM     TIME+    COMMAND 
       6244   me      39   19  31752  3124  2188  S   6.3   1.0   16:24.42   trackerd
       11071  me      20    0   2304  1092   840  R   1.3   0.3    0:00.14   top
+
+
+
+- Controlling Processes
+
+    - First, we'll start the 'xlogo' test program that just displays the XWindows logo in a new window.
+        If we can resize the window and the image resizes, the program is running.
+
+        # Start test program
+        $ xlogo
+
+
+    - Notice that our shell prompt has not returned.  This is because the shell is waiting for the 
+        program to finish.  To interrupt the process, we can return to the window and use the 'Cntl-C'
+        command to terminate the process.
+
+
+    - We can run a process in the background using the '&' character.  
+
+        # Start program in the background
+        $ xlogo &
+
+
+    - To return the process to the foreground, the 'fg' command is used:
+
+        # Return the first background process to the foreground
+        $ fg %1
+
+
+    - Sometimes, we want to stop a process without terminating it.  To stop a foreground process and
+        place it in the background, we can use 'Cntl-Z'.
+
+        # Now, we can either continue execution in the foreground or restart execution in the background
+        $ fg %1
+        $ bg %1
+
+
+
