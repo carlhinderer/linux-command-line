@@ -167,3 +167,91 @@ CHAPTER 10 - PROCESSES
 
 
 
+- Signals
+
+    - The 'kill' command can be used to kill processes.  
+
+        # Launch the application
+        $ xlogo &
+        [1] 28401
+
+
+        # Kill the process
+        $ kill 28401
+
+
+    - Actually, the 'kill' command doesn't exactly kill processes.  Rather, it sends them signals.  
+        Signals are one way that the operating system communicates with programs.  
+
+      For instance, when we use 'Cntl-c', a signal called 'INT' (interrupt) is sent.  When we use 'Cntl-z',
+        a signal called 'TSTP' (terminal stop) is sent.  Programs, in turn, listen for signals and may
+        act upon them as they are received.
+
+
+
+- Sending Signals to Process with kill
+
+    - The 'kill' command is used to send signals to programs.  
+
+        # kill Syntax
+        $ kill [-signal] PID...
+
+
+      If no signal is specified, the TERM signal is sent by default.
+
+
+    - Here are the most common signals:
+
+        Number    Name     Meaning
+        ------------------------------------------------------------------------------
+        1         HUP      Hangup. This is a vestige of the good old days when terminals were attached to
+                             remote computers with phone lines and modems. The signal is used to indicate 
+                             to programs that the controlling terminal has “hung up.” The effect of this
+                             signal can be demonstrated by closing a terminal session. The foreground
+                             program running on the terminal will be sent the signal and will terminate.
+                             This signal is also used by many daemon programs to cause a reinitialization.
+                             This means that when a daemon is sent this signal, it will restart and 
+                             reread its configuration file. The Apache web server is an example of a daemon
+                             that uses the HUP signal in this way.
+
+        2         INT      Interrupt. This performs the same function as a Ctrl-c sent from the terminal. 
+                             It will usually terminate a program.
+
+        9         KILL     Kill. This signal is special. Whereas programs may choose to handle signals sent
+                             to them in different ways, including ignoring them all together, the KILL
+                             signal is never actually sent to the target program. Rather, the kernel 
+                             immediately terminates the process. When a process is terminated in this
+                             manner, it is given no opportunity to “clean up” after itself or save its work.
+                             For this reason, the KILL signal should be used only as a last resort when 
+                             other termination signals fail.
+
+        15        TERM     Terminate. This is the default signal sent by the kill command. If a program is
+                             still “alive” enough to receive signals, it will terminate.
+
+        18        CONT     Continue. This will restore a process after a STOPor TSTP signal. This signal 
+                             is sent by the bg and fg commands.
+
+        19        STOP     Stop. This signal causes a process to pause without terminating. Like the KILL
+                             signal, it is not sent to the target process, and thus it cannot beignored.
+
+        20        TSTP     Terminal stop. This is the signal sent by the terminal when Ctrl-z is pressed.
+                             Unlike the STOP signal, the TSTP signal is received by the program, but the
+                             program may choose to ignore it.
+
+
+    - kill Examples:
+
+        # Use the signal number
+        $ kill -1 13456
+
+
+        # Use the signal name
+        $ kill -INT 13601
+
+
+        # The signal name can also be prefaced with 'SIG'
+        $ kill -SIGINT 13601
+
+
+
+        
