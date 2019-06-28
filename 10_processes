@@ -1,0 +1,87 @@
+-------------------------------------------------
+CHAPTER 10 - PROCESSES
+-------------------------------------------------
+
+- Processes
+
+    - Modern operating systems are multitasking, meaning they create the illusion of doing more than one
+        thing at once by rapidly switching from one executing program to another.
+
+
+    - When a system starts up, the kernel initiates a few of its own activities as processes and launches
+        a program called 'init'.  'init' then rungs a series of shell scripts (located in '/etc') called
+        init scripts, which start all the system services.  Many of these services are implemented as
+        daemon programs, which just sit in the back and do their work without having any user interface.
+
+
+    - The fact that a program can launch other programs is expressed in the process scheme as a 'parent
+        process' producing a 'child process'.
+
+
+    - The kernel maintains information about each process to help keep things organized.  For example,
+        each process is assigned a number called a 'Process Id' (PID).  PIDs are assigned in ascending
+        order, with 'init' always getting PID 1.  The kernel also keeps track of the memory assigned
+        to each process, as well as the process's readiness to resume execution.  Like files, processes
+        have owners and user ids, effective user ids, etc.
+
+
+
+- Viewing Processes
+
+    - The 'ps' command shows us the processes associated with the current terminal session.
+
+
+        # Show processes associated to current terminal session
+        $ ps
+
+        PID   TTY          TIME CMD 
+        5198  pts/1    00:00:00 bash
+        10129 pts/1    00:00:00 ps
+
+
+        TTY (Short for 'teletype') shows us the 'controlling terminal' for the process.
+        TIME shows us the amount of CPU time consumed by the process.
+
+
+    - Adding the 'x' option tells 'ps' to show all of our processes regardless of what terminal (if any)
+        they are controlled by.
+
+
+        # Show all processes
+        $ ps x
+
+         PID   TTY      STAT   TIME COMMAND 
+         2799  ?        Ssl    0:00 /usr/libexec/bonobo-activation-server –ac 
+         2820  ?        Sl     0:01 /usr/libexec/evolution-data-server-1.10 --
+         15647 ?        Ss     0:00 /bin/sh /usr/bin/startkde
+         ....
+
+
+         A new column names STAT has been added to the output.  It is short for 'state' and reveals the
+           current state of the process.
+
+
+
+- Process States
+
+    State             Meaning
+    -------------------------------------------------------------------------------
+    R                 Running. This means that the process is running or ready to run.
+
+    S                 Sleeping. The process is not running; rather, it is waiting for an event, such 
+                        as a keystroke or network packet.
+
+    D                 Uninterruptible sleep. The process is waiting for I/O such as a disk drive.
+
+    T                 Stopped. The process has been instructed to stop.
+
+    Z                 A defunct or “zombie” process. This is a child process that has terminated but 
+                        has not been cleaned up by its parent.
+
+    <                 A high-priority process. It's possible to grant more importance to a process, 
+                        giving it more time on the CPU. This property of a process is called niceness. A
+                        process with high priority is said to be less nicebecause it's taking more of the
+                        CPU's time, which leaves less for everybody else.
+
+    N                 A low-priority process. A process with low priority (a “nice” process) will get
+                        processor time only after other processes with higher priority have been serviced.
