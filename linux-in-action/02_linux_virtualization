@@ -1,0 +1,108 @@
+-------------------------------------------------------
+CHAPTER 2 - LINUX VIRTUALIZATION
+-------------------------------------------------------
+
+- Installing VirtualBox
+
+    $ sudo apt update
+    $ sudo apt install virtualbox
+
+    # Add extra file system and device integration between VMs and host
+    $ sudo apt install virtualbox-guest-additions-iso
+    # Now the ISO can be added as an optical drive to your running VM
+    
+
+
+- Linux Package Managers
+
+    Debian-Based (Debian, Ubuntu, Mint, Kali Linux)
+      - use .deb files for packages
+      - use the APT package manager to manage them
+
+    RedHat-Based (RedHat, CentOS, Fedora)
+      - use .rpm files for packages
+      - use the YUM package manager to manage them
+
+
+
+- Other Package Management Commands
+
+    # Search for packages
+    $ apt search sensors
+    $ yum search sensors
+
+    # Display package details
+    $ apt show lm-sensors
+    $ yum info lm_sensors
+
+
+
+- Installing Packages Without apt
+
+    # Download the skype package by selecting the '.deb' option from the downloads page
+    $ cd ~
+    
+    # Use 'dpkg' command, which will unpack the '.deb' file and install all dependencies
+    $ sudo dpkg -i skypeforlinux-64.deb
+
+
+
+- Finding out what architecture your system has
+
+    # Check for 32- or 64-bit
+    $ arch
+
+
+
+- Creating a Virtual Machine
+
+    1. Create the VM
+
+         > Create New
+         > Ubuntu VM
+         > Default 1024 MB RAM is fine for most purposes
+         > Create a virtual hard disk now
+         > VDI image
+         > Dynamically allocated hard disk
+         > 10 GB default size is fine
+
+    2. Download the ISO
+
+         > Download the ISO from https://ubuntu.com/download
+         > Verify the SHA matches:
+             $ sha256sum ubuntu-18.04.3-desktop-amd64.iso
+         > Start the VM and select the new ISO
+
+    3. Set Up the VM
+
+         > For now, go to the VM Settings -> Network, and use 'Bridged Adapter'
+         
+
+
+- Starting and Stopping Linux Services
+
+    # Start a service
+    $ systemctl start service-name
+
+    # Stop a service
+    $ systemctl stop service-name
+
+    # Check the status of a service
+    $ systemctl status service-name
+
+    # Restart a service
+    $ systemctl restart service-name
+
+
+    # Enable a service to start at boot up
+    $ systemctl enable service-name
+
+    # Disable a service from starting at boot up
+    $ systemctl disable service-name
+
+    # Check whether a service is configured to start at boot up
+    $ systemctl is-enabled service-name
+
+
+    # List status of all services
+    $ service --status-all
