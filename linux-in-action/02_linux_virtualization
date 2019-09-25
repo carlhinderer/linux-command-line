@@ -106,3 +106,37 @@ CHAPTER 2 - LINUX VIRTUALIZATION
 
     # List status of all services
     $ service --status-all
+
+
+
+- Changing a Password
+
+    The 'passwd' command is used to change a Linux account password.
+
+    $ passwd
+
+
+
+- Creating Linux Containers (LXC)
+
+    # Install LXC
+    $ sudo apt install lxc
+
+    # Create a new container with the 'ubuntu' template
+    $ sudo lxc-create -n myContainer -t ubuntu
+
+    # List available templates
+    $ ls /usr/share/lxc/templates/
+
+
+
+- Starting LXCs
+
+    # Start container
+    $ sudo lxc-start -d -n myContainer
+
+    # List containers
+    $ sudo lxc-ls --fancy
+
+    # Access container shell session
+    $ sudo lxc-attach -n myContainer
