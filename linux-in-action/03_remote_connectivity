@@ -1,0 +1,122 @@
+-------------------------------------------------------
+CHAPTER 3 - REMOTE CONNECTIVITY
+-------------------------------------------------------
+
+- OpenSSH
+
+    - SSH was designed in the 90s as a simple way for UNIX-like systems to safely encrypt
+        the data transferred as part of remote logins.  OpenSSH (1999), the most popular
+        implementation of the protocol, is actually a set of programs to replace
+        unencrypted legacy utilities.
+
+
+        Legacy Utility         OpenSSH Utility      Purpose
+        -----------------------------------------------------------------------
+        rcp                    scp                  Non-interactive file transfer
+
+        ftp                    sftp                 Interactive file transfer
+
+        rlogin, rsh, telnet    ssh                  Shell access to remote machine
+
+                               ssh-add, ssh-agent   Store keys to ease authentication
+
+                               ssh-keygen           Inspects and generates keys (RSA, DSA, Elliptic Curve)
+
+                               ssh-keyscan          Scans a list of hosts and collects their public keys
+
+                               sshd                 SSH server daemon
+
+
+
+- Using dpkg
+
+    - The 'dpkg' tool manages packages in the APT system in Debian-like systems.
+
+        # Get current installed and update status of package
+        $ dpkg -s gedit
+
+
+
+- Configuring OpenSSH
+
+    - When you log into a remote machine, your local PC is the OpenSSH client.  Your
+        machine must have the 'openssh-client' package.
+
+      The remote machine is the OpenSSH server, since it is the host for the remote
+        session.  The remote machine must have the 'openssh-server' package.  Note that
+        the server also includes all the tools found in the client package.
+
+
+        # Confirm that your pc has the client
+        $ dpkg -s openssh-client
+
+        # On the remote machine, confirm that the server is installed
+        $ dpkg -s openssh-server
+
+
+        # Check to make sure the ssh service is running
+        $ systemctl status ssh
+
+
+
+- Logging into a Remote Server with SSH
+
+    # Check the ip address of the remote machine
+    $ ip addr
+
+    # Test connectivity to the remote machine
+    $ ping 10.0.3.144
+
+    # SSH into the remote machine from the client
+    $ ssh ubuntu@10.0.3.144
+
+
+
+- Password-Free SSH Access
+
+    - By default, AWS disables password access on EC2 instances.  SSH settings are stored
+        in config files in '/etc/ssh'.  The '/etc/ssh/sshd_config' file specifies settings
+        for how remote clients will be able to log into your machine.  The 
+        '/etc/ssh/ssh_config' file specifies settings for how your machine will log into 
+        other machines.
+
+        # Setting in /etc/ssh/sshd_config
+        PasswordAuthentication no
+
+
+    - The alternative to SSH password authentication is to create a key pair, and copy the 
+        public half of the pair to the remote host.  This way, OpenSSH running on the host will
+        be able to authenticate you without a password.  
+
+      Note that a password will still be used, since ideally you will create a passphrase that
+        will make you authenticate locally before using your key pair.
+
+
+    - First, we create a new private/public key pair on the client machine.  You'll be asked
+        for a name for the key pair, or by default if you don't already have one, you can
+        use 'id_rsa'.  
+
+        # Create a new key pair
+        $ ssh-keygen
+
+        # The private key is saved in '/home/ubuntu/.ssh/id_rsa'
+        # The public key is saved in '/home/ubuntu/.ssh/id_rsa.pub'
+
+        The key fingerprint is:
+        SHA256:1wQzEnybUSOFpYEvmbxVPZjy1uGAV6Tnn5m1w0qD5T8 ubuntu@base
+        The key's randomart image is:
+        +---[RSA 2048]----+
+        |       .oo**=*o  |
+        |        o.*B*o+  |
+        |       . =.Oo+.o |
+        |        = =oooo  |
+        |        S+..... .|
+        |        ..  + ..*|
+        |           . + B.|
+        |            . +E.|
+        |             . ..|
+        +----[SHA256]-----+
+
+
+    - Once the key is created, the public key is copied to '/.ssh/authorized_keys' on the host
+        computer.  
