@@ -120,3 +120,159 @@ CHAPTER 3 - REMOTE CONNECTIVITY
 
     - Once the key is created, the public key is copied to '/.ssh/authorized_keys' on the host
         computer.  
+
+        # Make the directory on the remote machine under /home/ubuntu
+        $ ssh ubuntu@10.0.3.142 mkdir -p .ssh
+
+        # Copy your public key to the remote machine
+        $ cat .ssh/id_rsa.pub \
+          | ssh ubuntu@10.0.3.142 \
+          "cat >> .ssh/authorized_keys"
+
+        # Now, you can ssh into the remote machine without a password
+        $ ssh ubuntu@10.0.3.142
+
+
+
+- Using .pem Keys with EC2 Instances
+
+    - Many cloud providers (including EC2) will use .pem keys, and you must specify
+        which .pem key you want to use when logging into a specific instance.
+
+        # Use the -i flag to specify the key to use
+        $ ssh -i .ssh/mykey.pem ubuntu@10.0.3.142
+
+
+
+- Safely Copying Files with scp
+
+    - The scp program uses OpenSSH for file transfer.  
+
+        # Transfer a local file to the remote machine
+        $ scp .ssh/id_rsa.pub ubuntu@10.0.3.142:/home/ubuntu/.ssh/authorized_keys
+
+        # Copy remote file to local machine
+        $ scp -i mykey.pem mylogin@54.7.61.201:/home/mylogin/backup-file.tar.gz \
+          ./backups/january/
+
+
+    - The ssh-copy-id program is specifically designed to copy a key over to a
+        remote host.
+
+        # Copy key to remote machine
+        $ ssh-copy-id -i .ssh/id_rsa.pub ubuntu@10.0.3.142
+
+
+
+- Using X11 Forwarding
+
+    - Sometimes, it is advantageous to get a graphical session to solve a problem on
+        a remote user's computer (for instance, to troubleshoot LibreOffice).  To do this,
+        we can use X11 forwarding.  
+
+
+    - First, we need to enable X11 forwarding on the remote machine.
+
+        # In /etc/ssh/sshd_config
+        X11Forwarding yes
+
+
+    - Next, we need to enable X11 forwarding on the client machine
+
+        # In /etc/ssh/sshconfig
+        ForwardX11 yes
+
+
+    - Now, restart both machine to make sure the changes are reflected
+
+        $ systemctl restart ssh
+
+
+    - Now, we use the -X flag to start a graphic-enabled session.
+
+        $ ssh -X ubuntu@10.0.3.142
+
+      And we should be able to run a command that will launch a graphic program.
+
+        # Launch minesweeper
+        $ gnome-mines
+
+
+
+- Linux Process Management
+
+    - A process is an instance of a running program.  systemctl is the traffic cop that
+        organizes processes in a complex multiprocess, multiuser operating system.  
+
+
+    - The 'ps' command is used to view all running processes.
+
+        # Start a new process
+        $ for i in {1..10}; do sleep 1; done &
+
+        # See the new process running
+        $ ps
+
+          PID TTY          TIME CMD
+        19522 pts/17   00:00:00 bash
+        19829 pts/17   00:00:00 bash
+        19832 pts/17   00:00:00 sleep
+        19833 pts/17   00:00:00 ps
+
+
+    - Now, we can run the command again after our program ends.
+
+        # ps
+
+          PID TTY          TIME CMD
+        19522 pts/17   00:00:00 bash
+        19833 pts/17   00:00:00 ps
+
+      The only processes running our the command interpreter itself and the 'ps' command we
+        are running.  We can tell by the pid, however, that there are many other processes
+        already running on the system.
+
+
+    - On a Ubuntu machine, the first process that starts when the computer boots is called 'init',
+        and it starts other processes.  
+
+        # See the init process
+        $ ps -el | grep init
+
+        root         1     0  0 12:36 ?        00:00:00 /sbin/init
+        ubuntu    1406   904  0 16:26 pts/4    00:00:00 grep --color=auto init
+
+      Note that the init process runs a file at the '/sbin/init' location, and it is run by the
+        root user.  Adding the '-e' option to the ps command displays not only processes 
+        running in your current shell, but also processes from all parent shells all the way 
+        back to 'init'.  
+
+
+    - A 'parent shell' is a shell environment from which new child shells can subsequently be
+        launched and through which programs are run.  You can think of your GUI desktop as a
+        shell, and terminals you open as its children.  
+
+        # View the entire tree of child shells and processes
+        # pstree -p
+
+
+
+- Working with systemd
+
+    - The 'file' command give you information about a file.  If we run 'file' on
+        '/sbin/init', we'll see that its a symbolic link.
+
+        # Symbolic link
+        $ file /sbin/init
+        /sbin/init: symbolic link to /lib/systemd/systemd
+
+
+    - After years of political fights, systemd is now the process manager for all major
+        Linux distros.  The '/sbin/init' file is now just a link to the systemd program.
+
+
+    - The key administrative tasks are handled by 'systemctl' on behalf of systemd.  
+
+      Note that systemd has now been expanded to handle other system services, like a logging
+        manager ('journald'), a network manager ('networkd'), and a device manager
+        ('udevd').  The 'd' is for 'daemon', a background running process.
