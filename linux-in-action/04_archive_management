@@ -142,3 +142,167 @@ CHAPTER 4 - ARCHIVE MANAGEMENT
 
         # Recreate the single file
         $ cat archivename.tar.gz.part* > archivename.tar.gz
+
+
+
+- Streaming File System Archives
+
+    - We can create an archive and send it to a remote machine in a single command.
+
+        # Send archive to remote machine
+        $ tar czvf - --one-file-system / /usr /var --exclude=/home/andy \
+          | ssh username@10.0.3.141 "cat > /home/username/workstation-backup-Apr-10.tar.gz"
+
+
+    - The '--one-file-system' option excludes all data from any file system besides the
+        current one.
+
+
+    - Note that this generates the archive on the remote machine without saving a 
+        temporary copy on the local machine, so the amount of space on the local hard drive
+        is not a limitation.
+
+
+
+- Aggregating Files with find
+
+    - The 'find' command searches through a file system looking for objects that
+        match rules you provide.  The search outputs a list of names and locations
+        of matching files, and can be redirected to other commands.
+
+        # Archive files matching a condition
+        $ find /var/www/html/ -iname <1> "*.mp4" -exec tar -rvf videos.tar {} \;
+
+
+    - The '-iname' flag returns both upper and lowercase results.  Using the '-name'
+        flag instead returns case sensitive results.
+
+
+    - The '{}' characters tell the 'find' command to apply the 'tar' command to each
+        file it finds.  
+
+
+
+- Using the locate Command
+
+    - The 'find' command searches the current file system for matching files.  The
+        'locate' command instead searches through a pre-existing index of files,
+        so it is much faster.
+
+        # Search for files
+        $ locate *video.mp4
+
+
+    - The risk with running 'locate' is if the index of files have gone out of date.
+        Normally, the index is updated every time the system boots.  We can also
+        update it manually.
+
+        # Update the file index
+        $ updatedb
+
+
+
+- Preserving Permissions in Archives
+
+    - Running 'ls -l' will give details about a file's permissions.
+
+        $ ls -l /bin | grep zcat
+        -rwxr-xr-x 1 root root 1937 Oct 27 2014 zcat
+
+        -        = if file, d if directory
+        rwx      = owner permissions
+        r-x      = group permissions
+        r-x      = other permissions
+
+        1        = number of links to file
+        root     = owner name
+        root     = group name
+
+        1937 Oct 27 2014      = most recent edit
+        zcat     = filename
+
+
+    - The 'chmod' command is used to change a file's permissions.
+       
+        # Change owner permissions
+        $ chmod u+r /bin/zcat
+
+        # Change group permissions
+        $ chmod g+w /bin/zcat
+
+        # Change other permissions
+        $ chmod o-r /bin/zcat
+
+
+    - Groups are a powerful way to organize resources.  If you have 20 employees
+        who need access to some resource on a server, it is much easier to grant
+        permissions to 1 group than to 20 employees.  
+
+
+    - Permissions can also be changed using numeric values.
+
+        Read = 4
+        Write = 2
+        Execute = 1
+
+        # Change the owner (rwx), group (rwx), and other (x) permissions
+        $ chmod 771 /bin/zcat
+
+
+
+- File Ownerships
+
+    - When you create a new file, both the owner and group will match your username.
+
+        # Owner is creator
+        $ touch newfile
+        $ ls -l
+        -rw-rw-r-- 1 username username 0 Jun 20 20:14 newfile
+
+
+    - If you need to copy a file over to another server, you'll need to use sudo, 
+        and this will cause the owner to be 'root'.
+
+        # Owner is root
+        $ sudo touch newfile
+        $ ls -l
+        -rw-r--r-- 1 root root 0 Jun 20 20:37 newfile
+
+
+    - In this case, we'll need to change the file ownership.
+
+        # Change the owner
+        $ sudo chown otheruser:otheruser newfile
+
+
+    - When creating archives, you need to think about the file permissions.  If the
+        backup is restored with the wrong ownerships and permissions, it is going to cause
+        a big headache.
+
+        # Create some files 
+        # Note the '&&' will execute the 2nd command only if the 1st command is successful
+        $ mkdir tempdir && cd tempdir
+        $ touch file1
+        $ touch file2
+        $ touch file3
+
+        # Add a new user
+        $ sudo useradd newuser
+
+        # Change the ownership of one of the files
+        $ sudo chown newuser:newuser file3
+
+        # Now create an archive
+        $ tar cvf stuff.tar *
+
+        # And extract the archive and look at the file owners
+        $ tar xvf stuff.tar
+        $ ls -l
+        -rw-rw-r-- 1 username username 0 Jun 20 11:31 file1
+        -rw-rw-r-- 1 username username 0 Jun 20 11:31 file2
+        -rw-rw-r-- 1 username username 0 Jun 20 11:31 file3
+
+
+      As we can see, the problem is that only users with administrator powers can work with
+        resources in other users' accounts.  The solution is to use 'sudo' when using the
+        tar operations.
