@@ -1,0 +1,144 @@
+-------------------------------------------------------
+CHAPTER 4 - ARCHIVE MANAGEMENT
+-------------------------------------------------------
+
+- An archive is a single file containing a collection of files and directories.
+    It makes storing and sharing a collection of objects easier.
+
+  The 2 primary reasons to create archives is to build reliable file system images
+    and create efficient disk backups.
+
+
+
+- ISO's are images of complete operating systems, specially organized to make it 
+    easy to copy the included files to a target computer.  
+
+  Images can also be created from all or parts of a working OS to make an exact 
+    clone of the first system in its current state.  This can be done to rescue a
+    complex installation from a failing hard drive.
+
+  Images are also for providing identical system setups to multiple users, like 
+    student workstations in a classroom.
+
+
+
+- Disk backups are essential.  Things that can go wrong include:
+
+    1. Hardware failure
+    2. Config files can be mangled, leaving you locked out of your encrypted system
+    3. Data stored on cloud infrastructure can be suddenly lost
+    4. Ransomware attacks
+
+  Note that it is not enough to create backups.  Restoring from the backups must also
+    be tested on a regular basis.
+
+
+
+- Checking the size of partitions
+
+    - The 'df' command displays each disk partition that is currently mounted, along 
+        with its disk usage and location.  The '-h' flag makes the sizes human readable.
+  
+        # Get details on mounted partitions
+        $ df -h
+  
+        Filesystem      Size  Used Avail Use% Mounted on
+        /dev/sda2       910G  178G  686G  21% /
+        none            492K     0  492K   0% /dev
+        tmpfs           3.6G     0  3.6G   0% /dev/shm
+        tmpfs           3.6G  8.4M  3.6G   1% /run
+        tmpfs           5.0M     0  5.0M   0% /run/lock
+        tmpfs           3.6G     0  3.6G   0% /sys/fs/cgroup
+  
+  
+        - The '/' partition is the root partition
+        - The partitions with 0 bytes are likely pseudo file systems
+        - The '/run' directory contains files with runtime data generated during booting
+
+
+    - The '/dev/sda2' partition is the 2nd partition on Storage Device A, and it is 
+        represented as a system resource through the pseudo file system directory
+        '/dev'.  All devices associated with a system will be represented by a file
+        in the '/dev' directory.  
+
+
+
+- Where to Back Up Data
+
+    - There are many choices for where to back up data:
+
+        1. Legacy tape drives
+        2. SATA drives
+        3. Network Attached Storage
+        4. Storage Area Network
+        5. Cloud Storage Solution
+
+
+    - Whatever medium you use, make sure all backups are:
+
+        - Reliable
+        - Tested
+        - Rotated
+        - Distributed
+        - Secure
+        - Compliant
+        - Up to Date
+        - Scripted
+
+
+
+- Archiving with tar
+
+    - When creating an archive, you need to specify which files to archive and where
+        to put the archive file.
+
+        # c - create a new archive
+        # v - verbose output
+        # f - filename for archive
+
+        # Add all files in current directory to archive
+        $ tar cvf archivename.tar *
+
+        # Also include hidden files
+        $ tar cvf archivename.tar .
+
+        # Archive files with .mp4 extension
+        $ tar cvf archivename.tar *.mp4
+
+
+    - The '-z' option is used to also use gzip to compress the archive.
+
+        # Archive and compress
+        $ tar czvf archivename.tar.gz *.mp4
+
+        # Archive and compress files from a different directory
+        $ tar czvf archivename.tar.gz /home/myuser/Videos/*.mp4
+
+
+    - The '-x' option is used to extract the archive
+
+        # Extract the archive into the current directory
+        $ tar -xvf archivename.tar
+
+        # Extract the archive into a different directory
+        $ tar -xvf archivename.tar -C /home/user
+
+        # Same command will also extract a compressed archive
+        $ tar -xvf archivename.tar.gz
+
+
+    - Note that the .tar and .gz extensions aren't necessary.  It is just used as a 
+        convention to communicate the purpose of the file.
+
+
+
+- Splitting an Archive into Multiple Files
+
+    - If archive files get very big, it might make sense to break them down into multiple
+        smaller files.  The 'split' tool is made for this purpose.
+
+        # Split the archive into 1-GB sized parts
+        $ split -b 1G archivename.tar.gz "archivename.tar.gz.part"
+
+        # Recreate the single file
+        $ cat archivename.tar.gz.part* > archivename.tar.gz
