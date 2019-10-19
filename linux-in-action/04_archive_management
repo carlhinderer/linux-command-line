@@ -306,3 +306,56 @@ CHAPTER 4 - ARCHIVE MANAGEMENT
       As we can see, the problem is that only users with administrator powers can work with
         resources in other users' accounts.  The solution is to use 'sudo' when using the
         tar operations.
+
+
+
+- Archiving Partitions with dd
+
+    - We can use 'tar' to replicate entire file systems by copying the files from one
+        computer and then pasted them on top of a fresh Linux install of another
+        computer.  However, since those archives weren't complete images, they
+        require a running host OS as a base.
+
+
+    - Using 'dd' can make perfect byte-by-byte images of anything digital.  Note that
+        the command is known as 'disk destroyer', because one spelling mistake in the
+        command can wipe out an entire hard drive.
+
+        # Clone one entire drive to a spare drive
+        $ sudo dd if=/dev/sda of=/dev/sdb
+
+        # Create an image file from a drive
+        $ sudo dd if=/dev/sda of=/home/username/sdadisk.img
+
+        # Restore your disk using the image file
+        $ sudo dd if=sdadisk.img of=/dev/sdb
+
+
+    - The 'dd' command can also be used to wipe data from disks.  
+
+        # Fill a drive with zeros
+        $ sudo dd if=/dev/zero of=/dev/sda1
+
+        # Fill a drive with random zeros
+        $ sudo dd if=/dev/urandom of=/dev/sda1
+
+
+
+- Synchronizing Archives with rsync
+
+    - Backups have to happen regularly, but daily transfers of huge archives can
+        place a lot of strain on network resources.  The 'rsync' command can transfer
+        only the small number of files that were created or updated since the last
+        backup.
+
+        # Create 10 files
+        $ mkdir nynewdir && cd mynewdir
+        $ touch file{1..10}
+
+        # Make a directory to hold backups on remote machine
+        $ ssh username@10.0.3.141 "mkdir syncdirectory"
+
+        # Copy files over to remote machine
+        $ rsync -av * username@10.0.30141:syncdirectory
+
+        # Then, we can change the files and run the same command to send the updates
