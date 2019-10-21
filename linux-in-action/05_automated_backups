@@ -206,3 +206,70 @@ CHAPTER 5 - AUTOMATED BACKUPS
 
         Each filename will be tested for the presence of a space.  If a space is found, 
           then any spaces in the file will be changed to underscores.
+
+
+
+- Setting Up AWS For S3 Backups
+
+    - Backups to S3 are cheap and easy.  Storage only costs about $0.02 per GB per month.
+
+
+    - To install the AWS CLI with pip (the console is written in Python):
+
+        # First, I created a new python environment for this purpose
+        $ pip install awscli
+
+
+    - Next, we'll configure our AWS account.
+
+        1. From the AWS web console, click 'My Security Credentials'
+        2. Expand the Access Keys '(Access Key ID and Secret Access Key)' section
+        3. Click the 'Create New Access Key' button
+        4. It will show your new 'Access Key ID' and 'Secret Access Key'
+
+
+    - To link our console to our account:
+
+        Open a terminal and run 'aws configure'.
+
+          $ aws configure
+
+          AWS Access Key ID [None]: Enter new Access Key ID
+          AWS Secret Access Key [None]: Enter new Secret Access Key
+          Default region name [None]: us-west-1
+          Default output format [None]:
+
+
+    - Now, we should be able to list the S3 buckets in our account.
+
+        # List s3 buckets
+        $ asw s3 ls
+
+
+
+- Creating a New S3 Bucket
+
+    - First, we create a bucket with the 'mb' command.  Note that bucket names must
+        be unique across the entire S3 system.
+
+        # Create a bucket with some random characters in the name
+        $ aws s3 mb s3://mybucket-35876
+
+
+    - Now, let's say we want to back up some files stored in 'home/carl/dir2backup'.
+        The 'sync' command is similar to the 'rsync' command used locally.
+
+      The command we will run for that is:
+
+          $ aws s3 sync /home/carl/dir2backup s3://mybucket-35876
+
+
+    - To make things automatic, we'll write a script.  Note that we fully qualify the
+         path to the 'aws' command in our script.
+
+         #!/bin/bash
+         /usr/local/bin/aws s3 sync /home/carl/dir2backup s3://mybucket-35876
+
+      To make sure, we can check the full path of 'aws'.
+
+         $ which aws
