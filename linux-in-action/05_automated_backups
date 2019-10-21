@@ -121,3 +121,88 @@ CHAPTER 5 - AUTOMATED BACKUPS
 
     - The '/etc/gshadow' file contains encrypted versions of group passwords for if you
         sometimes want to allow group resources to non-group users.
+
+
+
+- Creating a Simple Script
+
+    - Here, we create a simple script called 'update.sh' to have apt automate updates
+        to all installed software.
+
+        #!/bin/bash
+        # Script to automate regular software upgrades
+
+        apt update
+        apt upgrade -y
+
+
+    - Next, to make our script executable, we must change the file attributes.
+
+        $ chmod +x upgrade.sh
+
+
+    - Now, we can copy our script into the '/etc/cron.daily' directory and it will be
+        run each day.
+
+        $ cp upgrade.sh /etc/cron.daily
+
+
+    - Our script requires admin permissions, since it uses apt.  Since cron always runs
+        as root by default, we don't need to add 'sudo' to our script.  If we do want to
+        run it manually from the command line, we need to add 'sudo' and preface the 
+        filename with the current directory.
+
+        # Run our script manually
+        $ sudo ./upgrade.sh
+
+
+
+- A Simple Script for Changing Filenames
+
+    - The Linux shell will often misinterpret filenames with spaces.
+
+        $ cat big name
+        cat: big: No such file or directory
+        cat: name: No such file or directory
+
+        $ cat 'big name'
+        Hello World
+
+
+    - Since the approach of adding quotes to every command will not always be available,
+        we could write a script to replace all spaces in filenames in a directory to be
+        underscores instead.
+
+        #!/bin/bash
+        echo "Which directory would you like to check?"
+        read directory
+            find $directory -type f | while read file; do
+                if [[ "$file" = *[[:space:]]* ]]; then
+                    mv "$file" `echo $file | tr ' ' '_'`
+                fi;
+            done
+
+
+    - echo "which directory would you like to check?"
+      read directory
+
+        The first line prints its text to the screen and then waits for user input.
+          The user then types something like '/home/ubuntu/files', and that value is
+          assigned to the 'directory' variable.
+
+
+    - find $directory -type f | while read file; do
+          ...
+      done
+
+        The 'find' command is invoked to return all file objects (type -f) in the 
+          specified directory.  The set of filenames will be read one at a time in the
+          while loop.
+
+
+    - if [[ "$file" = *[[:space:]]* ]]; then
+          mv "$file" `echo $file | tr ' ' '_'`
+      fi;
+
+        Each filename will be tested for the presence of a space.  If a space is found, 
+          then any spaces in the file will be changed to underscores.
