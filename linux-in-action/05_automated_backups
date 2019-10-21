@@ -1,0 +1,123 @@
+-------------------------------------------------------
+CHAPTER 5 - AUTOMATED BACKUPS
+-------------------------------------------------------
+
+- Bash Scripting Example
+
+    - Here is a simple script found by default on most systems at '/etc/cron.daily/passwd'.
+
+        #!/bin/sh
+
+        cd /var/backups || exit 0
+
+        for FILE in passwd group shadow gshadow; do
+            test -f /etc/$FILE            || continue
+            cmp -s $FILE.bak /etc/$FILE   && continue
+            cp -p /etc/$FILE && chmod 600 $FILE.bak
+        done
+
+
+    - #!/bin/sh
+
+        This is the 'shebang' line, which specifies which interpreter we want to use.  We're
+          actually using sh, which is an alternative to bash, but in this case there are no
+          practical differences between the two.
+
+
+    - cd /var/backups   || exit 0
+
+        This line changes the directory to '/var/backups'.  If that directory doesn't exist, 
+          the script will exit and return code 0 (successful).  The '||' operator is for 'or',
+          meaning that if the first command is not successful, run the second one.
+
+        Exit codes other than 0 indicate some sort of error status.
+
+
+    - for FILE in passwd group shadow gshadow; do
+          ...
+      done
+
+        This is a for loop that loops through 4 files.  These files' contents determine how
+          individual users and groups will be able to access particular resources.  
+
+
+    - test -f /etc/$FILE    || continue
+
+        This line tests for existence of the file.  If there isn't a file with that name in
+          '/etc', then we skip that file and go to the next file in the loop.
+
+
+    - cmp -s $FILE.bak /etc/$FILE     && continue
+
+        This line checks to see if the file and the file backup are identical.  If they are,
+          (determined by '&&') we will go to the next file in the loop.
+
+
+    - cp -p /etc/$FILE $FILE.bak && chmod 600 $FILE.bak
+
+        This line will back up the current file in the backups and tightens the permissions to
+          prevent unauthorized users from viewing it.  
+
+
+
+- 4 Important Files with Users and Groups
+
+    - The 'passwd' file contains a line for each user account that exists.
+
+        # List of user accounts
+        $ cat /etc/passwd
+
+        syslog:x:104:108::/home/syslog:/bin/false
+        _apt:x:105:65534::/nonexistent:/bin/false
+        sshd:x:106:65534::/var/run/sshd:/usr/sbin/nologin
+        ubuntu:x:1000:1000::/home/ubuntu:/bin/bash
+
+
+      The format of each line is:
+
+        ubuntu:x:1000:1000::/home/ubuntu:/bin/bash
+          ubuntu          = user name
+          x               = placeholder for password (now in /etc/shadow file)
+          1000            = user id
+          1000            = group id
+          /home/ubuntu    = user's home directory
+          /bin/bash       = user's default shell
+
+
+    - Note that the non-user accounts have '/bin/false' as their shell, because
+        they shoudln't be used for login.
+
+
+    - When you add a new user to your system, new lines will be added to the 'passwd',
+        'shadow', and 'group' files.  
+
+        # Add user (the preferred way, since it asks for a password and creates home dir)
+        $ sudo adduser alan
+
+
+        # Add user (does not prompt for password or create home dir)
+        $ sudo useradd alan
+
+        # Set up password separately
+        $ sudo passwd alan
+
+
+    - Previously, the '/etc/passwd' file included an encrypted form of each user's
+        password.  Because this file must remain readable by every user on the system,
+        this was deemed unwise.  Those encrypted passwords are now in '/etc/shadow'.
+
+        # Look at encrypted passwords
+        $ sudo cat /etc/shadow
+
+
+    - The '/etc/group' file contains basic information about all currently existing
+        system and user groups.  This file can be manually added to manage group
+        membership.
+
+      The form of each line is:
+
+        sudo:x:27:steve, newuser, neweruser
+
+
+    - The '/etc/gshadow' file contains encrypted versions of group passwords for if you
+        sometimes want to allow group resources to non-group users.
