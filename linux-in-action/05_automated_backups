@@ -273,3 +273,61 @@ CHAPTER 5 - AUTOMATED BACKUPS
       To make sure, we can check the full path of 'aws'.
 
          $ which aws
+
+
+
+- Scheduling Regular Backups with cron
+
+    - Here are the cron-related files in '/etc'.
+
+        $ ls /etc | grep cron
+        anacrontab
+        cron.d
+        cron.daily
+        cron.hourly
+        cron.monthly
+        crontab
+        cron.weekly
+
+       'acrontab' and 'crontab' are files, while the rest are directories.
+
+
+    - If you have a script you want run at set intervals, you can copy the script into
+        the appropriate directory, 'cron.monthly' or 'cron.weekly' or 'cron.daily' or
+        'cron.hourly'.  
+
+
+    - The 'cron.d' directory is meant for files whose contents precisely time the 
+        execution of commands.
+
+      Suppose you want to run the software upgrade job once each Monday.  You can put
+        a file in the /etc/cron.d directory with these contents:
+
+        21 5  * * 1  root apt update && apt upgrade
+
+      Now the command will run at 5:21 each Monday morning.  
+
+        21        Minute
+        5         Hour
+        *         Day of month
+        *         Month of year
+        1         Day of week
+        root      User
+
+
+    - We could also add this command to the 'crontab' file, and we wouldn't have to 
+        create a separate file for it.  However, the crontab does get overwritten during
+        system updates sometimes, so it is not advisable.
+
+      The 'crontab' file is actually used to execute the scripts in the 'cron' directories.
+
+
+
+    - The 'etc/crontab' file should be left alone, but there is a user-specific crontab that
+        can be used.
+
+        # Check which jobs are scheduled in your user crontab
+        $ crontab -l
+
+        # Edit your user crontab
+        $ crontab -e
