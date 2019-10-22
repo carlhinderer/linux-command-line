@@ -1,0 +1,151 @@
+-------------------------------------------------------
+CHAPTER 6 - EMERGENCY TOOLS
+-------------------------------------------------------
+
+- There are 3 catestrophic events you may need to recover from:
+
+    1. The computer boots, and the hard drive is working, but Linux won't load
+    2. The comoputer boots, but we're not sure if the drive is functional.
+    3. Everything works, but a software or password problem prevents you from logging in.
+
+
+
+- Working in Recovery/Rescue Mode
+
+    - If Linux is not letting you log in normally or the boot process unexpectedly stops
+        before the login screen, you'll want some basic system admin tools.  If Linux
+        won't load, you can access these tools from the GRUB menu.
+
+
+    - GRUB (GNU GRand Unified Bootloader) is the code that an OS uses to bring itself to life
+        when it's powered on.
+
+        [The Linux Boot Sequence]
+        1. System power up
+        2. BIOS or UEFI identifies hardware environment
+        3. Mounts MBR (master boot record partition)
+        4. GRUB displays menu and executes a kernel image
+        5. Kernel mounts root partition
+        6. Hand off to 'init' or 'systemd'
+
+      When a computer powers up, firmware instructions embedded in the system hardware identify
+        the network, storage, and memory resources that are available.  This was done with BIOS
+        in the old days, and is now done with UEFI.
+
+      Once the system finds a hard-drive partition containing the MBR, it loads the contents into
+        active memory.  On Linux systems, the MBR partition contains a number of files that, when
+        run, present one or more loadable kernel image boot configurations.
+
+
+
+- Using Recovery Mode in Ubuntu
+
+    - Once Ubuntu is loaded in recovery mode, you'll get a menu of tools to try and address
+        boot-time problems.  The 'clean' option will remove unused files to make free space.
+        The 'dpkg' option will try to fix any broken apt packages.  The 'root' option will
+        give you a bash shell.
+
+
+    - We can see these utilities in the Ubuntu file system.
+
+        $ locate recovery-mode
+
+        /lib/recovery-mode
+        /lib/recovery-mode/l10n.sh
+        /lib/recovery-mode/options
+        /lib/recovery-mode/recovery-menu
+        /lib/recovery-mode/options/apt-snapshots
+        /lib/recovery-mode/options/clean
+        /lib/recovery-mode/options/dpkg
+        /lib/recovery-mode/options/failsafeX
+        /lib/recovery-mode/options/fsck
+        /lib/recovery-mode/options/grub
+        /lib/recovery-mode/options/network
+        /lib/recovery-mode/options/root
+        /lib/recovery-mode/options/system-summary
+
+
+
+- Building a Live-Boot Recovery Drive
+
+    - The ISO images we used to create VMs can also be copied to a CD or USB drive and
+        used to boot a live session of the OS without requiring installing anything to
+        a hard drive.
+
+      This approach can be very helpful in the case where the compter boots, but we can't
+        tell for sure whether the hard drive is fully functional.
+
+
+    - If we are getting sudden and unexpected system crashes, the RAM is a likely culprit.
+        First, we can run the 'Test memory' utility to check if that is the problem.
+
+
+    - If the memory check passes, we next consider whether our problem is related to 
+        damaged partitions.  
+
+      A partition is really just metadata pointing to the location on a physical disk occupied 
+        by a file system.   If disk data is somehow corrupted and the exact addresses of a
+        partition's start and end points are changed or lost, then the file system on the
+        partition will become unreachable, and the data on the file system is as good as gone.
+
+      If we are worried about the drive failing, we want to first create a backup of the drive.
+        Then, we can try running the 'testdisk' utility, which will look for existing partitions
+        and attempt to repair them.
+
+
+
+- Recovering Files from a Damaged File System
+
+    - If we are unable to fully rescue our disk, our next priority becomes saving as many
+        important files as we can.  
+
+
+    - It's possible that a partition won't be accessible as a file system, because it hasn't
+        been mounted.  If it doesn't show up in the results of 'df', we'll need to mount it
+        (assign it to a location within a file system where it can be accessed).
+
+        # Create a new directory where partition will be mounted
+        $ sudo mkdir /run/temp-directory
+
+        # Mount the partition
+        $ sudo mount /dev/sdc1 /run/temp-directory
+
+
+
+- Password Recovery
+
+    - We know that the passwords chosen by the users we support are not strong enough.  To
+        store complex passwords, we can use something like LastPass.  Or we can implement
+        a SSO solution like Kerberos.  Still, problems are going to happen.
+
+
+    - If a regular user forgets their password, an admin can just change it for them.
+
+        # Change a pw for a user
+        $ sudo passwd username
+
+
+    - However, if the admin forgets their password, you have a bigger problem.  To work
+        around this, the 'chroot' command can be used.
+
+        # Find the root partition
+        $ lsblk
+
+        # Mount the root partition
+        $ sudo mkdir /run/mountdir/
+        $ sudo mount /dev/sdb1 /run/mountdir/
+
+        # Use chroot to get in
+        $ sudo chroot /run/mountdir
+        root@ubuntu:/#
+
+
+
+- Considering Disk Encryption
+
+    - Encrypting the data on your storage drives makes it much less likely that your data will
+        be compromised.
+
+
+    - On the other hand, many of the recover tools described here won't work on an encrypted
+        drive.  So, we have to strike a careful balance between security and accessibility.
