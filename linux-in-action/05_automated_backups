@@ -265,7 +265,7 @@ CHAPTER 5 - AUTOMATED BACKUPS
 
 
     - To make things automatic, we'll write a script.  Note that we fully qualify the
-         path to the 'aws' command in our script.
+         path to the 'aws' command in our script, 's3script.sh'.
 
          #!/bin/bash
          /usr/local/bin/aws s3 sync /home/carl/dir2backup s3://mybucket-35876
@@ -331,3 +331,32 @@ CHAPTER 5 - AUTOMATED BACKUPS
 
         # Edit your user crontab
         $ crontab -e
+
+
+
+- Scheduling Irregular Backups with anacron
+
+    - anacrontab is useful for scheduling jobs on machines that will not always be powered
+        on.  Jobs specified in 'anacrontab' are set to run a specified time after each
+        system boot.  
+
+      If anacrontab jobs are specified, they are give priority over other cron jobs.
+
+
+    - An anacrontab job looks like:
+
+        1 10  myBackupJob  /home/carl/backup.sh
+          1                       minutes after boot
+          10                      hours after boot
+          myBackupJob             job identifier
+          /home/carl/backup.sh    script location
+
+
+
+- Running the s3 sync Job
+
+    - Assuming we want to run our backup job on a server that is on 24/7, we can add
+        a file with our job to the '/etc/cron.d' directory.
+
+        # Will run every morning at 5:47
+        47 5 * * * /home/carl/s3script.sh
