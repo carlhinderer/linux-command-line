@@ -360,3 +360,75 @@ CHAPTER 5 - AUTOMATED BACKUPS
 
         # Will run every morning at 5:47
         47 5 * * * /home/carl/s3script.sh
+
+
+
+- Scheduling Regular Backups with systemd Timers
+
+    - Most jobs are still run on cron, for good reasons.  It's simple to use, and is
+        well understood.
+
+      The systemd timer alternative is more difficult to set up, and there are still
+        variations in how it works between different distros.  However, it does have
+        advantages.  It is more tightly integrated with other system services
+        (including logs) and commands can be executed based on changes in system
+        state (ie someone inserting a usb).
+
+
+    - To list all the timers already running:
+
+        $ systemctl list-timers --all
+
+
+    - To create a new timer, first we'll create a script called 'site-backup.sh' to
+        backup our simple web site.
+
+        #!/bin/bash
+        NOW=$(date + "$m_%d_%Y")
+        tar czvf /var/backups/site-backup-$NOW.tar.gz /var/www
+
+      And we need to make the script executable:
+
+        $ chmod +x site-backup.sh
+
+
+    - Next, we need to create the '.service' file.  Service files are common across systemd
+        operations.  They describe a system service in a uniform, predictable way.
+
+        # /etc/systemd/system/site-backup.service
+
+        [Unit]
+        Description=Backup Apache Website
+
+        [Service]
+        Type=simple
+        ExecStart=/home/carl/site-backup.sh
+
+        [Install]
+        WantedBy=multi-user.target
+
+
+    - Next, we need to create the '.timer' file.  This file tells systemd when you
+        want the service to run.
+
+        # /etc/systemd/system/site-backup.timer
+
+        [Unit]
+        Description=Backup Apache website - daily
+
+        [Timer]
+        OnCalendar=*-*-* 5:51:00
+        Unit=site-backup.service
+
+        [Install]
+        WantedBy=multi-user.target
+
+
+    - Now we just need to start the service and enable it to start at next boot.
+
+        $ sudo systemctl start site-backup.timer
+        $ sudo systemctl enable site-backup.timer
+
+      And any time we edit the .timer file, we'll need to update the system.
+
+        $ sudo systemctl daemon-reload
