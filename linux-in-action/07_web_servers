@@ -57,3 +57,70 @@ CHAPTER 7 - WEB SERVERS
         Take a look at our <a href="info.html">company history</a>.
         <br />
         And how about a look at our new company logo: <img src="logo.png" />
+
+
+
+- Installing MariaDB
+
+    - First, we'll install MariaDB.  MariaDB is a fork of MySql, but recently has been more
+        actively developed.  In many places, MariaDB is just called 'mysql'.
+
+        $ sudo apt update
+        $ sudo apt install mariadb-server
+
+      And we can check that the server is running.
+
+        $ sudo systemctl status mysql
+
+
+    - Next, we'll harden the security of our installation by running the 'mysql secure installation'
+        tool.
+
+        $ mysql_secure_installation
+        New root pw: mysql1
+
+
+    - Note that normally logging into the mysql shell as root is a bad idea.  We should create
+        a separate database user for any tasks, which only has access to the things it needs
+        access to.  For this example, however, we'll skip it.
+
+
+    - Log into the mysql shell
+
+        $ mysql -u root -p
+
+      Note that because we had to run the security script as sudo, now we are required to use
+        sudo to log into the shell.  We run these commands to fix this issue:
+
+        > SET PASSWORD = PASSWORD('your-password');
+        > update mysql.user set plugin = 'mysql_native_password' where User='root';
+        > FLUSH PRIVILEGES;
+
+      Now, we shouldn't need sudo to log in any more.
+
+
+    - Create a new database and add a table.
+
+        > CREATE DATABASE companydb;
+        > use companydb;
+
+        > CREATE TABLE Contacts (
+             ID int,
+             LastName varchar(255),
+             FirstName varchar(255),
+             Address varchar(255),
+             City varchar(255)
+          );
+
+        > INSERT INTO Contacts (ID, LastName, FirstName, Address, City)
+          VALUES ('001', 'Torvalds', 'Linus', '123 Any St.', 'Newtown');
+
+
+    - Now, create the db for MediaWiki.
+
+        > CREATE DATABASE wikidb;
+        > CREATE USER 'mw-admin'@'localhost' IDENTIFIED BY 'mypassword';
+        > GRANT ALL PRIVILEGES ON wikidb.* TO 'mw-admin'@'localhost'
+               IDENTIFIED BY 'mypassword';
+        > FLUSH PRIVILEGES
+        > exit
