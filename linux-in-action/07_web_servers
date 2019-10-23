@@ -1,0 +1,59 @@
+-------------------------------------------------------
+CHAPTER 7 - WEB SERVERS
+-------------------------------------------------------
+
+- Building a LAMP Server
+
+    - The LAMP server is such a common Linux configuration that Ubuntu has its own 
+        installation media package.
+
+        # The ^ indicates a special bundled package
+        $ sudo apt install lamp-server
+
+
+    - For this exercise, we'll install each piece separately instead.  These are the steps we
+        will follow:
+
+        1. Install Apache
+        2. Add a web page to the web document root
+        3. Install a SQL engine (MariaDB)
+        4. Install PHP
+        5. Install and configure MediaWiki
+
+
+
+- Setting Up an Apache Server
+
+    - Apache tends to dominate the HTTP server market, although Nginx and IIS also have
+        a lot of market share.
+
+
+    - To start, we just install the server, and it should already be running after install.
+
+        $ sudo apt install apache2
+
+      To navigate to the default page, just go to 'localhost' in your web browser.
+
+
+    - Now, we'll add some content to our web site.  Apache will direct all incoming requests
+        to a location specified in an Apache configuration file.  In Ubuntu, this file is
+        located at '/etc/apache2/sites-available/000-default.conf'.
+
+        # Contents of 000-default.conf
+        <VirtualHost *:80>
+            ServerAdmin webmaster@localhost
+            DocumentRoot /var/www/html
+            ErrorLog ${APACHE_LOG_DIR}/error.log
+            CustomLog ${APACHE_LOG_DIR}/access.log combined
+        </VirtualHost>
+
+       The 'DocumentRoot' attribute shows that the root document is located in '/var/www/html'.
+         It is called 'index.html'.
+
+
+    - We'll overwrite the Apache default file with our own file.
+
+        <h2>Welcome!</h2>
+        Take a look at our <a href="info.html">company history</a>.
+        <br />
+        And how about a look at our new company logo: <img src="logo.png" />
