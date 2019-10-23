@@ -124,3 +124,31 @@ CHAPTER 7 - WEB SERVERS
                IDENTIFIED BY 'mypassword';
         > FLUSH PRIVILEGES
         > exit
+
+
+
+- Installing PHP
+
+    - To install PHP
+
+        # Install php
+        $ sudo apt install php
+
+        # Install apache php extension
+        $ sudo apt install libapache2-mod-php
+
+        # Restart apache to reflect changes
+        $ sudo systemctl restart apache2
+
+
+    - Now, we can check that php is working correctly by creating a file in our '/var/www/html'
+        directory.
+
+        # /var/www/html/testmyphp.php
+        <?php
+        phpinfo();
+        ?>
+
+      And we can navigate to the page in our browser:
+
+        http://localhost/testmyphp.php
