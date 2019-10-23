@@ -152,3 +152,59 @@ CHAPTER 7 - WEB SERVERS
       And we can navigate to the page in our browser:
 
         http://localhost/testmyphp.php
+
+
+
+- Installing Mediawiki
+
+    - First we'll download Mediawiki using the link from their web page.
+
+        # Download Mediawiki
+        $ wget https://releases.wikimedia.org/mediawiki/1.33/mediawiki-1.33.1.tar.gz
+
+        # Extract archive
+        $ tar xzvf mediawiki-1.33.1.tar.gz
+
+        # Create a new directory for mediawiki
+        $ sudo mkdir /var/www/html/mediawiki
+
+        # Move into /var/www/html
+        $ sudo cp -r mediawiki-1.33.1/* /var/www/html/mediawiki
+
+
+    - Note that if we wanted to have mediawiki be the root of the server, we could just copy
+        the mediawiki files directly to '/var/www/html', and we would navigate to it with
+        'localhost/index.php'.
+
+      In this case, we created a separate directory for mediawiki, so we will navigate to it 
+        with 'localhost/mediawiki/index.php'.
+
+
+    - We need to install missing packages to get MediaWiki working.
+
+        # Install php packages for strings and xml
+        $ sudo apt install php7.0-mbstring php7.0-xml
+        $ sudo systemctl restart apache
+
+        # Install php mysql driver, caching, and image processing
+        $ sudo apt install php-mysql php-apcu php-imagick
+        # sudo systemctl restart apache2
+
+
+    - To set up the database:
+
+        Host: localhost
+        Name: wikidb
+        User: wikidb database user
+        Pw:   wikidb user pw
+
+
+    - And finally create the wiki:
+
+        Site: MyNewWiki
+        U:    Admin
+        p:    adminadmin
+
+
+    - Finally, the LocalSettings.php file will be generated.  We need to download it and move it
+        to the mediawiki root folder.  Now the wiki is ready for use.
