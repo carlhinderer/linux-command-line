@@ -208,3 +208,24 @@ CHAPTER 7 - WEB SERVERS
 
     - Finally, the LocalSettings.php file will be generated.  We need to download it and move it
         to the mediawiki root folder.  Now the wiki is ready for use.
+
+
+
+- Installation Differences Between Ubuntu and CentOS
+
+    - By default, Ubuntu ships without a firewall of any sort.  This is because there are
+        no open network services beyond basic infrastructure.  Thus, Apache is ready to
+        accept incoming traffic as soon as its installed.  
+
+      CentOS, on the other hand, comes with all ports securely shut tight.  If we want apache
+        to accept requests, we have to open port 80.
+
+
+    - CentOS has the 'firewalld' service to manage the firewall and the 'firewall-cmd' tool
+        to configure the firewall.
+
+        # Add port 80 as an exception
+        $ sudo firewall-cmd --add-service=http --permanent
+
+        # Restart the service
+        $ sudo systemctl restart firewalld
