@@ -1,0 +1,125 @@
+-------------------------------------------------------
+CHAPTER 8 - NETWORKED FILE SHARING
+-------------------------------------------------------
+
+- Nextcloud
+
+    - Nextcloud is an open source software suite that can use storage capacity for saving,
+        editing, and consuming a wide range of documents, including serives like 
+        audio/video cloud hosting.  Using Nextcloud, you can create your own private
+        version of Dropbox or Google Drive.  
+
+
+    - Besides hosting your sensitive material in-house, you can also use services like
+        Dropbox, Google Drive, or S3 as your back end.
+
+
+
+- Snaps
+
+    - Snaps were created to simplify installing software on different Linux distros and solve
+        the problem of having different package managers on different distros.  Snaps are 
+        fully self-contained software packages that also install environment dependencies and
+        any extensions they need.
+
+
+    - The snap system is more than a package manager.  A snap is an isolated sandbox with 
+        limited access to other system resources.  Communication between snaps is achieved
+        through a system of interfaces that only connect where appropriate.  
+
+
+    - Nextcloud was one of the first major projects to add its package as a snap.  Running
+        the snap install for Nextcloud will give you a fully functioning Nextcloud server
+        without having to manually install the LAMP elements first.
+
+        $ sudo snap install nextcloud
+
+
+    - Ubuntu Core is a special lightweight distribution primarily built to work with IoT devices
+        like smart appliances and connected cars, and with swarms of Docker-powered containers.
+        Core uses only snaps for package management.  
+
+
+
+- Installing Nextcloud Prereqs
+
+    - For an exercise, and to be able to configure Nextcloud the way we want it, we will install it
+        manually.
+
+
+    - For production instances of 150 people and 10TB of shared data, Nextcloud recommends:
+
+        1. One server with 2 CPU cores
+        2. 16 GB of RAM
+        3. Authentication through LDAP
+        4. RHEL or Ubuntu
+        5. Apache with a TLS/SSL encryption certificate
+        6. MySQL or MariaDB
+        7. The btrfs file system instead of ext4
+        8. Caching with memcached
+
+
+    - To install the prereq packages,
+
+        # Install packages
+        $ sudo apt install apache2 mariadb-server wget nano
+
+        # Install php packages
+        $ sudo apt install libapache2-mod-php7.0 php7.0-gd php7.0-json php7.0-mysql \
+            php7.0-curl php7.0-mbstring php7.0-intl php7.0-mcrypt php7.0-xml php7.0-zip \
+            php-imagick
+
+        # Run the mysql_secure_installation
+        $ sudo mysql_secure_installation
+
+
+
+- Configuring Apache
+
+    - First, we need to add the 'rewrite' module so that urls can be rewritten as they move 
+        between the client and server.  We also need the 'headers' module to that similar things 
+        can be done with the headers.
+
+        # Add rewrite module
+        $ sudo a2enmod rewrite
+
+        # Add headers module
+        $ sudo a2enmod headers
+
+
+    - We'll want to put nextcloud at the 'localhost/nextcloud' path instead of at the root, so we
+        need to tell Apache how to do that.  We can either:
+
+        A) Add a new section to our existing '000-default.conf' file.
+
+        B) Create a new .conf file at '/etc/apache2/sites-available'.  We'll use this method.  The
+             file will look like:
+
+             # /etc/apache2/sites-available/nextcloud.conf
+             Alias /nextcloud "/var/www/nextcloud/"
+
+             <Directory /var/www/nextcloud/>
+               Options +FollowSymlinks
+               AllowOverride All
+
+               <IfModule mod_dav.c>
+                 Dav off
+               </IfModule>
+
+               SetEnv HOME /var/www/nextcloud
+               SetEnv HTTP_HOME /var/www/nextcloud
+             </Directory> 
+
+
+    - Finally, we need to create a symbolic link to the new file we created.
+
+        # Add sym link to sites-available
+        $ sudo ln -s /etc/apache2/sites-available/nextcloud.conf \
+            etc/apache2/sites-enabled/nextcloud.conf
+
+      When Apache starts, it reads the contencts of '/etc/apache2/sites-enabled' looking for
+        site configurations to load.  Those configurations won't actually exist in 
+        'sites-enabled', but there will be links to the files in '/ect/apache/sites-available'.
+
+      Having sym links for this makes it easy to quickly disable a site, and then when you've
+        finished your edits, enable it again.  
