@@ -85,3 +85,46 @@ CHAPTER 9 - SECURING SERVERS
         # Now, add a rule to re-enable ssh
         $ sudo firewall-cmd --add-rich-rule='rule family="ipv4" source address="192.168.1.5 \
             port protocol="tcp" port="22" accept'
+
+
+
+- Installing and Configuring ufw
+
+    - 'ufw' is often installed by default on Debian-like systems.
+
+        # Install ufw
+        $ sudo apt install ufw
+
+        # Add rule to allow ssh
+        $ sudo ufw allow ssh
+
+        # Enable ufw
+        $ sudo ufw enable
+
+
+    - Now, we can create rules for HTTP and HTTPS traffic.
+
+        # Add rules to allow HTTP and HTTPS
+        $ sudo ufw allow 80
+        $ sudo ufw allow 443
+
+        # Get the list of active rules
+        $ sudo ufw status
+
+
+    - We can also fine tune the rules to only allow certain IP addresses.
+
+        # Stop and disable firewall
+        $ sudo ufw disable
+
+        # Delete the 2nd firewall rule in the list
+        $ sudo ufw delete 2
+
+        # Allow ssh for a specific ip
+        $ sudo ufw allow from 10.0.3.1 to any port 22
+
+        # Re-enable the firewall
+        $ sudo ufw enable
+
+        # Get list of active rules
+        $ sudo ufw status
