@@ -123,3 +123,107 @@ CHAPTER 8 - NETWORKED FILE SHARING
 
       Having sym links for this makes it easy to quickly disable a site, and then when you've
         finished your edits, enable it again.  
+
+
+
+- Downloading and Unpacking Nextcloud
+
+    - First, we download and unpack Nextcloud
+
+        # Download nextcloud
+        $ wget https://download.nextcloud.com/server/releases/nextcloud-12.0.0.tar.bz2
+
+        # Unpack the archive
+        $ tar xjf nextcloud-12.0.0.tar.bz2
+
+
+    - Next, we copy the files to '/var/www'.
+
+        # Copy files
+        $ sudo cp -r nextcloud /var/www
+
+
+    - Apache will need full access to the nextcloud files.  Many web servers (including apache)
+        use the special 'www-data' system user account for this, so we don't have to use 'root'
+        as the file owner.
+
+        # Change ownership
+        $ sudo chown -R www-data:www-data /var/www/nextcloud
+
+        # Restart apache
+        $ sudo systemctl restart apache2
+
+
+    - If there are any issues, check the logs to figure out what they are.  If there are no issues,
+        we should be able to navigate the the nextcloud admin page.
+
+        # Tail logs if there are any issues
+        $ journalctl | tail
+
+        # Navigate to nextcloud admin page
+        http://localhost/nextcloud
+
+
+
+- Configuring Nextcloud
+
+    - First, make an admin account and enter your mariadb passwords.  Now, we can use the
+        administration console.
+
+        u: admin
+        p: admin
+        db: nextclouddb
+
+
+    - Rather than using '/etc' the way many Linux applications do, Nextcloud keeps its main
+        config file 'config.php' in the '/var/www/nextcloud/config' directory.  It contains
+        authentication and environment information.  
+
+
+    - Nextcloud also has a fully featured command-line shell called 'occ command'.  
+
+        # Naviagate to nextcloud root
+        $ cd var/www/nextcloud
+
+        # Display occ help
+        $ sudo -u www-data php occ -h
+
+        # Print full list of available commands
+        $ sudo -u www-data php occ list
+
+
+
+- Using the Nextcloud Admin Console
+
+    - Clicking the gear icon in the upper right will bring up menus for Users, Apps, or
+        Admin.  
+
+
+    - We'll enable HTTPS to protect data in transit in the next chapter.  Right now, we also
+        want to protect the data while its at rest.  To do this, we will encrypt our files
+        on the server.  
+
+      To enable encryption, click the 'Encryption' link on the left panel and select the 
+        'Enable Server-side Encryption' check box.
+
+
+
+- Using AWS S3 as the Primary Nextcloud Storage
+
+    - First, we need the 'External Storage Support' app bundle.  To get it, we go to 
+        'Apps' > 'Disabled Apps' > 'Enable Storage Support'.
+
+
+    - Next, we create a new bucket (AWS CLI must be installed and configured on the server
+        to do this).  
+
+        # Bucket name must be globally unique
+        $ aws s3 mb s3://nextcloud445566
+
+
+    - In the Nextcloud console, navigate to the 'External Storage' link, click the 'Add Storage'
+        drop-down, and select 'Amazon S3' from the list.  Enter the bucket name, and your
+        access and secret keys.
+
+
+    - Now, we can copy files back and forth between our local Nextcloud and S3.
