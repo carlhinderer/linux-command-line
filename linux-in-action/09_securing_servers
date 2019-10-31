@@ -1,0 +1,87 @@
+-------------------------------------------------------
+CHAPTER 9 - SECURING SERVERS
+-------------------------------------------------------
+
+- Low-Hanging Fruit
+
+    - Always keep regular backups.
+
+
+    - Apply all software updates regularly.  There is a risk that upgrading packages may
+        cause issues, but it must be done anyway.  This risk can be mitigated by trying
+        the updates in staging environments first.
+
+        $ sudo apt update
+        $ sudo apt upgrade
+
+      Keep in mind that updating the package manager will only update packages installed 
+        by it.  Any software that was installed separately will need to be manually
+        updated.
+
+
+
+- Using Firewalls
+
+    - A 'firewall' is a set of rules.  When a data packets moves into or out of a protected
+        network space, its contents (its origin, target, and protocol) are tested against
+        the firewall rules to see if it should be allowed through.
+
+
+    - For instance, for a web server, let's say it must be open to both HTTP and HTTPS 
+        traffic from anywhere in the world.  Also, since admins and developers will need to
+        log in from time to time, we must enable SSH only for the people who need it.  All
+        other requests should be automatically refused.
+
+
+    - A Linux machine can be configured to apply firewall rules at the kernel level using 
+        the 'iptables' program.  It's not too complex, but to make it easier to configure,
+        Linux distros now include higher-level tools that are easier to use like 'ufw' (Ubuntu)
+        and 'firewalld' (CentOS).
+
+
+
+- Installing and Configuring firewalld
+
+    - 'firewalld' is part of the 'systemd' family of utilities.  It can be installed on 
+        Debian-like machines as well as RedHat-like machines.  
+
+        # Install firewalld
+        $ sudo apt install firewalld
+
+
+    - The 'firewall-cmd' tool is used to administer firewalld from the command line.
+
+        # Check the current firewall status
+        $ sudo firewall-cmd --state
+
+
+    - By default, all incoming traffic except for SSH will be blocked.  We'll have to add
+        exceptions for web traffic.
+
+        # Add rules to open the HTTP and HTTPS ports
+        $ sudo firewall-cmd --permanent --add-port=80/tcp
+        $ sudo firewall-cmd --permanent --add-port=443/tcp
+
+        # Reload to apply rules to current session
+        $ sudo firewall-cmd
+
+        # We can use standard service names instead of port numbers
+        $ sudo firewall-cmd --permanent --add-service=http
+        $ sudo firewall-cmd --permanent --add-service=https
+
+        # List all current settings
+        $ sudo firewall-cmd --list-services
+
+
+    - We can also remove services.
+
+        # Remove ssh access
+        $ sudo firewall-cmd --permanent --remove-service=ssh
+        $ sudo firewall-cmd --reload
+
+        # Test the configuration, login should fail
+        $ ssh root@192.168.1.22
+
+        # Now, add a rule to re-enable ssh
+        $ sudo firewall-cmd --add-rich-rule='rule family="ipv4" source address="192.168.1.5 \
+            port protocol="tcp" port="22" accept'
