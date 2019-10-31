@@ -128,3 +128,51 @@ CHAPTER 9 - SECURING SERVERS
 
         # Get list of active rules
         $ sudo ufw status
+
+
+
+- Using Nonstandard Ports
+
+    - Some admins will use nonstandard ports to provide security through obscurity.  For
+        instance, we can set the port used for SSH in the '/etc/ssh/sshd_conf' file on the
+        server.
+
+        # Default /etc/ssh/sshd_conf
+        Port 22
+
+        # We can change it
+        Port 55555
+
+        # Then, just restart the service
+        $ sudo systemctl restart ssh
+
+        # And, we'll have to open the port we want to use
+        $ sudo ufw allow 55555/tcp
+
+
+    - After this, we can specify the port we want to use when we ssh into the machine.
+
+        $ ssh -p 55555 username@ip
+
+
+
+- Network Ports
+
+    - Ports 1-1023 are designated as 'well-known' and have been set aside for recognized
+        services.  Using one of these ports is likely to cause a conflict.
+
+      Examples:
+        22 (SSH)
+        80 (HTTP)
+
+
+    - Ports 1024-49151 are 'registered', meaning that companies and organizations have 
+        requested that specific ports be set aside for their applications.
+
+      Examples:
+        1812 (RADIUS)
+        3306 (MySQL)
+
+
+    - Ports 49152-65535 are 'unregistered' and are considered dynamic or private.  These
+        ports are available for any temporary or ad hoc use.
