@@ -176,3 +176,105 @@ CHAPTER 9 - SECURING SERVERS
 
     - Ports 49152-65535 are 'unregistered' and are considered dynamic or private.  These
         ports are available for any temporary or ad hoc use.
+
+
+
+- Encrypting Data in Transport
+
+    - Any private information on websites must be encrpyted.  Even if the information is
+        public, encrypting the site will cause it to generate more traffic, since Google's
+        PageRank algorithm penalizes unencrypted websites.
+
+
+    - To encrypt websites, we use 'certificates', which are files containing information 
+        identifying the domain, owner, key, and a reliable digital signature.
+
+      Once you have a certificate, browsers can authenticate the security of your site and
+        exchange only encrypted data throughout a session.  All widely used modern browsers
+        come with public root certificates preinstalled, so they can authenticate 
+        connections with any site using a private CA certificate.
+
+
+    - The steps in the process are:
+
+        1. A client browser requests the server identity so the two can perform a handshake.
+
+        2. The server responds by sending a copy of the certificate it received from a CA.
+
+        3. The browser compares the certificate against its list of root certificates and 
+             confirms that your certificate hasn't been expired or been revoked.
+
+        4. If satisfied, the browser encrypts a symmetric session key using the public key
+             your server sent, and transmits the key to the server.
+
+        5. All transmissions will be encrypted using the session key.
+
+
+
+- Certificate Authorities
+
+    - Until 2016, generating and installing encryption certificates using the SSL/TLS
+        standard took time and cost money.  
+
+      On Linux, you would use the OpenSSL command line interface to generate a key pair and then 
+        put together a specially formatted CSR (Certificate Signing Request) package containing 
+        the public half of the pair along with site profile information.
+
+      The CSR would then be sent to a CA.  If the CSR was approved, the CA would send a 
+        certificate to be added to your file system.  And, you would update the Apache config
+        files so that Apache would know where the cert was stored.
+
+
+    - Since 2016, 'Let's Encrypt' has been issuing certificates as a CA for free.  It's sponsored
+        by the Electronic Frontier Foundation and a bunch of corporate partners.
+
+      We don't even need to worry about configuring files and using OpenSSL to generate CSRs any
+        more.  Let’s Encrypt’s 'Certbot ACME' client will do pretty much the whole thing for you. 
+        Let’s Encrypt certificates are valid for 90 days and can be set to automatically renew. 
+
+
+
+- Generating Certificates
+
+    - First, you'll need to acquire a domain name from a registrar like GoDaddy or AWS Route 53.
+        For our example server, are domain is 'bootstrap-it.com'.
+
+        # /etc/apache2/sites-available/000-default.conf
+        <VirtualHost *:80>
+            ServerName bootstrap-it.com
+            DocumentRoot /var/www/html
+            ServerAlias www.bootstrap-it.com
+        </VirtualHost>
+
+
+    - Next, we'll install the Certbot.
+
+        # Add the certbot repo to our apt list
+        $ sudo apt install software-properties-common
+        $ sudo add-apt-repository ppa:certbot/certbot
+        $ sudo apt update
+
+        # Install certbot
+        $ sudo apt install python-certbot-apache
+
+
+    - Now, we can launch the certbot.  Certbot will read our web server config files to infer 
+        the domain names we'll likely want to register.
+
+        # Launch certbot
+        $ sudo certbot --apache
+
+        Which names would you like to activate HTTPS for?
+        --------------------------
+        1: bootstrap-it.com
+        2: www.bootstrap-it.com
+        --------------------------
+        Select the appropriate numbers separated by commas and/or spaces,
+          or leave input blank to select all options shown (Enter 'c' to cancel):
+
+
+    - Once we have selected the domains, Certbot will try to confirm our domain exists in a
+        publicly accessible DNS server.  Then, it will try to connect to your site.  
+
+      If that is successful, a certificate will automatically be installed and any additional 
+        information will be added to your config files.
