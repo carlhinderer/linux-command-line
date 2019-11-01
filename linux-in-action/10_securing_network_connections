@@ -1,0 +1,108 @@
+-------------------------------------------------------
+CHAPTER 10 - SECURING NETWORK CONNECTIONS
+-------------------------------------------------------
+
+- Building an OpenVPN Tunnel
+
+    - Many professional tools must now be available for remote workers.  Since these remote 
+        connections connect through public networks, they are inherenctly insecure.  
+
+
+    - So far, we have used encryption in several cases in this book:
+
+        1. SSH and SCP protect data transferred through remote connections
+        2. File encryption protects data at rest
+        3. TLS/SSL certificates protected data in transit between web browsers and servers
+
+
+    - A VPN tunnel provides a direct connection between remote clients and servers, encrypting
+        the data passed back and forth between them.  Once you have opened a tunnel, 
+        it's possible to connect remote networks like they're all together locally.  
+
+
+    - OpenVPN uses the same TLS/SSL encryption that our web server does.  'IPSec', a layer 2
+        protocol, is an alternative.  
+
+
+    - Here, we want to build an OpenVPN server to permit sharing applications and access to 
+        the server's local network environment across multiple campuses.
+
+
+
+- Installing an OpenVPN Server
+
+    - First, we'll install the server.
+
+        # Install the required packages
+        $ sudo apt install openvpn easy-rsa
+
+        # Only open ports we need
+        $ sudo ufw enable
+        $ sudo ufw allow 22
+        $ sudo ufw allow 1194
+
+
+    - Next, we'll need to uncomment out a sinle line ('net.ipv4.ip_forward=1') in the 
+        '/ect/sysctl.conf' file.  This allows remote clients to be redirected as needed once they are
+        connected.  
+
+        # Edit file
+        $ sudo nano /etc/sysctl.conf
+
+        # Load new setting
+        $ sudo sysctl -p
+
+
+
+- Steps For Setting Up OpenVPN Server
+
+    1. Generate a set of PKI (Public Key Infrastructure) encryption keys on the server using scripts
+         that come with the 'easy-rsa' package.
+
+    2. Prepare matching keys for the client.
+
+    3. Configure a 'server.conf' file for the server.
+
+    4. Configure your OpenVPN client.
+
+    5. Test your VPN.
+
+
+
+- Using easy-rsa
+
+    - The easy-rsa scripts we need to generate keys are:
+
+        clean-all             # Removes old key files
+        pkitool               # Frontend for OpenSSL
+        build-ca              # Uses the pkitool script to generate a root certificate
+        build-key-server      # Uses the pkitool script to generate a key pair and certificate
+        build-dh              # Sets Diffie-Hellman authentication parameters
+
+
+    - Edit the environment variables in the '/etc/openvpn/easy-rsa/vars' file.  They provide
+        metadata about your domain and location.
+
+        # Edit /etc/openvpn/easy-rsa/vars File
+
+        export KEY_COUNTRY="CA"
+        export KEY_PROVINCE="ON"
+        export KEY_CITY="Toronto"
+        export KEY_ORG="Bootstrap IT"
+        export KEY_EMAIL="info@bootstrap-it.com"
+        export KEY_OU="IT"
+
+        # Run the file to pass its values to the shell environment.
+        $ cd /etc/openvpn/easy-rsa
+        $ sudo . ./vars
+
+
+    - Next, we'll generate the root certificate.
+
+        $ sudo ./clean-all
+        $ sudo ./build-ca
+
+
+    - Next, build a key-server script.
+
+        $ ./build-key-server server
