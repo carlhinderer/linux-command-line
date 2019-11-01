@@ -398,3 +398,109 @@ CHAPTER 9 - SECURING SERVERS
         Connecting to localhost (localhost)|::1|:80... connected.
         HTTP request sent, awaiting response... 403 Forbidden
         2017-08-02 10:27:30 ERROR 403: Forbidden.  
+
+
+
+- System Groups
+
+    - Groups are the mechanism we use to make files containing sensitive data accessible to multiple
+        accounts without opening them up to everyone.  
+
+
+    - Here, we create a new file and user account.  We won't be able to read the file yet after this
+        step.
+
+        # Create a new file
+        $ nano datafile.txt
+
+        # Onwer and group have full rights
+        $ chmod 770 datafile.txt
+
+        # Create new user account
+        $ sudo useradd otheruser
+        $ sudo passwd otheruser
+
+        # Switch to new user account 
+        $ su otheruser
+
+        # Try to access file
+        $ cat /home/ubuntu/datafile.txt
+
+        cat: /home/ubuntu/datafile.txt: Permission denied
+
+
+    - Now, we'll create a new group and associate it to the file.  Then, we'll add our new user to the
+        new group, and we'll be able to access the file.
+
+        # Create new group
+        $ sudo groupadd app-data-group
+
+        # Change file group
+        $ sudo chown ubuntu:app-data-group datafile.txt
+
+        # Add user to group and switch to user
+        $ sudo usermod -aG app-data-group otheruser
+
+        # Now, we can access the file
+        $ cat /home/ubuntu/datafile.txt
+
+        Hello World
+
+
+
+- Scanning for Dangerous User Id Values
+
+    - Sometimes, either by accident or malicious intent, a regular user gets full-time admin resources.
+        To scan for these types of accounts, we can search the 'passwd' file for any user that has
+        '0' as their user or group id.
+
+        # Look at passwd file
+        $ cat /etc/passwd
+
+        root:x:0:0:root:/root:/bin/bash
+        [...]
+        ubuntu:x:1000:1000::/home/ubuntu:/bin/bash
+
+
+        # Look for user accounts with userid of 0, luckily only root account
+        $ awk -F: '($3 == "0") {print}' /etc/passwd         
+
+        root:x:0:0:root:/root:/bin/bash
+
+
+        # Look for user accounts with groupid of 0, luckily only root account
+        $ awk -F: '($4 == "0") {print}' /etc/passwd
+
+        root:x:0:0:root:/root:/bin/bash
+
+
+
+- Scanning The System
+
+    - A port is considered 'open' if there's some process running on the host that's listening
+        on that port for requests.  The 'netstat' command displays open ports along with how
+        they are being used.
+
+        # Get open ports
+        $ netstat -npl
+
+
+    - The 'ss' command is also commonly used.  It lists all established ssh connections.
+
+        # Get ssh connections
+        $ ss -o state established
+
+           '( dport = :ssh or sport = :ssh )'                             1
+        Netid  Recv-Q Send-Q    Local Address:Port   Peer Address:Port
+        tcp    0      0         10.0.3.1:39874       10.0.3.96:ssh
+        timer:(keepalive,18min,0)
+
+
+    - The 'systemctl' command can list all existing services.
+
+        $ sudo systemctl list-unit-files --type=service --state=enabled
+
+
+    - The 'dpkg' command can list all currently installed packages.
+
+        $ sudo dpkg --list
