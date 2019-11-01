@@ -278,3 +278,123 @@ CHAPTER 9 - SECURING SERVERS
 
       If that is successful, a certificate will automatically be installed and any additional 
         information will be added to your config files.
+
+
+
+- Hardening the Authentication Process
+
+    - These are best practices for improving remote access security:
+
+        1. Avoid logging into servers as the root user.  It's always better to use 'sudo'
+             whenever admin privileges are necessary.
+
+           # In /etc/ssh/sshd_conf file
+           PermitRootLogin no
+
+           # Restart the service
+           $ sudo systemctl restart ssh
+
+
+        2. Encourage admins to use passwordless SSH access through key pais.
+
+           # In /etc/ssh/sshd_conf file
+           PasswordAuthentication no
+
+           # Restart the service
+           $ sudo systemctl restart ssh
+
+
+
+- Controlling File System Objects with SELinux
+
+    - A common permisions profile might give the owner of the file 'read-write-execute'
+        privileges, and the group and others only 'read' (744 in numeric notation).  This
+        is known as 'DAC (Discretionary Access Controls)', because it gives users full
+        control over their own resources.
+
+      The problem with the DAC approach is that non-admin users will make bad decisions.  For
+        instance, developers want files to be readable so they make them '777'.  
+
+
+    - When installed and activated, the 'SELinux' kernel module applies 'MAC (Mandatory Access
+        Controls)'.  This imposes carefully defined, system-wide limits on what a user can do,
+        making it impossible to set inherently dangerous conditions.
+
+
+    - SELinux is often not used because it has so many application compatibility problems.  
+        This is because many applications need to use system resources.  These conflicts can be
+        fixed, but it adds complexity to the development process.
+
+
+
+- Installing and Activating SELinux
+
+    - SELinux was developed by and for Red Hat Linux.  It comes installed and activated by default
+        on those systems.  It can be run for Ubuntu, but AppArmor is the more common choice for
+        Ubuntu.
+
+        # Install SELinux on Ubuntu
+        $ sudo apt install setools policycoreutils selinux
+
+        # Get current SELinux status
+        $ sudo sestatus
+
+        # Add SELinux into boot process
+        $ sudo selinux-activate
+
+
+    - SELinux behavior is controlled through the config file at '/etc/selinux/config'.  The file 
+        contains 2 settings, 'SELinuxState' and 'SELinuxType'.
+
+        SELinuxState = ['disabled',        # SELinux is off
+                        'enforcing',       # Security policy is enforced
+                        'permissive']      # Policy breaches trigger logged warnings
+
+        SELinuxType  = ['targeted',        # Enables a domain whose processes are unconfined by SELinux   
+                        'minimum',         # Only minimal processes are restricted by SELinux
+                        'mls']             # Policies are applied based on sensitivity level and capability
+
+
+
+- Applying SELinux Policies
+
+    - Let's say we have the scenario where we want to protect the system from developers who may
+        want to share files a bit too widely.
+
+      In this example, we work with a simple machine with Apache installed and an 'index.html'
+        file at '/var/www/html/'  The file will be accessible to at least local requests.
+
+        # Access file locally
+        $ wget localhost
+
+
+    - If we check out the permission status of 'index.html':
+
+        # -Z will display file's security context
+        $ sudo ls -Z /var/www/html/
+
+        -rw-r--r--. root root unconfined_u:object_r:httpd_sys_content_t:s0 index.html
+
+
+    - The file is globally readable, which is common for web resources.  Now, change the file's context 
+        type.  We'll replace the Apache 'httpd_sys_content_t' type with the Samba 'samba_share_t'
+        type.  
+
+        # Change the type
+        $ sudo chcon -t samba_share_t /var/www/html/index.html
+
+        # New security context
+        $ sudo ls -Z /var/www/html/
+
+        -rw-r--r--. root root unconfined_u:object_r:samba_share_t:s0 index.html
+
+
+    - Now Apache is unable to handle the request, since Apache has no control over the file in
+        its current context.
+
+        # Access file locally
+        $ wget localhost
+
+        Connecting to localhost (localhost)|::1|:80... connected.
+        HTTP request sent, awaiting response... 403 Forbidden
+        2017-08-02 10:27:30 ERROR 403: Forbidden.  
