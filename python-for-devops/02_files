@@ -218,6 +218,84 @@ CHAPTER 2 - AUTOMATING FILES AND THE FILESYSTEM
 
 - Using Regular Expressions to Search Text
 
+    - The Apache HTTP server can be configured to save log files in different formats.  One widely used
+        format is the 'CLF (Common Log Format)'.  A variety of log analysis tools can be used on this
+        format.
+
+      This is the layout of CLF:
+
+        <IP Address> <Client Id> <User Id> <Time> <Request> <Status> <Size>
+
+        # Example
+        127.0.0.1 - swills [13/Nov/2019:14:43:30 -0800] "GET /assets/234 HTTP/1.0" 200 2326
+
+
+    - Now, we'll create some regexes to parse the log entries:
+
+        # Sample log entry
+        >>> line = '127.0.0.1 - rj [13/Nov/2019:14:43:30] "GET HTTP/1.0" 200'
+
+
+        # Get IP address
+        >>> re.search(r'(?P<IP>\d+\.\d+\.\d+\.\d+)', line)
+        <re.Match object; span=(0, 9), match='127.0.0.1'>
+
+        >>> m = re.search(r'(?P<IP>\d+\.\d+\.\d+\.\d+)', line)
+        >>> m.group('IP')
+        '127.0.0.1'
+
+
+        # Get time
+        >>> r = r'\[(?P<Time>\d\d/\w{3}/\d{4}:\d{2}:\d{2}:\d{2})\]'
+        >>> m = re.search(r, line)
+        >>> m.group('Time')
+        '13/Nov/2019:14:43:30'
+
+
+    - We can grab multiple elements, as has been done here:
+
+        # Build regex
+        >>> r = r'(?P<IP>\d+\.\d+\.\d+\.\d+)'
+        >>> r += r' - (?P<User>\w+) '
+        >>> r += r'\[(?P<Time>\d\d/\w{3}/\d{4}:\d{2}:\d{2}:\d{2})\]'
+        >>> r += r' (?P<Request>".+")'
+
+        # Search
+        >>> m = re.search(r, line)
+
+
+        # Access matches
+        >>> m.group('IP')
+        '127.0.0.1'
+
+        >>> m.group('User')
+        'rj'
+
+        >>> m.group('Time')
+        '13/Nov/2019:14:43:30'
+
+        >>> m.group('Request')
+        '"GET HTTP/1.0"'
+
+
+
+    - We can use this same regex to pull information out of the entire log, instead of just a single
+        line.
+
+        # Build regex
+        >>> r = r'(?P<IP>\d+\.\d+\.\d+\.\d+)'
+        >>> r += r'- (?P<User>\w+)'
+        >>> r += r'\[(?P<Time>08/Nov/\d{4}:\d{2}:\d{2}:\d{2} [-+]\d{4})\]'
+        >>> r += r' (?P<Request>"GET .+")'
+
+
+        # Use finditer to process the log, printing each matching IP address
+        >>> matched = re.finditer(r, access_log)
+        >>> for m in matched:
+                print(m.group('IP'))
+
+
+
 - Dealing with Large Files
 
 - Encrypting Text
