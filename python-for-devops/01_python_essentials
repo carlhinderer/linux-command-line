@@ -282,3 +282,88 @@ CHAPTER 1 - PYTHON ESSENTIALS FOR DEVOPS
         >>> regex = re.compile(r'\w+\@\w+\.\w+')
         >>> regex.search(cc_list)
         <re.Match object; span=(13, 29), match='ekoenig@vpwk.com'>
+
+
+
+- Generators
+
+    - Generators can be used similarly to range objects to provide lazy evaulation.  Generators are
+        able to pause their state between calls.  
+
+        # Create a simple generator
+        >>> def count():
+                n = 0
+                while True:
+                    n += 1
+                    yield n
+
+
+        # Use the generator
+        >>> counter = count()
+        >>> counter
+        <generator object count at 0x10e8509a8>
+
+        >>> next(counter)
+        1
+        >>> next(counter)
+        2
+        >>> next(counter)
+        3
+
+
+        # Fibonacci Generator
+        >>> def fib():
+                first = 0
+                last = 1
+                while True:
+                    first, last = last, first + last
+                    yield first
+
+        >>> f = fib()
+        >>> next(f)
+        1
+        >>> next(f)
+        1
+        >>> next(f)
+        2
+        >>> next(f)
+        3
+
+
+        # Use generator in a for loop
+        >>> f = fib()
+        >>> for x in f:
+                print(x)
+                if x > 12:
+                    break
+
+        1
+        1
+        2
+        3
+        5
+        8
+        13
+
+
+
+- Generator Comprehensions
+
+    # List comprehension
+    >>> list_o_nums = [x for x in range(100)]
+    >>> list_o_nums
+    [0, 1, 2, 3, ...  97, 98, 99]
+
+
+    # Generator comprehension
+    >>> gen_o_nums = (x for x in range(100))
+    >>> gen_o_nums
+    <generator object <genexpr> at 0x10ea14408>
+
+
+    # Memory comparison
+    >>> import sys
+    >>> sys.getsizeof(list_o_nums)
+    912
+    >>> sys.getsizeof(gen_o_nums)
+    120
