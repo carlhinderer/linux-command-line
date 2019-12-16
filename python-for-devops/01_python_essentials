@@ -1,0 +1,87 @@
+-----------------------------------------------------------
+CHAPTER 1 - PYTHON ESSENTIALS FOR DEVOPS
+-----------------------------------------------------------
+
+- The range() Function
+
+    - The range() function is actually not a function at all, but a type representing a sequence of
+        numbers.  It maintains a small memory footprint, even over extended sequences, since it
+        only stores the start, stop, and step values.
+
+
+- String Formatting
+
+    # C-style way
+    >>> "%s + %s = %s" % (1, 2, 'Three')
+    >>> "%.3f" % 1.234567
+
+    # Format method (Python 3)
+    >>> "{} comes before {}".format('first', 'second')
+    >>> "{city} is in {state}".format(city='Denver', state='Colorado')
+
+    # Supply a dictionary of parameter values
+    >>> values = {'first': 'Bill', 'last': 'Bailey'}
+    >>> "Won't you come home, {first} {last}?".format(**values)
+
+    # F-strings are simpler version of format
+    >>> count = 43
+    >>> f"Count: {{count:5d}}"
+
+
+
+- The Standard Library Template Class
+
+    >>> from string import Template
+    >>> greeting = Template("$hello Mark Anthony")
+
+    >>> greeting.substitute(hello='Bonjour')
+    'Bonjour Mark Anthony'
+
+
+
+- Functions as Objects
+
+    >>> def double(input):
+            return input*2
+    
+    >>> double
+    <function double at 0x107d34ae8>
+
+    >>> type(double)
+    <class 'function'>
+
+    >>> def triple(input):
+            return input*3
+
+    >>> functions = [double, triple]
+    >>> for function in functions:
+            print(function(3))
+    6
+    9
+
+
+
+- Anonymous Functions
+
+    - When you need to create a very limited function, you can create an unnamed (anonymous) one
+        using the 'lambda' keyword.  Generally, we should limit their use to situations where a 
+        function expects a small function as an argument.
+
+
+      # The default sorting mechanism compares first elements
+      >>> items = [[0, 'a', 2], [5, 'b', 0], [2, 'c', 1]]
+      >>> sorted(items)
+      [[0, 'a', 2], [2, 'c', 1], [5, 'b', 0]]
+
+
+      # Define a sort method to compare the second elements
+      >>> def second(item):
+              return item[1]
+
+      # Use method for sorting
+      >>> sorted(items, key=second)
+      [[0, 'a', 2], [5, 'b', 0], [2, 'c', 1]]
+
+
+      # With lambda, we can do the same thing without a full function definition
+      >>> sorted(items, key=lambda item: item[1])
