@@ -1,0 +1,97 @@
+-----------------------------------------------------------
+CHAPTER 2 - AUTOMATING FILES AND THE FILESYSTEM
+-----------------------------------------------------------
+
+- Reading Files
+
+    # The open() function creates a file object
+    >>> file_path = 'bookofdreams.txt'
+    >>> open_file = open(file_path, 'r')
+
+    # The read() method returns the file contents as a string
+    >>> text = open_file.read()
+    >>> len(text)
+    >>> 476909
+    >>> text[56]
+    's'
+
+    >>> open_file
+    <_io.TextIOWrapper name='bookofdreams.txt' mode='r' encoding='UTF-8'>
+
+    # It's a good practice to close files manually, although Python will close them automatically
+    #   when they are out of scope.
+    >>> open_file.close()
+
+
+    # The readlines() method returns the file contents split on newline characters
+    >>> open_file = open(file_path, 'r')
+    >>> text = open_file.readlines()
+    >>> len(text)
+    8796
+
+    >>> text[100]
+    'science, when it admits the possibility of occasional hallucinations\n'
+
+    >>> open_file.close()
+
+
+
+- Using the with Statement
+
+    # The with statement will cause the file to be closed implicitly
+    >>> with open(file_path, 'r') as open_file:
+            text = open_file.readlines()
+
+
+
+- Opening Binary Files
+
+    # If you open binary files (a jpeg for example) as text, the line ending mismatches
+    #   will corrupt the file.  So, we must open it as binary.
+
+    >>> file_path = 'bookofdreamsghos00lang.pdf'
+    >>> with open(file_path, 'rb') as open_file:
+            btext = open_file.read()
+
+    >>> btext[0]
+    37
+
+    >>> btext[:25]
+    b'%PDF-1.5\n%\xec\xf5\xf2\xe1\xe4\xef\xe3\xf5\xed\xe5\xee\xf4\n18'
+
+
+
+- Writing Files
+
+    # In write mode, the open() function creates a file if it doesn't already exist and 
+    #   overwrites it if it does.  To append to a file instead, use the 'a' flag in the mode.
+
+    >>> text = '''export STAGE=PROD
+                  export TABLE_ID=token-storage-1234'''
+
+    >>> with open('.envrc', 'w') as opened_file:
+            opened_file.write(text)
+
+    >>> !cat .envrc
+    export STAGE=PROD
+    export TABLE_ID=token-storage-1234
+
+
+
+- The pathlib Module
+
+    # The pathlib module has convenience functions for more advanced path handling
+    >>> import pathlib
+    
+
+    # Read text from a file
+    >>> path = pathlib.Path('/Users/joe/test_script.py')
+    >>> path.read_text()
+
+    # Write text
+    >>> path.write_text('LOG:DEBUG')
+
+    
+    # Read binary data
+    >>> path = pathlib.Path('/Users/joe/sp.config')
+    >>> path.read_bytes()
