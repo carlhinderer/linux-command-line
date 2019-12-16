@@ -177,6 +177,45 @@ CHAPTER 2 - AUTOMATING FILES AND THE FILESYSTEM
 
 
 
+- Working with CSV
+
+    >>> import csv
+    >>> file_path = '/Users/kbehrman/Downloads/registered_user_count_ytd.csv'
+
+    # Read
+    >>> with open(file_path, newline='') as csv_file:
+            off_reader = csv.reader(csv_file, delimiter=',')
+            for _ in range(5):
+                print(next(off_reader))
+
+    ['Date', 'PreviousUserCount', 'UserCountTotal', 'UserCountDay']
+    ['2014-01-02', '61', '5336', '5275']
+    ['2014-01-03', '42', '5378', '5336']
+    ['2014-01-04', '26', '5404', '5378']
+    ['2014-01-05', '65', '5469', '5404']
+
+
+
+- Using pandas DataFrames
+
+    # Read a csv file
+    >>> import pandas as pd
+    >>> df = pd.read_csv('sample-data.csv') 
+
+
+    # Look at top rows of file
+    >>> df.head(3)
+
+
+    # Get basic statistics of DataFrame
+    >>> df.describe()
+
+
+    # View a single column
+    >>> df['close']
+
+
+
 - Using Regular Expressions to Search Text
 
 - Dealing with Large Files
