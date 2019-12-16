@@ -9,6 +9,7 @@ CHAPTER 1 - PYTHON ESSENTIALS FOR DEVOPS
         only stores the start, stop, and step values.
 
 
+
 - String Formatting
 
     # C-style way
@@ -367,3 +368,63 @@ CHAPTER 1 - PYTHON ESSENTIALS FOR DEVOPS
     912
     >>> sys.getsizeof(gen_o_nums)
     120
+
+
+
+- Running Unix Shell Commands with IPython
+
+    - An 'SList' type converts a regular shell command into an object that has 3 main methods:
+
+        1. field
+        2. grep
+        3. sort
+
+
+      # Get an SList
+      >>> var_ls = !ls -l
+      >>> type(var_ls)
+      SList
+
+
+      # The sort method sorts the results by one of the columns
+      >>> df = !df
+      >>> df.sort(3, nums=True)
+
+
+      # Grep searches for a string
+      # Return all processes with kill in the name
+      >>> ls = !ls -l /usr/bin
+      >>> ls.grep("kill")
+
+      ['-rwxr-xr-x   1 root   wheel      1621 Aug 20  2018 kill.d',
+       '-rwxr-xr-x   1 root   wheel     23984 Mar 20 23:10 killall',
+       '-rwxr-xr-x   1 root   wheel     30512 Mar 20 23:10 pkill']
+
+
+
+- Using IPython Magic Commands
+
+    # Write inline bash
+    >>> %%bash
+        uname -a
+
+
+    # Write and test Python or bash scripts on the fly
+    >>> %%writefile print_time.py
+        #!/usr/bin/env python
+        import datetime
+        print(datetime.datetime.now().time())
+
+    # File now exists
+    #!/usr/bin/env python
+    import datetime
+    print(datetime.datetime.now().time())
+
+    # Run the script
+    >>> !python print_time.py
+    19:06:00.594914
+
+
+    # List variables currently in memory
+    >>> %who
+    df    ls    var_ls
