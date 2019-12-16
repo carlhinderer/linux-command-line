@@ -85,3 +85,200 @@ CHAPTER 1 - PYTHON ESSENTIALS FOR DEVOPS
 
       # With lambda, we can do the same thing without a full function definition
       >>> sorted(items, key=lambda item: item[1])
+
+
+
+- Using Regular Expressions
+
+    The Python 're' package offers regular expressions similar to those found in Perl.  The 're'
+      module uses backslashes to delineate special characters used in matching.  To avoid confusion
+      with regular string escape sequences, it is recommended that raw strings are used in regex
+      patterns.
+
+
+    - Searching
+
+        # CC list from an email
+        >>> cc_list = '''Ezra Koenig <ekoenig@vpwk.com>,
+                         Rostam Batmanglij <rostam@vpwk.com>,
+                         Chris Tomson <ctomson@vpwk.com,
+                         Bobbi Baio <bbaio@vpwk.com'''
+
+        # Search with in
+        >>> 'Rostam' in cc_list
+        True
+
+        
+        # Similarly, can search with re.search (returns a re.Match only if there is a match)
+        >>> import re
+        >>> re.search(r'Rostam', cc_list)
+        <re.Match object; span=(32, 38), match='Rostam'>
+
+        # Use as condition
+        >>> if re.search(r'Rostam', cc_list):
+                print('Found Rostam')
+
+
+    - Character Sets
+
+        # Match a B or R, followed by obb, followed by i or y
+        >>> re.search(r'[B,R]obb[i,y]', cc_list)
+
+
+        # Match on character ranges
+        >>> re.search(r'Chr[a-z][a-z]', cc_list)
+
+        # One or more letter
+        >>> re.search(r'[A-Za-z]+', cc_list)
+
+        # 6 consecutive letters
+        >>> re.search(r'[A-Za-z]{6}', cc_list)
+
+
+        # Match an email address
+        >>> re.search(r'[A-Za-z]+@[a-z]+\.[a-z]+', cc_list)
+        <re.Match object; span=(13, 29), match='ekoenig@vpwk.com'>
+
+
+    - Character Classes
+
+        \w     Equivalent to [a-zA-Z0-9]
+        \d     Equivalent to [0-9]
+
+
+        # Match one or more word characters
+        >>> re.search(r'\w+', cc_list)
+        <re.Match object; span=(0, 4), match='Ezra'>
+
+
+        # Much simpler email address matcher
+        >>> re.search(r'\w+\@\w+\.\w+', cc_list)
+        <re.Match object; span=(13, 29), match='ekoenig@vpwk.com'>
+
+
+    - Groups
+
+        We can use parentheses to define groups in a match.  These groups can be accessed from the
+          match object.
+
+
+        # Will be defined in the order in which they appear
+        >>> matched = re.search(r'(\w+)\@(\w+)\.(\w+)', cc_list)
+
+        # 0-indexed group is always full match
+        >>> matched.group(0)
+        'ekoenig@vpwk.com'
+
+        # Individual groups
+        >>> matched.group(1)
+        'ekoenig'
+        >>> matched.group(2)
+        'vpwk'
+        >>> matched.group(3)
+        'com'
+
+
+    - Named Groups
+
+        # Name the groups being captured
+        >>> matched = re.search(r'(?P<name>\w+)\@(?P<SLD>\w+)\.(?P<TLD>\w+)', cc_list)
+
+        # Now, can access groups by name
+        >>> matched.group('name')
+        'ekoenig'
+
+        >>> print(f'''name: {matched.group("name")}
+        ... Secondary Level Domain: {matched.group("SLD")}
+        ... Top Level Domain: {matched.group("TLD")}''')
+        name: ekoenig
+        Secondary Level Domain: vpwk
+        Top Level Domain: com
+
+
+    - Find All
+
+         So far, we've only returned the first match found.  We can use 'findall' to return all of
+           the matches as a list of strings.
+
+
+        # Find all
+        >>> matched = re.findall(r'\w+\@\w+\.\w+', cc_list)
+        >>> matched
+        ['ekoenig@vpwk.com', 'rostam@vpwk.com', 'ctomson@vpwk.com', 'cbaio@vpwk.com']
+
+
+        # Find all groups
+        >>> matched = re.findall(r'(\w+)\@(\w+)\.(\w+)', cc_list)
+        >>> matched
+        [('ekoenig', 'vpwk', 'com'), ('rostam', 'vpwk', 'com'),
+         ('ctomson', 'vpwk', 'com'), ('cbaio', 'vpwk', 'com')]
+
+
+        # Get list of all names
+        >>> names = [x[0] for x in matched]
+        >>> names
+        ['ekoenig', 'rostam', 'ctomson', 'cbaio']
+
+
+    - Find Iterator
+
+        When dealing with large texts, such as logs, it is useful to not process the text all at once.
+          You can produce an iterator object with the 'finditer' method.  This object processes text
+          until it finds a match, then stops.
+
+
+        # Get an iterator
+        >>> matched = re.finditer(r'\w+\@\w+\.\w+', cc_list)
+        >>> matched
+        <callable_iterator object at 0x108e68748>
+
+        # Keep getting next object
+        >>> next(matched)
+        <re.Match object; span=(13, 29), match='ekoenig@vpwk.com'>
+        >>> next(matched)
+        <re.Match object; span=(51, 66), match='rostam@vpwk.com'>
+        >>> next(matched)
+        <re.Match object; span=(83, 99), match='ctomson@vpwk.com'>
+
+
+        # Use the iterator in a for loop
+        >>> matched = re.finditer("(?P<name>\w+)\@(?P<SLD>\w+)\.(?P<TLD>\w+)", cc_list)
+        >>> for m in matched:
+        print(m.groupdict())
+
+        {'name': 'ekoenig', 'SLD': 'vpwk', 'TLD': 'com'}
+        {'name': 'rostam', 'SLD': 'vpwk', 'TLD': 'com'}
+        {'name': 'ctomson', 'SLD': 'vpwk', 'TLD': 'com'}
+        {'name': 'cbaio', 'SLD': 'vpwk', 'TLD': 'com'}
+
+
+    - Substitution
+
+        Besides searching and matching, regexes can also be used to substitute part or all of a string.
+
+
+        # Obscure all digits
+        >>> re.sub("\d", "#", "The passcode you entered was  09876")
+        'The passcode you entered was  #####'
+
+
+        # Format Users
+        >>> users = re.sub("(?P<name>\w+)\@(?P<SLD>\w+)\.(?P<TLD>\w+)",
+                           "\g<TLD>.\g<SLD>.\g<name>", cc_list)
+        >>> print(users)
+        Ezra Koenig <com.vpwk.ekoenig>,
+        Rostam Batmanglij <com.vpwk.rostam>,
+        Chris Tomson <com.vpwk.ctomson,
+        Chris Baio <com.vpwk.cbaio>
+
+
+    - Compiling
+
+        If the match is going to happen many times, performance gains can be had by compiling the regex
+          into an object.  This object can then be used for matches witout recompiling.
+
+
+        # Compile regex
+        >>> regex = re.compile(r'\w+\@\w+\.\w+')
+        >>> regex.search(cc_list)
+        <re.Match object; span=(13, 29), match='ekoenig@vpwk.com'>
