@@ -95,3 +95,102 @@ CHAPTER 2 - AUTOMATING FILES AND THE FILESYSTEM
     # Read binary data
     >>> path = pathlib.Path('/Users/joe/sp.config')
     >>> path.read_bytes()
+
+
+
+- Working with JSON
+
+    # Read json file
+    >>> import json
+    >>> with open('service-policy.json', 'r') as opened_file:
+            policy = json.load(opened_file)
+
+
+    # Pretty-print the json
+    >>> from pprint import pprint
+    >>> pprint(policy)
+
+
+    # Use the data from within the file structure
+    >>> policy['Statement']['Resource'] = '53'
+
+
+    # Write a Python dictionary to a JSON file
+    >>> with open('service-policy.json' ,'w') as opened_file:
+            policy = json.dump(policy, opened_file)
+
+
+
+- Working with YAML
+
+    - YAML is a superset of JSON, but has a more compact format, using whitespace similar to how
+        Python uses it.  It is used by many tools.
+
+      For instance, Ansible is a tool used to automate software configuration, management, and 
+        deployment.  Ansible uses files referred to as playbooks to define actions to automate.
+
+
+      # PyYAML is the most commonly used library for working with yaml
+      $ pip install PyYAML
+
+
+      # Import data from yaml file
+      >>> import yaml
+      >>> with open('verfiy-apache.yml', 'r') as opened_file:
+              verify_apache = yaml.safe_load(opened_file)
+
+
+      # Pretty-print data
+      >>> pprint(verify_apache)
+
+
+      # Write to yaml file
+      >>> with open('verify-apache.yml', 'w') as opened_file:
+              yaml.dump(verify_apache, opened_file)
+
+
+
+- Working with XML
+
+    # Read an XML file
+    >>> import xml.etree.ElementTree as ET
+    >>> tree = ET.parse('http_feeds.feedburner.com_oreilly')
+
+
+    # Start at the root to traverse the tree
+    >>> root = tree.getroot()
+    >>> root
+    <Element '{http://www.w3.org/2005/Atom}feed' at 0x11292c958>
+
+
+    # Iterate over the child nodes
+    >>> for child in root:
+            print(child.tag, child.attrib)
+
+
+    # Search using XML namespaces
+    >>> ns = {'default': 'http://www.w3.org/2005/Atom'}
+    >>> authors = root.findall('default:entry/default:author/default:name', ns)
+
+    >>> for author in authors:
+            print(author.text)
+
+
+
+- Using Regular Expressions to Search Text
+
+- Dealing with Large Files
+
+- Encrypting Text
+
+    - Hashing with Hashlib
+    - Encryption with Cryptography
+
+
+- The os Module
+
+- Managing Files and Directories Using os.path
+
+- Walking Directory Trees Using os.walk
+
+- Paths as Objects with Pathlib
