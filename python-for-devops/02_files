@@ -298,10 +298,84 @@ CHAPTER 2 - AUTOMATING FILES AND THE FILESYSTEM
 
 - Dealing with Large Files
 
-- Encrypting Text
+    - There are times when we need to process very large files.  If the files contain data that can 
+        be processed one line at a time, the task is easy with Python.  We can load one line at a time
+        into memory, and the lines are removed automatically by the garbage collector.
 
-    - Hashing with Hashlib
-    - Encryption with Cryptography
+
+    - Many common problems arise from the fact that Windows-created files end in '\r\n' while
+        Linux-created files end in '\n'.  Python handles the translation for you, so you if you
+        want to convert a file, you can open it, read one line at a time, and save it.
+
+        # Convert to your operating system's line endings
+        >>> with open('big-data.txt') as source_file:
+                with open('big-data-corrected.txt', 'w'):
+                    for line in source_file:
+                        target_file.write(line)
+
+
+    - We can define a generator if we need to parse multiple files, a single line at a time.
+
+        # Define a generator to read the file
+        >>> def line_reader(file_path):
+                with open(file_path, 'r') as source_file:
+                    for line in source_file:
+                        yield line
+
+        >>> reader = line_reader('big-data.txt')
+
+        # Write to converted file
+        >>> with open('big-data-corrected.txt', 'w') as target_file:
+                for line in reader:
+                    target_file.write(line)
+
+
+    - If you cannot use line endings as a means of breaking up your data (ie with binary files), you
+        can read the data in chunks.
+
+        # Read 1KB at a time
+        >>> with open('binarystuff.jpg', 'rb') as source_file:
+                while True:
+                    chunk = source_file.read(1024)
+                    if chunk:
+                        process_data(chunk)
+                    else:
+                        break
+
+
+
+- Hashing with hashlib
+
+    - To be secure, user passwords must be stored encrpyted.  A hash function (a one-way function hard
+        to reverse) is often used to encrypt a password into a bit string.  Hash functions are also
+        commonly used to ensure documents sent over the web were unchanged during transmission.
+
+
+    - The 'hashlib' library includes several methods for hashing, including:
+
+        SHA1
+        SHA224
+        SHA384
+        SHA512
+        MD5
+
+
+    - Here, we hash a password using the MD5 algorithm:
+
+        # Password is a string
+        >>> import hashlib
+        >>> secret = 'This is the password'
+
+        # Convert the string into a binary string
+        >>> bsecret = secret.encode()
+
+        # Hash the binary string
+        >>> m = hashlib.md5()
+        >>> m.update(bsecret)
+
+        >>> m.digest()
+        b' \xf5\x06\xe6\xfc\x1c\xbe\x86\xddj\x96C\x10\x0f5E'
+
 
 
 - The os Module
