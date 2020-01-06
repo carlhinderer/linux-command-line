@@ -1,0 +1,25 @@
+-----------------------------------------------------------
+CHAPTER 16 - LINUX BOOT & STARTUP
+-----------------------------------------------------------
+
+- Hardware Boot
+
+
+- Linux Boot
+
+    - GRUB stage 1
+    - GRUB stage 1.5
+    - GRUB stage 2
+
+
+- Configuring GRUB
+
+
+- The Linux Kernel
+
+
+- Linux Startup
+
+    - systemd
+    - Graphical Login Screen
+    - About the Login

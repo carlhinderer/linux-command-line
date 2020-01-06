@@ -1,0 +1,48 @@
+-----------------------------------------------------------
+CHAPTER 13 - TOOLS FOR PROBLEM SOLVING
+-----------------------------------------------------------
+
+- The 5 Steps of Problem Solving
+
+    1. Knowledge
+    2. Observation
+    3. Deduction
+    4. Action
+    5. Test
+
+
+- System Performance and Problem Solving with top
+
+
+- Other top-like Tools
+
+    - htop
+    - atop
+
+
+- Memory Tools
+
+
+- Tools That Display Disk I/O Statistics
+
+
+- The /proc Filesystem
+
+
+- Exploring Hardware
+
+
+- Monitoring Hardware Temperatures
+
+
+- Monitoring Hard Drives
+
+
+- System Statistics with SAR
+
+    - Installation and Configuration
+    - Examining Collected Data
+    - 
+
+
+- Cleanup
