@@ -1,0 +1,26 @@
+-----------------------------------------------------------
+CHAPTER 6 - REGULAR EXPRESSIONS
+-----------------------------------------------------------
+
+- Regular Expressions
+
+
+- Getting Started
+
+    - The Mailing List
+    - First Solution
+    - Second Solution
+
+
+- grep
+
+    - Data Flow
+    - Regex Building Blocks
+    - Repetition
+    - Other Metacharacters
+
+
+- sed
+
+
+- Other Tools that Implement Regex

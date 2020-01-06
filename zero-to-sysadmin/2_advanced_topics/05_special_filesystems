@@ -1,0 +1,18 @@
+-----------------------------------------------------------
+CHAPTER 5 - SPECIAL FILESYSTEMS
+-----------------------------------------------------------
+
+- The /proc Filesystem
+
+
+- The /sys Filesystem
+
+
+- Swap Space
+
+    - Types of Linux Swap
+    - Thrashing
+    - What is the Right Amount of Swap Space?
+    - Adding More Swap Space on a Non-LVM Disk Partition
+    - Adding Swap to an LVM Disk Environment
+    - Other Swap Options with LVM

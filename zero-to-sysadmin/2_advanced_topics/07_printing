@@ -1,0 +1,34 @@
+-----------------------------------------------------------
+CHAPTER 7 - PRINTING
+-----------------------------------------------------------
+
+- About Printers
+
+    - Print Languages
+    - Printers and Linux
+    - CUPS
+    - Creating the Print Queue
+
+
+- Printing to a PDF File
+
+
+- File Conversion Tools
+
+    - A2PS
+    - PS2PDF
+    - PR
+    - PS2ASCII
+
+
+- Operating System-Related Conversion Tools
+
+    - UNIX2DOS
+    - DOS2UNIX
+    - UNIX2MAC and MAC2UNIX
+
+
+- Miscellaneous Tools
+
+    - lpmove
+    - wvText and odt2txt

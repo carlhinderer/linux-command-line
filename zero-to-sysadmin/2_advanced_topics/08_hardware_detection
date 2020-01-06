@@ -1,0 +1,23 @@
+-----------------------------------------------------------
+CHAPTER 8 - HARDWARE DETECTION
+-----------------------------------------------------------
+
+- Introduction
+
+
+- dmidecode
+
+
+- lshw
+
+
+- lsusb
+
+
+- usb-devices
+
+
+- lspci
+
+
+- Cleanup
