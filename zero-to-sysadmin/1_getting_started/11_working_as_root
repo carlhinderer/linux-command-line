@@ -1,0 +1,28 @@
+-----------------------------------------------------------
+CHAPTER 11 - WORKING AS ROOT
+-----------------------------------------------------------
+
+- Why root?
+
+
+- The su Command
+
+
+- Getting to Know the root Account
+
+
+- Disadvantages of root
+
+
+- Escalating User Privilege
+
+    1. The Bad Ways
+    2. Using Sudo
+    3. The sudoers File
+    4. Real Sysadmins don't sudo
+    5. sudo or not sudo
+    6. Bypass sudo
+    7. Valid Uses for sudo
+
+
+- Using sudo as root
