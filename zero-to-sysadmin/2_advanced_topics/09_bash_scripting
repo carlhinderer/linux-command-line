@@ -1,0 +1,50 @@
+-----------------------------------------------------------
+CHAPTER 9 - COMMAND LINE PROGRAMMING
+-----------------------------------------------------------
+
+- Simple CLI Programs
+
+
+- Basic Bash Syntax
+
+
+- Output to the Display
+
+
+- Variables
+
+
+- Control Operators
+
+    - Return Codes
+    - The Operators
+
+
+- Program Flow Control
+
+    - true and false
+    - Logical Operators
+    - String Comparison Operators
+    - Numerical Comparison Operators
+    - Miscellaneous Operators
+
+
+- Grouping Program Statements
+
+
+- Expansions
+
+    - Brace Expansion
+    - Tilde Expansion
+    - Pathname Expansion
+    - Command Substitution
+    - Arithmetic Expansion
+
+
+- for Loops
+
+
+- Other Loops
+
+    - while Loops
+    - until

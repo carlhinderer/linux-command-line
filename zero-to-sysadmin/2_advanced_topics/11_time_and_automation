@@ -1,0 +1,38 @@
+-----------------------------------------------------------
+CHAPTER 11 - TIME AND AUTOMATION
+-----------------------------------------------------------
+
+- Keeping Time with Chrony
+
+    - The NTP Server Hierarchy
+    - NTP Choices
+    - Chrony Structure
+    - Client Configuration
+    - Chronyc as an Interactive Tool
+
+
+- Using cron for Timely Automation
+
+    - The crond Daemon
+    - Crontab
+    - cron Examples
+    - crontab Entries
+
+
+- Other Scheduling Options
+
+    - /etc/cron.d
+    - anacron
+
+
+- Thoughts About cron
+
+    - Scheduling Tips
+    - Security
+
+
+- The at Command
+
+    - Syntax
+    - Time Specification
+    - Security

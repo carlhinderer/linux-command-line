@@ -1,0 +1,62 @@
+-----------------------------------------------------------
+CHAPTER 12 - NETWORKING
+-----------------------------------------------------------
+
+- Basic Networking Concepts
+
+    - Definitions
+    - MAC Addresses
+    - IP Addresses
+
+
+- TCP/IP
+
+    - The TCP/IP Network Model
+    - Simple Example
+
+
+- CIDR - Network Notation and Configuration
+
+    - Network Classes
+    - Along Came a CIDR
+    - Variable Length Subnet Masking
+
+
+- DHCP Client Configuration
+
+
+- NIC Naming Conventions
+
+
+- NIC Configuration Files
+
+    - Create an Interface Configuration File
+
+
+- The Interface Configuration File
+
+    - The Network File
+    - The Route-<Interface> File
+    - Other Network Files
+
+
+- Network Startup
+
+    - The NetworkManager Service
+
+
+- Name Services
+
+    - How a Name Search Works
+    - Using the /etc/hosts File
+
+
+- Introduction to Network Routing
+
+    - The Routing Table
+
+
+- iptraf-ng
+
+
+- Cleanup

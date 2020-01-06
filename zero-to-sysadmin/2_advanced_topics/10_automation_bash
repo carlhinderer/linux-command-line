@@ -1,0 +1,45 @@
+-----------------------------------------------------------
+CHAPTER 10 - AUTOMATION WITH BASH SCRIPTS
+-----------------------------------------------------------
+
+- Why Use Shell Scripts?
+
+    - Shell Scripts
+    - Scripts vs Compiled Programs
+
+
+- Updates
+
+    - About Updates
+    - Create a List of Requirements
+    - The CLI Program
+    - Convert the CLI Program to a Script
+    - Add Some Logic
+    - Limit to Root
+    - Add Command-Line Options
+    - Check For Updates
+    - Is a Reboot Required?
+    - Adding a Help Function
+    - Finishing the Script
+
+
+- About Testing
+
+    - Testing in Production
+    - Fuzzy Testing
+    - Testing the Script
+
+
+- Making it Better
+
+
+- Licensing
+
+
+- Automated Testing
+
+
+- Security
+
+
+- Additional Levels of Automation
