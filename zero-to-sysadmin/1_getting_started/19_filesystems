@@ -1,0 +1,59 @@
+-----------------------------------------------------------
+CHAPTER 19 - FILESYSTEMS
+-----------------------------------------------------------
+
+- Definitions
+
+
+- Filesystem Functions
+
+    1. Data storage
+    2. Namespace
+    3. Security Model
+    4. API
+    5. Implementation
+
+
+- The Linux Filesystem Hierarchical Standard
+
+    - The Standard
+    - Problem Solving
+    - Using the Filesystem Incorrectly
+    - Adhering to the Standard
+
+
+- Linux Unified Directory Structure
+
+
+- Filesystem Types
+
+
+- Mounting
+
+
+- The Linux ext4 Filesystem
+
+    - Cylinder Groups
+    - The inode
+    - Journal
+
+
+- Data Allocation Strategies
+
+    - Data Fragmentation
+
+
+- Repairing Problems
+
+    - The /etc/fstab File
+    - Repairing Damaged Filesystems
+    - Finding Lost Files
+
+
+- Creating a New Filesystem
+
+    - Finding Space
+    - Adding a Virtual Hard Drive
+
+
+- Other Filesystems

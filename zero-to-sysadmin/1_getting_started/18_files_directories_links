@@ -1,0 +1,36 @@
+-----------------------------------------------------------
+CHAPTER 18 - FILES, DIRECTORIES, & LINKS
+-----------------------------------------------------------
+
+- Preparation
+
+
+- User Accounts and Security
+
+
+- File Attributes
+
+    - File Ownership
+    - File Permissions
+    - Directory Permissions
+    - Implications of Group Ownership
+    - umask
+    - Changing File Permissions
+    - Applying Permissions
+    - Timestamps
+
+
+- File Meta-Structures
+
+    - The Directory Entry
+    - The inode
+
+
+- File Information
+
+
+- Links
+
+    - Hard Links
+    - Locating Files with Several Hard Links
+    - Symbolic Links
