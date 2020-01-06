@@ -1,0 +1,26 @@
+-----------------------------------------------------------
+CHAPTER 1 - LOGICAL VOLUME MANAGEMENT
+-----------------------------------------------------------
+
+- The Need For Logical Volume Management
+
+    - Running Out of Disk Space in VirtualBox
+    - Recovery
+
+
+- LVM Structure
+
+
+- Extending a Logical Volume
+
+
+- Extending Volume Groups
+
+    - Create a New Volume Group 1
+    - Create a New Volume Group 2
+
+
+- Tips
+
+
+- Advanced Capabilities

@@ -1,0 +1,46 @@
+-----------------------------------------------------------
+CHAPTER 4 - MANAGING PROCESSES
+-----------------------------------------------------------
+
+- Processes
+
+    - Process Scheduling in the Kernel
+
+
+- Tools
+
+    - top
+    - Summary Section
+    - Process Section
+
+
+- More About Load Averages
+
+
+- Signals
+
+
+- CPU Hogs
+
+
+- Process Scheduling
+
+    - Nice Numbers
+
+
+- Killing Processes
+
+
+- Other Interactive Tools
+
+    - atop
+    - htop
+
+
+- Glances
+
+
+- Other Tools
+
+
+- The Impact of Measurement
