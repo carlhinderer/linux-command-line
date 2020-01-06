@@ -1,0 +1,34 @@
+-----------------------------------------------------------
+CHAPTER 3 - THE LINUX PHILOSOPHY FOR SYSADMINS
+-----------------------------------------------------------
+
+- Structure of the Philosophy
+
+
+
+- Tenets
+
+    1. Data Streams are a Universal Interface
+    2. Transforming Data Streams
+    3. Everything is a File
+    4. Use the Linux FHS
+    5. Embrace the CLI
+    6. Be the Lazy Sysadmin
+    7. Automate Everything
+    8. Always Use Shell Scripts
+    9. Test Early, Test Often
+    10. Use Common Sense Naming
+    11. Store Data in Open Formats
+    12. Use Seprate Filesystems for Naming
+    13. Make Programs Portable
+    14. Use Open Source Software
+    15. Strive For Elegance
+    16. Find the Simplicity
+    17. Use Your Favorite Editor
+    18. Document Everything
+    19. Back Up Everything - Frequently
+    20. Follow Your Curiosity
+    21. There is No Should
+    22. Mentor the Young Sysadmins
+    23. Support Your Favorite Open Source Project
+    24. Reality Bytes

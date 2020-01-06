@@ -1,0 +1,46 @@
+-----------------------------------------------------------
+CHAPTER 1 - INTRO
+-----------------------------------------------------------
+
+- Windows and Linux
+
+    - The DEC VAX/VMS operating system was designed with a closed philosophy in order to protect users
+        from having to understand the internals of the system.
+
+      Dave Cutler, who wrote VAX/VMS, is also the chief architect of Windows NT.
+
+
+    - In 1991 in Helsinki, Linus Torvalds was learning Minix, a tiny variant of Linux written by Andrew 
+        Tannenbaum.  He thought it had too many deficiencies, so he wrote his own kernel.  
+
+
+    - For the latest release of the Linux kernel (4.17, June 2018), over 1700 developers have made 13,500
+        changes to the kernel alone.
+
+
+
+- The Linux Truth
+
+    - Unix was not designed to stop its users from doing stupid things, as that would also stop them from doing
+        clever things.
+
+
+    - The root user can do anything on a Linux machine.  There are no limits of any type on the root user.
+
+
+    - Non-root users have a few limits placed on them, but they can still do many clever things as well.  The primary
+        limits placed on non-root users are intended to prevent them from doing things that interfere with others'
+        ability to freely use the Linux host.  This does not prevent users from doing great harm to their own
+        user accounts.
+
+
+
+- Understanding Linux
+
+    1. Knowledge
+    2. Flexibility
+    3. Stability
+    4. Scalability
+    5. Security
+    6. Freedom
+    7. Longevity
