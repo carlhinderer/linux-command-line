@@ -1,0 +1,43 @@
+-----------------------------------------------------------
+CHAPTER 5 - INSTALLING LINUX
+-----------------------------------------------------------
+
+- Booting the Fedora Live Image
+
+
+
+- Installing Fedora
+
+    1. Start the Installation
+    2. Set the Hostname
+    3. Hard Drive Partitioning
+
+
+
+- About Swap Space
+
+    1. Types of Memory
+    2. Swap
+    3. Types of Linux Swap
+    4. Thrashing
+    5. Choosing the Right Amount of Swap Space
+
+
+
+- Beginning the Installation
+
+    1. Set the Root Password
+    2. Create the Student User
+
+
+
+- Finishing the Installation
+
+    1. Exit the Installer
+    2. Shut Down the Live System
+    3. Reconfigure the VM
+    4. Create a Snapshot
+
+
+
+- First Boot
