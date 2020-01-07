@@ -1,0 +1,42 @@
+-----------------------------------------------------------
+CHAPTER 7 - INTRODUCING EMAIL
+-----------------------------------------------------------
+
+- Introduction
+
+    - Definitions
+
+
+- Email Data Flow
+
+
+- Structure of an Email
+
+    - Email Headers
+
+
+- SendMail on the Server
+
+    - Sendmail Installation
+    - Sendmail Configuration
+
+
+- Firewall and DNS Configuration
+
+
+- SendMail on the Client
+
+
+- The SMTP Protocol
+
+
+- Email-Only Accounts
+
+
+- Who Gets Email for root?
+
+
+- Things to Remember
+
+    - It is Not Instant
+    - There is No Delivery Guarantee

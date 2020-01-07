@@ -1,0 +1,41 @@
+-----------------------------------------------------------
+CHAPTER 6 - ROUTING & FIREWALLS
+-----------------------------------------------------------
+
+- Introduction
+
+
+- NIC Configuration Files
+
+    - The ip Command
+    - Create an Interface Configuration File
+
+
+- The Interface Configuration File
+
+
+- Routing on a Workstation
+
+
+- Network Routing
+
+
+- Creating a Router
+
+    - Preparation
+    - Configure the New NIC
+    - Reconfiguring DHCP
+    - Reconfiguring DNS
+
+
+- Setting Up the Router
+
+    - Kernel Configuration
+    - Changing the Firewall
+    - Understanding the Rule Set
+
+
+- Complex Routing
+
+
+- Fail2Ban

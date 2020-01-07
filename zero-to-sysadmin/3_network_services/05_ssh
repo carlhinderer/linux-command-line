@@ -1,0 +1,26 @@
+-----------------------------------------------------------
+CHAPTER 5 - REMOTE ACCESS WITH SSH
+-----------------------------------------------------------
+
+- Introduction to SSH
+
+
+- Starting the SSH Server
+
+
+- How SSH Works
+
+
+- Public/Private Key Pairs
+
+    - How PPKPs Work
+
+
+- X-Forwarding
+
+    - The X Window System
+
+
+- Remote Commands
+
+    - Remote Backups
