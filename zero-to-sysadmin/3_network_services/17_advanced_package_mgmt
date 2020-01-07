@@ -1,0 +1,33 @@
+-----------------------------------------------------------
+CHAPTER 17 - ADVANCED PACKAGE MANAGEMENT
+-----------------------------------------------------------
+
+- Introduction
+
+
+- Preparation
+
+
+- Examining the spec File
+
+    - Preamble
+    - %description
+    - %prep
+    - %files
+    - %pre
+    - %post
+    - %postun
+    - %clean
+    - %changelog
+
+
+- Building the RPM
+
+
+- Testing the RPM
+
+
+- Experimenting
+
+
+- Rebuilding a Corrupted RPM Database
