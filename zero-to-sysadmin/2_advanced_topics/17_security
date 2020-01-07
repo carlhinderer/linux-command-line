@@ -57,3 +57,58 @@ CHAPTER 17 - SECURITY
 
 
 - Basic Steps to Harden a System
+
+    1. Limit physical access to prevent unauthorized people from inserting malware via a USB drive.
+
+    2. Use strong passwords and enforce this rule.
+
+    3. Change passwords frequently.  Password aging can be used to enforce this.
+
+    4. Do not share user accounts.  If multiple users need a shared document, create a group.
+
+    5. Delete old user accounts when they are no longer needed.
+
+    6. Strong firewalls are an important part of any security regimen.
+
+    7. Use public/private key pairs with SSH.
+
+    8. Do not store sensitive data on computers that are firewalls or routers that are directly
+         accessible to the internet.
+
+    9. In larger organizations data should not be stored on any host in the DMZ.
+
+    10. Intrusion detection can be used to detect when an intrusion has occurred.
+
+    11. Verify open ports with tools like nmap.  There should be no unexpected or unnecessary open ports.
+
+    12. Use a BIOS password to prevent changes during the hardware boot sequence.
+
+    13. Use a GRUB password to prevent changes to Linux initialization and startup.
+
+    14. Turn off or remove unused services to prevent attacks against any possible vulnerabilities.
+
+    15. Use firewalls to limit inbound and outbound traffic to be only what would be expected on a given
+          host.
+
+    16. Use SELinux to prevent hackers from making changes even if they do gain access to a host.
+
+    17. Use intrusion detection software like Tripwire to report altered files and other signs of a
+          successful or attempted intrusion.
+
+    18. Disable ZEROCONF, which is a network self-configuration program when static configuration has 
+          not been performed and DHCP is not available.  This service is sometimes known as 'avahi'.
+
+    19. Sync all system times using NTP to make it easier to compare log files.
+
+    20. Only allow root to run cron jobs.
+
+    21. Enable only the ssh2 protocol, which is the default in Red Hat-based distros like Fedora.
+
+    22. Do now allow root logins, especially remote ones.  Log in as a non-user and then su to root.
+
+    23. Real SysAdmins don't use sudo.  
+
+    24. If a non-root user really does need access to a command that requires root privilege, configure
+          sudo for that one user to use that one command.
+
+    25. Back up everything - frequently.
