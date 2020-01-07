@@ -1,0 +1,16 @@
+-----------------------------------------------------------
+CHAPTER 3 - DHCP
+-----------------------------------------------------------
+
+- Overview of DHCP
+
+
+- Installing the DHCP Server
+
+
+- Configuring the DHCP Server
+
+
+- Configuring Guest Hosts
+
+    - The dhcpd.conf File

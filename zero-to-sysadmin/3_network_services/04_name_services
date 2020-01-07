@@ -1,0 +1,45 @@
+-----------------------------------------------------------
+CHAPTER 4 - NAME SERVICES
+-----------------------------------------------------------
+
+- Introducing DNS (Domain Name Services)
+
+    - The /etc/hosts File
+
+
+- How a Name Search Works
+
+
+- The DNS Database
+
+
+- Common DNS Record Types
+
+    - SOA (Start of Authority)
+    - $ORIGIN
+    - NS
+    - A
+    - AAAA
+    - CNAME
+    - PTR
+    - MX
+    - Other Records
+
+
+- Using BIND (Berkeley Internet Name Daemon)
+
+    - Preparation
+    - Setting Up the Caching Name Server
+    - Configuring IPTables for DNS
+    - Start the Name Service
+    - Reconfiguring DHCP
+    - Using the Top-Level DNS Services
+
+
+- Creating a Primary Name Server
+
+    - Creating the Forward Zone File
+    - Adding the Forward Zone Files to /etc/named.conf
+    - Adding CNAME Records
+    - Creating the Reverse Zone File
+    - Adding the Reverse Zone to /etc/named.conf
