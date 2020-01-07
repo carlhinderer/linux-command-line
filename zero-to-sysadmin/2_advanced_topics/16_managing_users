@@ -1,0 +1,42 @@
+-----------------------------------------------------------
+CHAPTER 16 - MANAGING USERS
+-----------------------------------------------------------
+
+- The root Account
+
+
+- Your Account
+
+    - Your Home Directory
+
+
+- User Accounts and Groups
+
+    - The /etc/passwd File
+    - Nologin Shells
+    - The /etc/shadow File
+    - The /etc/group File
+    - The /etc/login.defs File
+    - Account Configuration Files
+
+
+- Password Security
+
+    - Password Encryption
+    - Generating Good Passwords
+    - Password Quality
+
+
+- Managing User Accounts
+
+    - Creating New Accounts
+    - The useradd Command
+    - Creating New Accounts by Editing the Files
+    - Locking the Password
+    - Deleting User Accounts
+
+
+- Forcing Account Logoff
+
+
+- Setting Resource Limits

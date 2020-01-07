@@ -1,0 +1,32 @@
+-----------------------------------------------------------
+CHAPTER 13 - SYSTEMD
+-----------------------------------------------------------
+
+- Controversy
+
+    - Why I Prefer SystemV
+    - Why I Perfer systemd
+    - The Real Issue
+
+
+- The systemd Suite
+
+    - Practical Structure
+
+
+- systemctl
+
+    - Service Units
+    - Mount Units
+
+
+- systemd Timers
+
+    - Time Specification
+    - Timer Configuration
+
+
+- systemd-analyze
+
+
+- Journals

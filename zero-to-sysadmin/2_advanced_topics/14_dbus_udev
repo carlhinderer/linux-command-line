@@ -1,0 +1,21 @@
+-----------------------------------------------------------
+CHAPTER 14 - D-BUS & UDEV
+-----------------------------------------------------------
+
+- /dev Chaos
+
+    - About D-Bus
+    - About udev
+
+
+- Naming Rules
+
+
+- Making udev Work
+
+    - Using udev For Your Success
+    - Basic Script
+    - Unique Device Identification
+    - Refining the Rule into Something Useful
+    - Security
+    - Udev in the Real World
