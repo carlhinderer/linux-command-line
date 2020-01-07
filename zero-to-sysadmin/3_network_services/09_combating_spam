@@ -1,0 +1,36 @@
+-----------------------------------------------------------
+CHAPTER 9 - COMBATING SPAM
+-----------------------------------------------------------
+
+- The Problem
+
+
+- But Why Host Your Own Email Server Then?
+
+
+- My Email Server
+
+
+- Project Requirements
+
+
+- Procmail
+
+
+- How it Works
+
+
+- Preparation
+
+
+- Configuration
+
+    - Configuring Sendmail
+    - Hacking mimedefang-filter
+    - Setting Up a Mail Folder
+    - Configuring Procmail
+    - Reports of Procmail's Demise
+    - Creating spamassassin Rules
+
+
+- Additional Resources

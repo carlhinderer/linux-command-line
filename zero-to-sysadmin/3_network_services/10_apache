@@ -1,0 +1,37 @@
+-----------------------------------------------------------
+CHAPTER 10 - APACHE WEB SERVER
+-----------------------------------------------------------
+
+- Introduction
+
+
+- Installing Apache
+
+
+- Testing Apache
+
+
+- Creating a Simple Index File
+
+
+- Adding DNS
+
+
+- Using Telnet to Test the Web Site
+
+
+- Good Practice Configuration
+
+
+- Virtual Hosts
+
+    - Configuring the Primary Virtual Host
+    - Configuring the Secondary Virtual Host
+
+
+- Using CGI Scripts
+
+    - Using Perl
+    - Using Bash
+    - Redirecting the Web Page to CGI
+    - Refreshing the Page Automatically
