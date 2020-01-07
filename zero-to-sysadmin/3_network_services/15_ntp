@@ -1,0 +1,26 @@
+-----------------------------------------------------------
+CHAPTER 15 - NETWORK TIME PROTOCOL
+-----------------------------------------------------------
+
+- Linux and Time
+
+
+- The NTP Server Hierarchy
+
+
+- NTP Choices
+
+
+- Chrony Structure
+
+
+- Client Configuration
+
+
+- Configuring NTP with Chrony
+
+    - Configuring the NTP Server
+    - Configuring the Client and Testing
+    - chronyc as an Interactive Tool
+    - Setting the Hardware Clock
+    - About Time Zones

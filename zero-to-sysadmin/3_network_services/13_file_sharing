@@ -1,0 +1,41 @@
+-----------------------------------------------------------
+CHAPTER 13 - FILE SHARING
+-----------------------------------------------------------
+
+- File Sharing Use Cases
+
+    - Downloading Files
+    - Shared Access
+    - Simple Collaboration
+    - Team Collaboration
+
+
+- FTP and FTPS
+
+
+- VSFTP
+
+    - Installation and Preparation of VSFTP
+    - The FTP Client
+    - Firewall Configuration for FTP
+    - Anonymous FTP Access
+    - Securing VSFTP With Encryption
+
+- NFS
+
+    - NFS Server
+    - NFS Client
+    - Cleanup
+
+
+- SAMBA
+
+    - Using the SAMBA client
+
+
+- Midnight Commander
+
+    - Midnight Commander and Samba
+
+
+- Apache Web Server

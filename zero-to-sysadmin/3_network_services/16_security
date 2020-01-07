@@ -1,0 +1,39 @@
+-----------------------------------------------------------
+CHAPTER 16 - SECURITY
+-----------------------------------------------------------
+
+- Advanced DNS Security
+
+    - About chroot
+    - Enabling bind-chroot
+
+
+- Hardening the Network
+
+
+- Advanced iptables
+
+
+- Advanced Backups
+
+    - rsync
+    - Performing Backups
+    - Recovery Testing
+
+
+- Restrict SSH Remote Root Login
+
+
+- Malware
+
+    - Root Kits
+    - ClamAV
+    - TripWire
+
+
+- SELinux
+
+    - Additional SELinux Considerations
+
+
+- Social Engineering
