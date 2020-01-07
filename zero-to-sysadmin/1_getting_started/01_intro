@@ -21,26 +21,42 @@ CHAPTER 1 - INTRO
 
 - The Linux Truth
 
-    - Unix was not designed to stop its users from doing stupid things, as that would also stop them from doing
-        clever things.
+    - Unix was not designed to stop its users from doing stupid things, as that would also stop them from 
+        doing clever things.
 
 
     - The root user can do anything on a Linux machine.  There are no limits of any type on the root user.
 
 
-    - Non-root users have a few limits placed on them, but they can still do many clever things as well.  The primary
-        limits placed on non-root users are intended to prevent them from doing things that interfere with others'
-        ability to freely use the Linux host.  This does not prevent users from doing great harm to their own
-        user accounts.
+    - Non-root users have a few limits placed on them, but they can still do many clever things as well.  
+        The primary limits placed on non-root users are intended to prevent them from doing things that 
+        interfere with others' ability to freely use the Linux host.  This does not prevent users from 
+        doing great harm to their own user accounts.
 
 
 
 - Understanding Linux
 
     1. Knowledge
+         Since Linux is open, we can learn how things work, which helps in learning how to solve problems.
+
     2. Flexibility
+         Linux can run on a huge number of different hardware platforms.  Intel and AMD, Raspberry Pi,
+           Tv, cell phones, DVRs, the ISS, and the top 500 fastest supercomputers are examples.
+
     3. Stability
+         Linux machines can run uninteruppted for long periods of time.
+         
     4. Scalability
+         Linux can run on watches and phones, workstations, servers, and supercomputers.  It runs the
+           smallest and largest computers, and everything in between.
+
     5. Security
+         Linux was designed with security measures from the ground up.
+
     6. Freedom
+         We have access to the source code and can change or recompile it.
+
     7. Longevity
+         Linux prevents planned obselescence of hardware by keeping resource use low.  Resistance to 
+           malware also helps with this.
