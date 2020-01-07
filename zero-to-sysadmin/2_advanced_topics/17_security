@@ -1,0 +1,59 @@
+-----------------------------------------------------------
+CHAPTER 17 - SECURITY
+-----------------------------------------------------------
+
+- Introduction
+
+    - Security By Obscurity
+    - What Is Security?
+    - Data Protection
+
+
+- Security Vectors
+
+    - Self-Inflicted Problems
+    - Environmental Problems
+    - Physical Attacks
+    - Network Attacks
+    - Software Vulnerabilities
+
+
+- Linux and Security
+
+
+- Login Security
+
+
+- Checking Logins
+
+
+- Telnet
+
+
+- SSH
+
+    - The SSH Server
+
+
+- Firewalls
+
+    - firewalld
+    - Understanding the Rules
+    - Deleting and Adding Rules
+
+
+- IPTables
+
+    - Converting to IPTables
+    - Understanding the Rule Set
+    - Managing Rules with IPTables
+
+
+- Fail2Ban
+
+
+- PAM (Pluggable Authentication Modules)
+
+
+
+- Basic Steps to Harden a System

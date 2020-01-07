@@ -1,0 +1,31 @@
+-----------------------------------------------------------
+CHAPTER 18 - BACK UP EVERYTHING FREQUENTLY
+-----------------------------------------------------------
+
+- Backups to the Rescue
+
+    - The Problem
+
+
+- Backup Options
+
+    - tar
+
+
+- Off-site Backups
+
+
+- Disaster Recovery Services
+
+
+- Options
+
+
+- How Frequently?
+
+    - How frequently is frequently?
+    - What Does Full Mean?
+    - All vs Diff
+    - Considerations for Automation of Backups
+    - Dealing with Offline Hosts
+    - Advanced Backups
