@@ -2,28 +2,139 @@
 CHAPTER 2 - OPERATING SYSTEMS
 -----------------------------------------------------------
 
-- Computer Components
+- Processors
 
-    1. Motherboard
-    2. Processors
-    3. Peripherals
-    4. The Operating System
+    # Print information about installed processors
+    $ lscpu
+
+    Architecture:         x86_64
+    CPU op-mode(s):       32-bit, 64-bit
+    Byte Order:           Little Endian
+    CPU(s):               32
+    Thread(s) per core:   2
+    Core(s) per socket:   16
+    Socket(s):            1
+
+
+    - A 'core' is a single ALU and its required supporting components.
+
+    - There are 16 cores on this machine, each of which is hyperthreaded with 2 threads per core.
+        Thus, there are 32 CPUs available.
+
+
+
+- Operating Systems
+
+    - In an advanced operating system like Linux, the desktop is just another application.
+
+    - The kernel manages access to the hardware devices of the computer, including access to the CPUs 
+        as computing resources.  It also manages system services such as memory allocation. 
+
+    - The Linux kernel provides an API for other programs to use in order to access the kernel 
+        functions.
 
 
 
 - Operating System Functions
 
     1. Memory Management
+
+         - Linux and other modern OS's use advanced memory management strategies to virtualize RAM
+             and disk into a single virtual memory space that can be used as if it was all physical RAM.
+
+         - In coperation with the CPU, the kernel manages access to memory to ensure that programs only
+             access those regions of memory which have been assigned to them.
+
+         - Virtual memory eliminates the need for the application programmer to deal directly with
+             memory management, because it provides a single virtual memory address space for each
+             program.
+
+
     2. Multitasking
+
+         - Linux has many daemon programs running in the background to manage hardware and other software
+             running on the host.
+
+
     3. Multiuser
+
+         - Many different users can be logged into the same system at the same time, each doing their own
+             thing, isolated and protected from the activities of the others.
+
+
     4. Process Management
+
+         - The kernel manages the execution of all tasks running on the system.  Linux is multitasking from
+             the moment it boots up.
+
+         - The CPU scheduler keeps track of which processes are ready to run and what their priorities.
+             The 'nice number' is based on how recently a process had CPU time and how much it had.
+
+
     5. Interprocess Communication
+
+         - Many programs must be synchronized with each other to ensure that their work is properly
+             coordinated.  IPC is the tool that enables this coordination.
+
+         - Shared memory is used when two tasks need to pass data between them.  The clipboard is an example
+             of this.
+
+         - Named pipes can be used to communicate data between 2 programs.
+
+
     6. Device Management
+
+         - The kernel manages access to the physical hardware through the use of device drivers.
+
+         - Access to physical devices must be managed carefully so that that only one program is given
+             control to a device at any given moment.
+
+         - For managing disk I/O, the kernel does not actually handle physical access to the disk.  It
+             manages requests for disk I/O from applications and passes these requests to the file system
+             (ext2/3/4, vfat, hpfs, cdfs, nfs).
+
+         - All types of hardware are handled like files.  This results in some amazing capabilities and
+             interesting possibilities.
+
+
     7. Error Handling
 
+         - The kernel must handle errors when they occur.  It may take some action such as retrying the
+             failed operation, displaying an error message, and logging the message to a log file.
 
 
-- History
+
+- Unix History
+
+    - Late 1960s = Bell Labs, GE, and MIT start writing Multics for GE 645 mainframe
+                 = Costly, never became widely available
+                 = Ken Thompson wrote a game called 'Space Travel' to run on it, but it cost $50 to run it!
+
+    - 1969       = Thompson and Ritchie write UNIX in assembly language for the DEC PDP-7 so they could port 
+                     'Space Travel' to it
+
+    - 1970       = Bell Labs recognizes the potential of UNIX and starts supporting it
+
+    - 1972       = Ritchie creates the C programming language to write utilites for UNIX
+                 = The entire UNIX kernel is rewritten in C, making it portable
+
+    - 1975       = Thompson teaches at Berkeley, BSD Unix is begun
+
+    - 1978       = UNIX is in fairly wide use in Bell Labs and in many universities
+
+    - 1982       = AT&T releases commercial variant of UNIX, charging license fees
+                 = AT&T continues giving the source code to universities to promote learning it
+                     (This led to a rapid proliferation of additional features, but also a proliferation of 
+                       distributions)
+
+    - 1983       = Unix System V is released
+
+
+
+- Linux History
+
+    - Linus Torvalds wrote the first version of the Linux kernel in 1991 in Helsinki.  It
+        was written for the 80386 processor, since that's what he had in his home computer.
 
 
 
@@ -31,6 +142,20 @@ CHAPTER 2 - OPERATING SYSTEMS
 
     - GNU Coreutils
 
+        - These tools were written by the GNU project, led by Richard Stallman.  There are 102
+            of them.
+
+            # Get info on coreutils
+            $ info coreutils
+
+
     - Util-Linux
 
+        - These commands are distributed by the Linux Kernel Organization.  The 107 commands were
+            originally the 'fileutils', 'shellutils', and 'textutils' collections, but are now
+            combined in a single package.
+
+
     - Copyleft
+
+        - 
