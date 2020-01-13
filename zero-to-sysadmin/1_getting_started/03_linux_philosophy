@@ -4,31 +4,162 @@ CHAPTER 3 - THE LINUX PHILOSOPHY FOR SYSADMINS
 
 - Structure of the Philosophy
 
+    1. Foundational Tenets
+         Basic commands and low-level knowledge
+
+    2. Functional Tenets
+         Build on the foundation and perform daily sysadmin tasks
+
+    3. Enlightenment
+         Deep understanding and knowledge sharing
+
 
 
 - Tenets
 
     1. Data Streams are a Universal Interface
+
+         - Everything in Linux revolves around streams of data - particulary text streams.  A stream is 
+             a flow of text data that originates at some source.
+
+         - STDIO provides a standardized interface for passing data.  It is a buffered data stream used
+             to stream the output of one program/file/device to the input of another.
+
+
     2. Transforming Data Streams
+
+         - Data streams can be manipulated by inserting transformers into the stream using pipes.  These
+             transformers are sometimes also called 'filters'.
+
+         - Redirection can then be used at the end of the pipeline to direct the data stream to a file.
+
+
     3. Everything is a File
+
+         - Everything can be the source of a data stream, the target of a data stream , or in many cases
+             both.
+
+         - For instance, this makes it possible to copy a boot record, a disk partition, or an entire
+             hard drive.
+
+         - All devices are implemented as special files located in the /dev directory.  Device files are
+             not device drivers.  They are gateways that are exposed to the user.
+
+
     4. Use the Linux FHS
+
+         - The Linux File Hierarchy Standard defines the structure of the Linux directory tree.  It names
+             a set of standard directories and designates their purposes.  This standard ensures that all
+             distros are consistent in their usage.
+
+
     5. Embrace the CLI
+
+         - The command line provides the primary interface to the OS.
+
+
     6. Be the Lazy Sysadmin
+
+         - If you are efficient, you can be a lazy admin, but also a very productive admin.
+
+
     7. Automate Everything
+
+         - We should be thinking about automating every single task, whether it runs once an hour or once
+             a year.
+
+
     8. Always Use Shell Scripts
+
+         - Shell scripts are portable and easily read and written.
+
+
     9. Test Early, Test Often
+
+         - Testing requires a well-designed test plan based on requirements statements.  The plan should
+             verify that the code does everything it is supposed to do.
+
+
     10. Use Common Sense Naming
+
+         - If possible, keep names lowercase and short.  On the other hand, they must be long enough
+             to be distinguishable.
+
+
     11. Store Data in Open Formats
+
+         - Using well-known open formats is better.  Using plain text is best.
+
+
     12. Use Seprate Filesystems for Naming
+
+         - There are at least 3 excellent reasons for maintaining separate filesystems (partitions) 
+             on Linux hosts:
+
+             1. If a hard drive crashes, other filesystems on the drive may still salvagable.
+             2. It's possible to fill up a filesystem, and multiple filesystems makes handling this easier.
+             3. Upgrages can be made easier if some directories are duplicated.
+
+
     13. Make Programs Portable
+
+         - Use a scripting langauge rather than a compiled one.
+
+
     14. Use Open Source Software
+
+         - Use code we are free to inspect, modify, and enhance.
+
+
     15. Strive For Elegance
+
+         - Elegant solutions produce elegant results and are easy to maintain and fix.
+
+
     16. Find the Simplicity
+
+         - Think about solving only the task at hand and nothing else.
+
+
     17. Use Your Favorite Editor
+
+         - vi is useful, since it is nearly always present on Linux systems.
+
+
     18. Document Everything
+
+         - Good documentation is not easy and it takes time.  It requires an understanding of the
+             audience.  It is extremely valuable when written well.
+
+
     19. Back Up Everything - Frequently
+
+         - Backups save time, effort, and money.  Don't be caught without them.
+
+
     20. Follow Your Curiosity
+
+         - Always keep learning new things.  Follow wherever your curiosity leads you.
+
+
     21. There is No Should
+
+         - There may always be exceptions to any of these rules.  Linux is flexible, so you can solve the
+             problem the best way for your needs.
+
+
     22. Mentor the Young Sysadmins
+
+         - Include other people when solving problems so that knowledge is passed on.
+
+
     23. Support Your Favorite Open Source Project
+
+         - Answer questions on forums, contribute bug reports, write documentation, write code, teach,
+             or contribute money.
+
+
     24. Reality Bytes
+
+         - In reality, you will end up having to compromise these principles in some high-pressure
+             situation.
