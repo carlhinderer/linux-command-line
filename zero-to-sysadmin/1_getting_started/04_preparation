@@ -65,7 +65,7 @@ CHAPTER 4 - PREPARATION
 
             Command: p   # Print current partition table and disk information
             Command: w   # Write revised partition table to disk
-       
+
 
 
         5. Create an EXT4 filesystem on the new partition.
@@ -143,5 +143,54 @@ CHAPTER 4 - PREPARATION
             vboxusers:x:973:dboth
 
 
+            # Not in book, but I needed to 777 /Experiments to get things working
+            $ chmod 777 /Experiments
+
+
 
 - Download the Fedora ISO File
+
+    - Download the Fedora XFCE live boot image:
+        https://spins.fedoraproject.org/xfce/download/index.html
+
+
+    - Move the file:
+
+        $ cd ~/Downloads
+        $ mv Fedora* /tmp
+
+
+
+- Creating the VM
+
+    - Add New VM
+
+        Name: StudentVM1
+        Machine Folder: /Experiments
+        Type: Linux
+        Version: Fedora (64-bit)
+        Hard Disk: Create a virtual hard disk now
+
+
+    - Configure Hard Drive
+
+        File Location: /Experiments/StudentVM1
+        Storage: Dynamically Allocated
+        Size: 60 GB
+
+
+    - Right-click new VM, and go to 'Settings':
+
+        System:
+          Boot Order: Optical, Hard Disk
+
+        Display:
+          Video Memory: 128 MB
+
+        Storage:
+          Controller: SATA:
+            Port Count: 5
+
+        Network:
+          Attached To: NAT Network
+          Name: StudentNetwork
