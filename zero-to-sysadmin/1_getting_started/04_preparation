@@ -4,10 +4,144 @@ CHAPTER 4 - PREPARATION
 
 - Installing VirtualBox
 
-- Creating the VM
+    - We will be using the latest version of Fedora for our VMs.  Find instructions specific to your 
+        OS for installing VirtualBox.
+
+
 
 - Configuring the Virtual Network
 
+    - A virtual network is a private network that exists only on the VirtualBox host.  It is designed to 
+        allow the user to manage access to the outside world.
+
+    - The virtual router which is created also provides services such as DHCP and name services for the
+        VMs on the virtual network.
+
+    - The 'NAT' option is the default, and simplest option for VMS.  It allows VMs to talk to the internet,
+        but not to each other.  Since we need them to talk to each other, we'll use the 'NAT Network'
+        option that allows them to talk to each other and the internet.
+
+
+    - To create a virtual NAT Network:
+
+        > File > Preferences
+        > Network
+        
+        > Add New NAT Network
+            Network Name: StudentNetwork
+
+
+
 - Preparing Disk Space
+
+    - To attach a USB hard drive:
+
+        1. Check the current partitions
+
+            $ df -h
+
+
+        2. Plug the drive into the USB
+
+
+        3. Find the drive ID assigned to the new device
+
+            # sdb is the new drive
+            $ dmesg
+
+            ...
+            [sdb] Attached SCSI removable disk
+
+
+        4. See if there are existing partitions on the disk
+
+            $ fdisk /dev/sdb
+
+
+           Then, use fdisk to delete the existing partitions and create a new partition.
+
+            Command: d   # Delete existing partitions
+            Command: n   # Create new partition
+
+            Command: p   # Print current partition table and disk information
+            Command: w   # Write revised partition table to disk
+       
+
+
+        5. Create an EXT4 filesystem on the new partition.
+
+            $ mkfs -t ext4 /dev/sdi1
+
+
+        6. Add a label to the new partition.
+
+            # Add label
+            $ e2label /dev/sdi1 Experiments
+
+            # See labels
+            $ e2label /dev/sdi1
+
+
+        7. Create the 'Experiments' directory.  This will be the directory on which we mount the
+             filesystem we are creating on the USB drive.
+
+            # Add in root directory
+            $ mkdir /Experiments
+
+
+        8. At this point, we could mount the USB filesystem, but we'll make it easier by adding a 
+             line to the 'etc/fstab' (filesystem table) file.
+
+            $ echo "LABEL=Experiments /Experiments ext4 user,owner,noauto,defaults  0 0" >> /etc/fstab
+
+
+        9. Now, we mount the drive and verify that it is present.
+
+            $ mount /Experiments
+            $ df -h
+
+
+        10. Now, we can look at the contents in our new directory.
+
+            $ ll -a /Experiments
+
+            total 24
+            drwxr-xr-x   3 root root  4096 Aug  8 09:34 .
+            dr-xr-xr-x. 24 root root  4096 Aug  8 11:18 ..
+            drwx------   2 root root 16384 Aug  8 09:34 lost+found
+
+
+        11. Change the group ownerships and permissions of the directory so that VirtualBox users can 
+              have access to it.
+
+            # Change permissions
+            $ cd /
+            $ chgrp root /Experiments
+            $ chmod g+w /Experiments
+
+
+            # See Experiments directory
+            $ ll | grep Exp
+
+            drwxrwxr-x    3 root root  4096 
+
+
+        12. Finally, we need to add our own non-root user account to the vboxusers group in the 
+              /etc/groups file.
+
+            # Find vboxusers group
+            $ cd /etc
+            $ grep vboxusers group
+
+            vboxusers:x:973:
+
+
+            # Add user to group
+            $ usermod -G vboxusers myusername
+            $ grep vboxusers group
+
+            vboxusers:x:973:dboth
+
+
 
 - Download the Fedora ISO File
