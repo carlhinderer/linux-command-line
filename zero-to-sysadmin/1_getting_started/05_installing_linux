@@ -168,17 +168,30 @@ CHAPTER 5 - INSTALLING LINUX
 - Beginning the Installation
 
     1. Set the Root Password
+
+        > Root Password
+            > StuRoo123!
+
+
     2. Create the Student User
+
+        > Create User
+            > Full name: Student User
+            > User name: student
+            > Check 'Request a password to use this account'
+            > PW: Stu123!
 
 
 
 - Finishing the Installation
 
     1. Exit the Installer
+
     2. Shut Down the Live System
-    3. Reconfigure the VM
+
+    3. Unmount the Fedora Live image
+
     4. Create a Snapshot
 
-
-
-- First Boot
+         > Click the 'Snapshots' button in the VirtualBox Manager
+         > Click the 'Take' button
