@@ -1,0 +1,15 @@
+-----------------------------------------------------------
+CHAPTER 11 - DOCKER & DOCKER COMPOSE
+-----------------------------------------------------------
+
+- What Is a Docker Container?
+
+- Creating, Building, Running, and Removing Docker Images and Containers
+
+- Publishing Docker Images to a Docker Registry
+
+- Running a Docker Container with the Same Image on a Different Host
+
+- Running Multiple Docker Containers with Docker Compose
+
+- Porting the docker-compose Services to a New Host and Operating System

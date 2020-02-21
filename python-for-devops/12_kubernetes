@@ -1,0 +1,17 @@
+-----------------------------------------------------------
+CHAPTER 12 - CONTAINER ORCHESTRATION: KUBERNETES
+-----------------------------------------------------------
+
+- Short Overview of Kubernetes Concepts
+
+- Using Kompose to Create Kubernetes Manifests from docker-compose.yml
+
+- Deploying Kubernetes Manifests to a Local Kubernetes Cluster Based On minikube
+
+- Launching a GKE Kubernetes Cluster in GCP with Pulumi
+
+- Deploying the Flask Example Application to GKE
+
+- Installing Prometheus and Grafana Helm Charts
+
+- Destroying the GKE Cluster

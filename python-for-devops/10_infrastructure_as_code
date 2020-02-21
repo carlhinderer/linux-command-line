@@ -1,0 +1,27 @@
+-----------------------------------------------------------
+CHAPTER 10 - INFRASTRUCTURE AS CODE
+-----------------------------------------------------------
+
+- A Classification of Infrastructure Automation Tools
+
+- Manual Provisioning
+
+- Automated Infrastructure Provisioning with Terraform
+
+    - Provisioning an S3 Bucket
+    - Provisioning an SSL Certificate with AWS ACM
+    - Provisioning an Amazon CloudFront Distribution
+    - Provisioning a Route 53 DNS Record
+    - Copying Static Files to S3
+    - Deleting All AWS Resources Provisioned with Terraform
+
+
+- Automated Infrastructure Provisioning with Pulumi
+
+    - Creating a New Pulumi Project for AWS
+    - Creating Configuration Values for the Staging Stack
+    - Provisioning an ACM SSL Certificate
+    - Provisioning a Route 53 Zone and DNS Records
+    - Provisioning a CloudFront Distribution
+    - Provisioning a Route 53 Record for the Site URL
+    - Creating and Deploying a New Stack

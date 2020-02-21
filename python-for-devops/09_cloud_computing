@@ -1,0 +1,57 @@
+-----------------------------------------------------------
+CHAPTER 9 - CLOUD COMPUTING
+-----------------------------------------------------------
+
+- Benefits of Cloud Computing
+
+- Cloud Computing Foundations
+
+- Types of Cloud Computing
+
+
+- Types of Cloud Services
+
+    - Infrastructure as a Service
+    - Metal as a Service
+    - Platform as a Service
+    - Serverless Computing
+    - Software as a Service
+
+
+- Infrastructure as Code
+
+
+- Continuous Delivery
+
+
+- Virtualization and Containers
+
+    - Hardware Virtualization
+    - Software Defined Networks
+    - Software Defined Storage
+    - Containers
+
+
+- Challenges and Opportunities in Distributed Computing
+
+- Python Concurrency, Performance, and Process Management in the Cloud Era
+
+- Process Management
+
+    - Manage Processes with Subprocess
+    - Avoid shell=True
+    - Set Timeouts and Handle Them When Appropriate
+
+    - The Problem with Python Threads
+    - Using Multiprocessing to Solve Problems
+    - Forking Processes with Pool()
+
+    - Function as a Service and Serverless
+
+    - High-Performance Python with Numba
+    - Using Numba JIT Compiler
+
+    - Using High-Performance Servers
+
+
+- DevOps Takeaways
