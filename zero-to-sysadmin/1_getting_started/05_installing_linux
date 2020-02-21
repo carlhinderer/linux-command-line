@@ -131,11 +131,37 @@ CHAPTER 5 - INSTALLING LINUX
 
 - About Swap Space
 
-    1. Types of Memory
-    2. Swap
-    3. Types of Linux Swap
-    4. Thrashing
-    5. Choosing the Right Amount of Swap Space
+    - Swap (aka paging) is used to substitute disk space for RAM when RAM fills up.  
+        The kernel uses a memory management program the detects blocks (aka pages) of
+        memory which haven't been used recently, and moves them over to a special partition
+        on the hard drive.
+
+    - The total amount of memory in a Linux computer is the RAM plus swap space, and is 
+        referred to as virtual memory.
+
+    - Linux provides for 2 types of swap space, 'swap partitions' and 'swap files'.  A swap
+        file can be used when there is no free disk space in which to create a swap partition.
+        The 'mkswap' command is used to designate a partition or file as swap space.
+
+    - Thrashing can occur when the total virtual memory becomes nearly full.  It can cause the
+        system to become completely unresponsive or very slow.  The 'free' command will show
+        CPU and memory usage, and can be used to diagnose this problem.
+
+
+
+- Recommended Amount of Swap Space
+
+    Amount of RAM installed in system         Recommended swap space
+    --------------------------------------------------------------------------
+    ≤ 2GB                                     2X RAM
+
+    2GB–8GB                                   = RAM
+
+    >8GB                                      8GB
+
+
+    - Now, we can create the swap partition.  The swap partition does not have a mount point,
+        as it's only available to the kernel.
 
 
 
