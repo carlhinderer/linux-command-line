@@ -1,0 +1,46 @@
+-----------------------------------------------------------
+CHAPTER 5 - PACKAGE MANAGEMENT
+-----------------------------------------------------------
+
+- Why Is Packaging Important?
+
+    - When Packaging Might Not Be Needed
+
+
+- Packaging Guidelines
+
+    - Descriptive Versioning
+    - The changelog
+
+
+- Choosing a Strategy
+
+
+- Packaging Solutions
+
+    - Native Python Packaging
+    - Package Files
+    - The Python Package Index
+    - Hosting an Internal Package Index
+
+    - Debian Packaging
+    - Package Files
+    - Producing the Binary
+    - Debian Repositories
+
+    - RPM Packaging
+    - The Spec File
+    - Producing the Binary
+    - RPM Repositories
+
+
+- Management with systemd
+
+    - Long-Running Processes
+    - Setting It Up
+    - The systemd Unit File
+
+
+- Installing the Unit
+
+    - Log Handling

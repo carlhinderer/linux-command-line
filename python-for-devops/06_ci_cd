@@ -1,0 +1,17 @@
+-----------------------------------------------------------------
+CHAPTER 6 - CONTINUOUS INTEGRATION & CONTINUOUS DEPLOYMENT
+-----------------------------------------------------------------
+
+- Real-World Case Study: Converting a Poorly Maintained WordPress Site to Hugo
+
+    - Setting Up Hugo
+    - Converting WordPress to Hugo Posts
+    - Creating An Algolia Index and Updating It
+    - Orchestrating with a Makefile
+    - Deploying with AWS CodePipeline
+
+
+- Real-World Case Study: Deploying a Python App Engine Application with Google Cloud Build
+
+
+- Real-World Case Study: NFSOPS

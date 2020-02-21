@@ -1,0 +1,26 @@
+-----------------------------------------------------------
+CHAPTER 3 - WORKING WIH THE COMMAND LINE
+-----------------------------------------------------------
+
+- Working with the Shell
+
+    - Talking to the Interpreter with the sys Module
+    - Dealing with the Operating System Using the os Module
+    - Spawing Processes with the subprocess Module
+
+
+- Creating Command-Line Tools
+
+    - Using sys.argv
+    - Using argparse
+    - Using click
+    - Using fire
+    - Implementing Plug-ins
+
+
+- Case Study: Turbocharging Python with Command-Line Tools
+
+    - Using the Numba JIT Compiler
+    - Using the GPU with CUDA Python
+    - Running True Multicore Multithreaded Python Using Numba
+    - KMeans Clustering

@@ -1,0 +1,59 @@
+-----------------------------------------------------------
+CHAPTER 7 - MONITORING & LOGGING
+-----------------------------------------------------------
+
+- Key Concepts in Building Reliable Systems
+
+    - The only solution to the chaos of startups is automation, skepticism, humility, and immutable
+        DevOps principles.
+
+    - Human beings cannot be involved in deploying software in the long term.  Deploying, testing, and
+        building software needs to be 100% automated.
+
+    - The most significant initial impact you can have in a company is to set up continuous integration
+        and continuous delivery.
+
+
+
+- Immutable DevOps Principles
+
+    - Centralized Logging
+
+        - Logging follows closely behind automation in importance.  In large-scale, distributed systems,
+            logging is not optional.  
+
+        - For instance, exceptions should always be sent to the centralized logging system.  On the 
+            other hand, it is a good idea to create debug-level logging while creating new features.
+            The solution is to use logging levels so that 
+
+
+
+    - Case Study: Production Database Kills Hard Drive
+    - Did You Build It or Buy It?
+    - Fault Tolerance
+
+
+- Monitoring
+
+    - Graphite
+    - StatsD
+    - Prometheus
+
+
+- Instrumentation
+
+    - Naming Conventions
+
+
+- Logging
+
+    - Why Is It Hard?
+    - The basicconfig
+    - Deeper Configuration
+    - Common Patterns
+
+
+- The ELK Stack
+
+    - Logstash
+    - ElasticSearch and Kibana

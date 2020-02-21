@@ -1,0 +1,37 @@
+-----------------------------------------------------------
+CHAPTER 8 - PYTEST FOR DEVOPS
+-----------------------------------------------------------
+
+- Testing Superpowers with pytest
+
+- Getting Started with pytest
+
+    - Testing with pytest
+    - Layouts and Conventions
+    - Differences with unittest
+
+
+- pytest Features
+
+    - conftest.py
+    - The Amazing assert
+    - Parametrization
+
+
+- Fixtures
+
+    - Getting Started
+    - Built-in Fixtures
+
+
+- Infrastructure Testing
+
+    - What Is System Validation?
+    - Introduction to Testinfra
+    - Connecting to Remote Nodes
+    - Features and Special Fixtures
+
+
+- Examples
+
+- Testing Jupyter Notebooks with pytest

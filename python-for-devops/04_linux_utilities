@@ -1,0 +1,47 @@
+-----------------------------------------------------------
+CHAPTER 4 - USEFUL LINUX UTILITIES
+-----------------------------------------------------------
+
+- Disk Utilities
+
+    - Measuring Performance
+    - Accurate Tests with fio
+    - Partitions
+    - Retrieving Specific Device Information
+
+
+- Network Utilities
+
+    - SSH Tunneling
+    - Benchmarking HTTP With Apache Benchmark
+    - Load Testing with molotov
+
+
+- CPU Utilities
+
+    - Viewing Processes with htop
+
+
+- Working with Bash and ZSH
+
+    - Customizing the Python Shell
+    - Recursive Globbing
+    - Searching and Replacing with Confirmation Prompts
+    - Removing Temporary Python Files
+    - Listing and Filtering Processes
+    - Unix Timestamp
+
+
+- Mixing Python with Bash and ZSH
+
+    - Random Password Generator
+    - Does My Module Exist?
+    - Changing Directories to a Module's Path
+    - Converting a CSV File to JSON
+
+
+- Python One-Liners
+
+    - Debuggers
+    - How Fast is this Snippet?
+    - strace
