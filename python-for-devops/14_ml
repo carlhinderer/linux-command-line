@@ -1,0 +1,51 @@
+-----------------------------------------------------------
+CHAPTER 14 - MLOPS & MACHINE LEARNING ENGINEERING
+-----------------------------------------------------------
+
+- Machine Learning
+
+    - Supervised Machine Learning
+    - Ingest
+    - EDA
+    - Descriptive Statistics
+    - Kernel Density Distribution
+
+    - Modeling
+    - SKLearn Regression Model
+
+
+- Python Machine Learning Ecosystem
+
+    - Deep Learning with Pytorch
+    - Regression with Pytorch
+
+
+- Cloud Machine Learning Platforms
+
+
+- Machine Learning Maturity Model
+
+    - Machine Learning Key Terminology
+    - Level 1: Framing, Scope Identification, and Problem Definition
+    - Level 2: Continuous Delivery of Data
+    - Level 3: Continuous Delivery of Clean Data
+    - Level 4: Continuous Delivery of Exploratory Data Analysis
+    - Level 5: Continuous Delviery of Traditional ML and AutoML
+    - Level 6: Operational Feedback Loop
+
+
+- SKLearn Flask with Kubernetes and Docker
+
+    - Modeling
+    - Split Data
+    - Tune Scaled GBM
+    - Fit Model
+    - Evaluate
+    - adhoc_predict
+    - JSON Workflow
+    - Scale Input
+
+    - Pickling SKLearn
+    - Unpickle and Predict
+    - adhoc_predict From Pickle
+    - Scale Input

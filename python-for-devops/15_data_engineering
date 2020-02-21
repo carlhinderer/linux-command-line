@@ -1,0 +1,38 @@
+-----------------------------------------------------------
+CHAPTER 15 - DATA ENGINEERING
+-----------------------------------------------------------
+
+- Small Data
+
+    - Dealing with Small Data Files
+
+
+- Write a File
+
+- Read a File
+
+- Generator Pipeline to Read and Process Lines
+
+- Using YAML
+
+- Big Data
+
+- Big Data Tools, Components, and Platforms
+
+    - Data Sources
+    - Filesystems
+    - Data Storage
+
+
+- Real-Time Streaming Ingestion
+
+- Case Study: Building a Homegrown Data Pipeline
+
+- Serverless Data Engineering 
+
+    - Using AWS Lambda with CloudWatch Events
+    - Using Amazon CloudWatch Logging with AWS Lambda
+    - Using AWS Lambda to Populate Amazon Simple Queue Service
+    - Wiring Up CloudWatch Event Trigger
+    - Creating Event-Driven Lambdas
+    - Reading Amazon SQS Events from AWS Lambda

@@ -1,0 +1,18 @@
+-----------------------------------------------------------
+CHAPTER 13 - SERVERLESS TECHNOLOGIES
+-----------------------------------------------------------
+
+- Deploying the Same Python Function to the Big 3 Cloud Providers
+
+    - Installing Serverless Framework
+    - Deploying Python Function to AWS Lambda
+    - Deploying Python Function to Google Cloud Functions
+    - Deploying Python Function to Azure
+
+
+- Deploying a Python Function to a Self-Hosted FaaS Platforms
+
+    - Deploying Python Functions to OpenFaaS
+
+
+- Provisioning DynamoDB Table, Lambda Functions, and API Gateway Methods using the AWS CDK
