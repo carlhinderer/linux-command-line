@@ -375,6 +375,46 @@ CHAPTER 2 - AUTOMATING FILES AND THE FILESYSTEM
 
         >>> m.digest()
         b' \xf5\x06\xe6\xfc\x1c\xbe\x86\xddj\x96C\x10\x0f5E'
+        
+
+
+- Symmetric Key Encryption with cryptography
+
+    - The 'cryptography' library is a popular choice for handling encryption problems in Python.  
+
+      
+    - Symettric Key Encryption is a group of encryption algorithms based on shared keys.  The
+        drawback is that both sides must possess the same key.  However, it is faster and more
+        straightforward, so it is appropriate for encrypting large files.  These algorithms include:
+
+        1. AES (Advanced Encryption Algorithm)
+        2. Blowfish
+        3. DES (Data Encryption Standard)
+        4. Serpent
+        5. Twofish
+
+
+    - Fernet is an implementation of the popular AES algorithm:
+
+        # Install cryptography library
+        $ pip install cryptography
+
+
+        # Generate a key
+        >>> from cryptography.fernet import Fernet
+        >>> key = Fernet.generate_key()
+        >>> key
+        b'q-fEOs2JIRINDR8toMG7zhQvVhvf5BRPx3mj5Atk5B8='
+
+
+      Note that we need to store this key securely, as we will need it to decrypt the file.  Keep
+        in mind that anyone who has access to it will also be able to decrypt your files.  
+
+
+
+- Asymmetric Key Encryption with cryptography
+
+    - 
 
 
 
