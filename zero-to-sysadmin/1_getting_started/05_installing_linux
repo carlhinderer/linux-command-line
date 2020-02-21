@@ -4,13 +4,128 @@ CHAPTER 5 - INSTALLING LINUX
 
 - Booting the Fedora Live Image
 
+    - To boot the Fedora Live Image, go to the VM's settings:
+
+        > Controller: IDE
+            > CD: Fedora.iso
+
+
+    - Initial Logins:
+
+        u: Live System user
+        p: (none)
+
 
 
 - Installing Fedora
 
     1. Start the Installation
+
+         - First, click the 'Install to Hard Drive' link on the desktop.
+
+
     2. Set the Hostname
+
+        - On installation screen, navigate to 'Network and Host Name'
+
+            Host Name: studentvm1
+
+
     3. Hard Drive Partitioning
+
+         - We also need to partition the hard drive in a more standard, recommended manner.  
+             To do this, we click 'Installation Destination'.
+
+             Storage Configuration: Custom
+
+
+         - We need to create a partitioning scheme like this one:
+
+              Mount point       Partition       Filesystem type        Size (GiB)        Label
+              ------------------------------------------------------------------------------------
+              /boot             Standard        EXT4                   1.0               boot
+
+              / (root)          LVM             EXT4                   2.0               root
+
+              /usr              LVM             EXT4                   15.0              usr
+
+              /home             LVM             EXT4                   2.0               home
+
+              /var              LVM             EXT4                   10.0              var
+
+              /tmp              LVM             EXT4                   5.0               tmp
+
+              swap              swap            swap                   4.0               swap
+              ------------------------------------------------------------------------------------
+              Total                                                    39.00
+
+
+         - To add each of these partitions:
+
+             > Click the '+' button
+             > Add the Mount Point and Size
+
+
+         - Some terminology:
+
+             1. The entire Linux directory structure, starting with the root (/) directory,
+                  is the 'Linux filesystem'.
+
+             2. A raw partition can be formatted with an EXT3, EXT4, BTRFS, XFS, or other
+                  filesystem metastructure.  The partition can then be called a 'filesystem.'
+
+             3. If the partition is for the '/home' directory, for example, it will be called
+                  the '/home filesystem'.  The /home filesystem is then mounted on the 
+                  '/home' mount point, and then it becomes a logical and functional part
+                  of the root filesystem.
+
+
+         - After all the partitions are defined, the Anaconda installer will create the volume
+             group, the logical volumes, any raw partitions such as '/boot', and the entire
+             directory including mount points on the / filesystem.
+
+           It will format the volumes or partitions with the selected filesystem type (usually
+             ext4) and create the '/etc/fstab' file to define the mounts and their mount points,
+             so that the kernel can find them each time the system is booted.
+
+
+         - The /boot partition contains the files required for the system to boot up and
+             gain a minimal state of functionality.  Because full-featured filesystem 
+             kernel drivers are not available at this boint, the /boot partition must be a
+             standard non-LVM Linux partition within an ext4 filesystem.
+
+             > Add a New Mount Point
+                 > Mount Point: /boot
+                 > Desired Capacity: 1G
+                 > Label: boot
+                 > Click 'Update Settings'
+
+
+         - After saving the updated settings for the /boot filesystem, the rest of the 
+             partitions can be created as logical volumes in a volume group.
+
+           LVM (Logical Volume Management) makes managing and resizing logical volumes
+             very easy.
+
+           Create the root:
+
+               > Add a New Mount Point
+                 > Mount Point: /
+                 > Desired Capacity: 2G
+                 > Label: root
+                 > Click 'Update Settings'
+
+           Now, the device is 'LVM', and there is a volume group name.
+
+
+         - In order to include all the remaining space on our virtual hard drive in the volume
+             group:
+
+               > Click 'Modify' under 'Volume Group'
+                 > Size Policy: As large as possible
+
+
+         - Now, we can add the other partitions, except for the swap partition.
 
 
 
