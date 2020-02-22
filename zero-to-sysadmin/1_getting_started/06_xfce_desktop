@@ -2,31 +2,37 @@
 CHAPTER 6 - USING THE XFCE DESKTOP
 -----------------------------------------------------------
 
-- Why XFCE?
+- Why Xfce?
 
-    1. The Desktop
-    2. The File Manager
-    3. Stability
-    4. The XFCE4-Terminal Emulator
-    5. Configurability
+    - Xfce is a more lightweight alternative to the more popular GNOME and KDE desktops.
+        This makes it ideal for resource-constrained environments like VMs.  
+
+    - Thunar is the default file manager for Xfce.  It is a lightweight alternative to
+        more fully-featured file managers like Konqueror and Dolphin.  
+
+    - The Xfce4-terminal emulator is a lightweight alternative to more fully-featured
+        emulators like Tilix, Terminator, and Konsole.
 
 
 
 - Getting Started
 
-    1. Logging In
-    2. The Settings Manager
-    3. Adding Launchers to Panel 2
-    4. Preferred Applications
-
-
-
-- Desktop Appearance
-
-
-
-- Multiple Desktops
+    - By default, the root account cannot be logged into from the GUI.
 
 
 
 - Installing Updates
+
+    - To install updates from the command line:
+
+        # Switch to root account
+        $ su -
+
+        # Install all available updates
+        $ dnf -y update
+
+        # Reboot so that the new kernel is loaded
+        $ reboot
+
+        # After reboot, update man pages
+        $ mandb
