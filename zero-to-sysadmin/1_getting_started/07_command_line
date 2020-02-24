@@ -4,20 +4,90 @@ CHAPTER 7 - USING THE LINUX COMMAND LINE
 
 - Preparation
 
+    # Install prereqs for the chapter (as root)
+    $ dnf -y install tilix screen ksh tcsh zsh sysstat
+
+
 
 - CLI Terminology
 
-    1. Command Prompt
-    2. Command Line
-    3. Commands
-    4. Terminal
-    5. Console
-    6. Virtual Console
-    7. Terminal Emulator
-    8. Pseudo-Terminal
-    9. Shell
-    10. Secure Shell (SSH)
-    11. Screen
+    - The 'command prompt' is the prompt to enter a command:
+
+         [student@studentvm1 ~]$
+
+
+    - The 'command line' is the line on the terminal that contains the command prompt and
+        any command you enter.  The command line can be accessed through a graphical 
+        terminal emulator, through a virtual console (with KVM aka Keyboard-Video-Mouse 
+        support), or via remote login (like SSH).
+
+
+    - The 'command-line interface' is any text mode user interface to the Linux OS that
+        allows the user to type commands and read responses.
+
+
+    - Commands are typed on the command line to tell Linux what to do:
+
+        command [-o(ptions)] [arg1] [arg2] ... [argX]
+
+
+    - Originally, a 'terminal' was a piece of hardware that provides a means of
+        interacting with a mainframe or Unix host.  
+
+      Terminals that are even older, such as mechanical teletype machines (TTY), predate
+        the use of CRT displays.  Often, these 'dumb terminals' were connected to mainframes
+        over telephone lines, and had just enough logic to display data from the host and
+        transfer data to the host.
+
+      Much of the terminology pertaining to the command line is rooted in these dumb
+        terminals.  For instance, if you look in the /dev folder of your Linux machine, you'll
+        see lots of TTY device files.
+
+
+    - A 'console' is a special terminal, since it is the primary terminal connected to the host
+        itself.  Many restricted commands could only be run from the console.  For instance, only
+        the console could display system-level error messages when problems occurred.  
+
+
+    - Modern Linux computers provide the capability for 'virtual consoles' that allow for 
+        multiple logins from a single keyboard and monitor.  Each virtual console is assigned
+        a function key corresponding to the console number (usually Cntl+Alt+F1 etc).
+
+
+    - A 'terminal emulator' is a software program that emulates a hardware terminal.  Xterm (1984)
+        was the first terminal emulator.  Popular terminal emulators today include GNOME-terminal,
+        Tilix, Terminator, and Konsole.  
+
+
+    - In Linux, almost everything is handled as a file.  Device files (aka 'device special files')
+        are used to provide the OS and user an interface to the devices they represent.  All 
+        Linux device files are located in the /dev directory.
+
+      A 'pseudo-terminal' is a device file to which a terminal emulator is attached in order to 
+        interface with the OS.  The device files for the pseudo-terminals are located in the
+        /dev/pts directory and are created only when a new terminal emulator is launched.
+
+
+    - A 'session' refers to a terminal session, which is a single terminal emulator connected
+        to a single user login and shell.
+
+
+    - A 'shell' is the command interpreter for the OS.  The most popular shells are:
+
+        1. bash = most popular, based on bourne shell
+        2. csh  = for people who like C syntax
+        3. ksh  = korn shell, popular with Unix users
+        4. tcsh = version of csh that is easier to use
+        5. zsh  = combines many features of other popular shells
+
+
+    - SSH is not really a shell.  The 'ssh' command starts a secure link between itself as the
+        client and another server running the SSHD server.
+
+
+    - A 'screen session' is useful, because it will continue to run applications even if a 
+        connection is broken due to a network interruption.
+
 
 
 - Example - Using Virtual Consoles
