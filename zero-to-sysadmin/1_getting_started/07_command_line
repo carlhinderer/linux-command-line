@@ -92,8 +92,65 @@ CHAPTER 7 - USING THE LINUX COMMAND LINE
 
 - Example - Using Virtual Consoles
 
+    # Change to virtual console 2 
+    # On VM, HostKey+F2
+
+    # Now, change to virtual console 3
+    HostKey+F3
+
+    # Now list currently logged in users and uptime, we'll see all 3
+    $ w
+
+    # Will also list currently logged in users, slightly differently
+    $ who
+
+    # Display your current login name
+    $ whoami
+
+    # Display your real and effective ID and GID
+    $ id
+
+    # Log out of other sessions and return to GUI desktop
+    HostKey+F1
+
+
 
 - Example - Using Different Shells
+
+    # Change to ksh
+    $ ksh
+
+    # Change to zsh
+    $ zsh
+
+    # Go back to bash
+    $ exit
+
+
+
+- Example - Using a Screen Session
+
+    # Enter screen display manager
+    $ screen
+
+    # Open new shell within the screen session
+    # Cntl-a + c
+
+    # List open terminals
+    # Cntl-a + "
+
+    # Exit a terminal
+    $ exit
+
+    # Disconnect from screen session and all open terminals
+    # Cntl-a + d
+
+    # List all current screen sessions
+    $ screen -list
+
+    # Reconnect to an active screen session
+    $ screen -r
+
 
 
 - The GUI and the CLI
