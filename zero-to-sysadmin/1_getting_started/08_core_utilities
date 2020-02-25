@@ -4,6 +4,18 @@ CHAPTER 8 - CORE UTILITIES
 
 - GNU coreutils
 
+    - In response to AT&T making Unix proprietary and charging for it, RMS created a group
+        to write a free and open OS.  This group produced the GNU core utilities, but never
+        was able to produce a kernel.
+
+    - When Torvalds started working on the Linux kernel, he needed a set of basic system
+        utilities to perform useful work.  So, he took the freely available GNU core
+        utilities and recompiled them for Linux.  This gave him a complete, although basic,
+        OS.
+
+    - There are 102 core utilities.  They were originally 3 separate collections: fileutils,
+        shellutils, and textutils.  Today, they are combined into a single collection.
+
 
 
 - List of coreutils
@@ -66,3 +78,19 @@ CHAPTER 8 - CORE UTILITIES
     flock           mcookie         script          write
     fsck            mesg            scriptreplay    zramctl
     fsck.cramfs     mkfs            setarch
+
+
+
+- A Few util-linux Commands
+
+    # Print the calendar for last month, this month, and next month
+    $ cal -3
+
+    # Get information about the cal command
+    $ man cal
+
+    # List details about installed CPUs
+    $ lscpu
+
+    # List block devices (usually disk drives)
+    $ lsblk -i
