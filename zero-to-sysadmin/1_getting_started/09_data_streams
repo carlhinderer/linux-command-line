@@ -105,8 +105,57 @@ CHAPTER 9 - DATA STREAMS
 
 - Generating Data Streams
 
+    - Most core utilities use STDIO as their output stream.  Data streams can be as short as
+        a single character or as long as needed.
+
+        # Generate a stream of data, which is sent to STDOUT
+        $ ls -al
+
+
+    - Some GNU coreutils are designed specifically to produce streams of data.  For instance,
+        the 'yes' command produces a continuous data stream with repetitions of the argument
+        provided.  
+
+        # Generate continuous data stream
+        $ yes 12345-abcde
+
+        # Press Cntl+C to stop it
+
+
+    - One use for the 'yes' command is to continually answer 'yes' when asked for confirmation
+        before files are deleted.  Note this must be used with extreme care!
+
+        # Delete the files we created in /mnt
+        $ cd /mnt
+        $ yes | rm * ; ll
+
+        # Recreate the files
+        $ for I in `seq 0 9` ; do dmesg > file$I.txt ; done
+
+
 
 - Test a Theory with yes
+
+    - The 'watch' command takes a static command and turns it into one that continuously 
+        updates.  The 'df' command displays all filesystems with their sizes, free space, and
+        mount points.  
+
+        # Show filesystems
+        $ df -h
+
+        # Watch filesystems and update every second
+        $ watch -n 1 df -h
+
+
+    - Now, we'll watch the USB filesystem fill up.
+
+        # Fill up filesystem
+        $ yes 123456789-abcdefgh >> /mnt/testfile.txt
+
+        # Now, delete the file and unmount the filesystem
+        $ cd ~
+        $ rm -f /mnt/testfile.txt ; umount /mnt
+
 
 
 - Exploring the USB Drive
