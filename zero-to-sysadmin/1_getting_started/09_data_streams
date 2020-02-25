@@ -214,19 +214,90 @@ CHAPTER 9 - DATA STREAMS
 
 
 
-
-
 - Pipes
+
+    - Pipes were invented by Doug McIlroy in the early days of Unix.  They are core to the
+        Unix philosophy.  They allow the standard output of one command to be connected
+        to the standard input of the next command.
+
+        # Show currently logged-in users
+        $ w | tail -n +3 | awk '{print $1}' | sort | uniq
+
+
+    - The |& operator can be used to pipe both STDOUT and STDERR to the next command.  This
+        is not always desirable, but can sometimes be useful.
+
+
+    - A string of programs connected with pipes is called a 'pipeline'.  
+
 
 
 - Building Pipelines
 
+    - The pipeline above was not built all at once.  The usual process of creating them is
+        to keep adding filters one at a time.
+
+        $ w
+        $ w | tail -n +3
+        $ w | tail -n +3 | awk '{print $1}'
+        $ w | tail -n +3 | awk '{print $1}' | sort
+        $ w | tail -n +3 | awk '{print $1}' | sort | uniq
+
+
 
 - Redirection
+
+    - Redirection is used to redirect the STDOUT of a data stream to a file instead of
+        the display.  The file will be created or overwritten.
+
+        # Redirect the output
+        $ df -h > diskusage.txt
+
+
+    - We can also append the STDOUT to a file instead of overwriting it.
+
+        # Append the output
+        $ df -h >> diskusage.txt
+
+
+    - STDIN can also be redirected, although it is less often done.  For instance, we might
+        want to input data from a file to STDIN.  
+
+        # Get the octal display of random data to read it more easily
+        $ od -c -N 50 < /dev/urandom
+
 
 
 - Using grep
 
+    - The 'grep' command is used to select lines that match a specified pattern from a 
+        stream of data.  It can be used in some very creative and interesting ways.
+
+        # Install package to generate random passwords (as root)
+        $ dnf -y install pwgen
+
+        # Create a stream of 5000 lines of random data, each 75 characters long
+        $ cd ~
+        $ pwgen 75 5000 > random.txt
+
+        # Print all the lines with 'see' in the file
+        $ grep see random.txt
+
+
+        # Print the lines from dmesg with 'cpu' in them
+        $ dmesg | grep cpu
+
+        # List all the subdirectories in your home directory (start with 'd')
+        $ ls -la | grep ^d
+
+        # List all the files that are not directories (don't start with 'd')
+        $ ls -la | grep -v ^d
+
 
 
 - Cleanup
+
+    - Now, we can unmount the USB drive:
+
+        # Unmount usb
+        $ umount /mnt
