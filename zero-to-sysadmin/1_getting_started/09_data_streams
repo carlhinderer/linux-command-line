@@ -160,8 +160,60 @@ CHAPTER 9 - DATA STREAMS
 
 - Exploring the USB Drive
 
+    - Next, we'll use the 'dd' (disk dump) command.  This command has a reputation as the
+        'disk destroyer', so we'll use our USB drive to perform the experiments for safety.
+
+      Here, we'll print the boot record, which is always the first block on any disk.
+
+        # As root, we'll use the dd command to view the boot record of the USB drive
+        #   if = data stream source
+        #   bs = block size
+        #   count = number of blocks to dump to STDIO
+
+        $ dd if=/dev/sdb bs=512 count=1
+
+
+    - Now, remount the filesystem and look at the first record of the partition.
+
+        # Mount the usb drive
+        $ mount /dev/sdb1 /mnt
+
+        # Look at the first record of the partition
+        $ dd if=/dev/sdb1 bs=512 count=1
+
+
+    - Now, we'll look at more blocks on the partition to see the files we created on it.
+
+        # Look at the first 2000 blocks on the partition
+        $ dd if=/dev/sdb1 bs=512 count=2000
+
+
+    - Now, we'll display 50 blocks at a time, skipping the first 2000 blocks since we've
+        already seen them.
+
+        # Display 50 blocks at a time, skipping first 2000
+        $ dd if=/dev/sdb1 bs=512 count=50 skip=2000
+
+        # Same command, but use less to scroll through
+        $ dd if=/dev/sdb1 bs=512 count=50 skip=2000 | less
+
+
 
 - Randomness
+
+    - If we need to destroy a hard drive, it may be useful to fill it up with random data
+        before disposing of it.  
+
+        # Print an unending stream of random data to STDIO
+        $ cat /dev/urandom
+
+
+    - If you're really paranoid, the 'shred' command can overwrite individual files, partitions,
+        and complete drives.  It can also make several passes over the data to provide even
+        more randomness.  
+
+
+
 
 
 - Pipes
@@ -174,6 +226,7 @@ CHAPTER 9 - DATA STREAMS
 
 
 - Using grep
+
 
 
 - Cleanup
