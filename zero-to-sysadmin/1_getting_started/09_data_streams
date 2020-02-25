@@ -4,8 +4,103 @@ CHAPTER 9 - DATA STREAMS
 
 - Data Streams
 
+    - Data streams are the raw materials upon which the core utilities and many other
+        CLI tools perform their work.  A data stream is a stream of text data being passed
+        from one file, device, or program to another using STDIO.  
+
+
+    - Data streams can be manipulated by inserting transformers (aka filters) into the 
+        stream using pipes.  
+
+      Redirection can then be used at the end of the pipeline to direct the data stream to 
+        a file.  That file can be an action data file on the hard drive, or a device file
+        like a printer, terminal, or any other connected device.
+
+
 
 - STDIO File Handles
+
+    - Using STDIO for program input and output is a key foundation of the Linux way of
+        doing things.  The idea is to write small programs that do one thing well, and
+        write those program to handle text streams, since that is the universal interface.
+
+
+    - Programs using STDIO use standardized file handles for input and output rather
+        than files that are stored on disk or other media.  STDIO is best described as a
+        buffered data stream.
+
+
+    - STDIO was developed by Ken Thompson as part of the infrastructure required to 
+        implement pipes on early versions of Unix.
+
+
+    - There are 3 STDIO data streams, each of which is automatically opened as a file at
+        the startup of a program (programs that use STDIO, at least).
+
+        STDIN (file handle 0)
+          - Standard Input, which is input from the keyboard by default
+          - Can be redirected from any file, including device files, but is not commonly done
+
+        STDOUT (file handle 1)
+          - Standard Output, which sends the data stream to the display by default
+
+        STDERR (file handle 2)
+          - Standard Error, which is also sent to the display by default
+
+
+    - If STDOUT is redirected to a file, STDERR continues to be displayed on the screen.
+        This ensures that users will still see any errors resulting from execution.
+
+
+    - STDIO is implemented in a standared C library header file, 'stdio.h', which can be
+        included in the source code of programs so that it can be compiled into the
+        resulting executable.  
+
+
+
+- Preparing a USB Drive
+
+    1. Open a terminal session and log in as root.
+
+    2. In the menu bar, navigate to 
+         > Devices > USB > Generic Mass Storage
+
+    3. Run the 'dmesg' command to determine which device file the kernel has assigned to the
+         USB drive.  
+
+         # Determine device file
+         $ dmesg
+
+         # This will also give us the device file
+         $ lsblk -i
+
+    4. Run the 'fdisk' command to determine what type of partition is on the USB drive.  It
+         should be a FAT partition.
+
+         # Determine partition type
+         $ fdisk -l /dev/sdb
+
+         Device     Boot Start     End Sectors  Size Id Type
+         /dev/sdb1          38 7839719 7839682  3.8G  6 FAT16
+
+    5. Now that we know the device file, we can mount the drive's partition on /mnt.
+         Storage devices must be mounted as part of the main root (/) filesystem
+         before they can be accessed.  The /mnt directory is a defined mount point
+         location for temporarily mounting filesystems.
+
+         # Mount the usb drive partition
+         $ mount /dev/sdb1 /mnt
+
+         # Now, navigate to /mnt and delete any existing files on the partition
+         $ cd /mnt
+         $ ll
+         $ rm -rf *
+
+    6. Finally, we can add a few files to the partition for experimenting with.
+
+         # Add some files
+         $ for I in 0 1 2 3 4 5 6 7 8 9 ; do dmesg > file$I.txt ; done
+
 
 
 - Generating Data Streams
