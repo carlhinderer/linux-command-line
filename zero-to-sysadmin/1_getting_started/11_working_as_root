@@ -4,11 +4,100 @@ CHAPTER 11 - WORKING AS ROOT
 
 - Why root?
 
+    - The root user can do anything on a Linux computer.  They can perform any task, 
+        regardless of which user owns a file, directory, or process.  They can delete
+        undeletable files and add and delete users.  They can kill, suspend, or change
+        the priority of any running process.
+
+    - Non-root users do not have the authority to perform root-level tasks on a Linux
+        computer.  For example, they may not enter directories that belong to other
+        users.  
+
+    - Although it is possible for the user of a non-root account to have root privileges,
+        it is not a best practice to do so.  If a few users need access to a few
+        commands that require root privilege, the sudo facitlity should be used to give
+        them access to only those commands.
+
+
 
 - The su Command
 
+    - The su command (aka 'switch user' or 'substitute user') allows us to work on the 
+        command line as a different user from the one we logged in as.  Each SysAdmin
+        should have a non-root account, and switch to the root user only when 
+        root privileges are required.
+
+
+    - If we switch to root and don't use the hyphen with the command, the environment,
+        $PATH, and other environment variables including the $PWD will remain that of
+        the previous user.  This is for historical backwards compatibility reasons.
+
+      If we add the hyphen, it tells the su command to start up a new login shell, which
+        sets the root environment and makes /root the $PWD.  If we're switching to a user
+        other than root, it will set the environment for that user.
+
+
+    - The root user can 'su' to any other user's account without needing their password.
+
+
 
 - Getting to Know the root Account
+
+    - Each Linux user account has attributes which provide the OS with information about
+        how to handle the account, files belonging to the account, and any commands
+        entered on behalf of the account.  These include the user id (UID) and group id
+        (GID).
+
+
+    - Here, we determine the UID and GID of the root account:
+
+        # Switch to root
+        $ su -
+
+        # Get the UID and GID of the root user
+        $ id
+        uid=0(root) gid=0(root) groups=0(root)
+
+        # Files in home directory, with user name (root) and group name (root)
+        $ ll
+        -rw-------. 1 root root 1354 Aug 13 16:24 anaconda-ks.cfg
+        -rw-r--r--. 1 root root 1371 Aug 18 10:16 initial-setup-ks.cfg
+
+        # Files in home directory, with UID (0) and GID (0) instead
+        $ ll -n
+        -rw-------. 1 0 0 1354 Aug 13 16:24 anaconda-ks.cfg
+        -rw-r--r--. 1 0 0 1371 Aug 18 10:16 initial-setup-ks.cfg
+
+
+    - A non-root user cannot create new directories in most parts of the directory tree.  
+        They can create new directories in 2 places:
+
+          1. Their home directory
+          2. The /tmp directory
+
+
+    - To explain why non-root users cannot create new files or directories, we can look at
+        the ownerships and permissions of the root directory:
+
+        [student@studentvm1 ~]$ ls -la /
+        total 76
+        dr-xr-xr-x.  18 root root  4096 Apr 25 02:19 .
+        dr-xr-xr-x.  18 root root  4096 Apr 25 02:19 ..
+        <snip>
+        dr-xr-xr-x.  13 root root     0 Sep 12 17:18 sys
+        drwxrwxrwt.  10 root root  4096 Sep 13 16:45 tmp
+        drwxr-xr-x.  13 root root  4096 Apr 25 02:19 usr
+        drwxr-xr-x.  22 root root  4096 Apr 25 02:23 var
+
+
+      This is the structure of Linux permissions for files and directories:
+
+        Directory    User    Group    Other
+        d or -       rwx     rwx      rwx
+
+
+      The User is the owner of the directory.
+
 
 
 - Disadvantages of root
