@@ -4,14 +4,78 @@ CHAPTER 12 - INSTALLING & UPDATING SOFTWARE
 
 - Dependency Hell
 
+    - Dependency hell is the difficult process of resolving multiple layers of complex
+        dependencies.  It was a common problem before the development of moder package
+        managers.
+
+
 
 - RPM
+
+    - RPM (RPM Package Manager) is a program and system that provides the capabilites 
+        to install, upgrade, remove and manage RPM packages.  It is the original Red Hat
+        package manager.  RPM packages have the .rpm file extension.
+
+
+    - RPM is a little primitive compared to more recent package managers, but it was a
+        big step forward at the time (1997).  It can only manage packages that are already
+        on the local machine and has some trouble with advanced dependency resolution.
+
+
+    - Before RPM, the old process took time and patience:
+
+        1. Download the source code (usually distributed as tarballs)
+        2. Untar the tarball to the desired location
+        3. Run 'make configure' to configure the procedure for the specific host
+        4. Run 'make' to to perform the actual compilation of the source to executable files
+        5. Run 'make install' to install the executable binary file and any libraries created
+
+
+    - To use rpm:
+
+        # Download RPM package
+        $ su -
+        $ cd /tmp
+        $ wget https://github.com/Apress/linux-volume-1/blob/master/utils-1.0.0-1.noarch.rpm
+
+        # Try to install package, fails because dependencies are missing
+        $ rpm -ivf utils-1.0.0-1.noarch.rpm
+
+        # Install package with dependencies
+        $ rpm -qR utils-1.0.0-1.noarch.rpm
+
 
 
 - YUM
 
+    - YUM (Yellow Dog Updater Modified) was an early (2001) attempt to address RPM's 
+        shortcomings.  It resolved dependencies and was able to download packages from 
+        the internet.  It was very successful at its time, but had several problems
+        that were uncovered over time.
+
+
+    - YUM and DNF have the exact same syntax.  In fact, if you run 'yum' now, it is just an
+        alias to 'dnf'.
+
+        $ for I in `which yum dnf` ; do ll $I ; done
+        lrwxrwxrwx. 1 root root 5 Dec 13 05:33 /usr/bin/yum -> dnf-3
+        lrwxrwxrwx. 1 root root 5 Dec 13 05:33 /usr/bin/dnf -> dnf-3
+
+
 
 - DNF
+
+    - DNF (Dandified YUM) replaced YUM as the default package manager in 2015.  It is a
+        wrapper around RPM.
+
+
+    - It determines all dependencies recursively, identifies all the packages required,
+        then continues to recurse until no further dependencies are found.
+
+
+    - DNF can automatically download GPG signing keys and check RPM packages for authenticity
+        before they are installed.
+
 
 
 - Installing Packages
