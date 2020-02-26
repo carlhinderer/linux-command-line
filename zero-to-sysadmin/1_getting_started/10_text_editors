@@ -2,23 +2,59 @@
 CHAPTER 10 - TEXT EDITORS
 -----------------------------------------------------------
 
-- Text Editors
-
-
 - Vim
+
+    - Vim is an enhanced version of the origin vi editor.  It is available on most modern
+        Linux distros, and is the default text editor for system admins.
+
+    - A GUI version, gvim, is also available.
+
 
 
 - Other Text Editors
 
     - Emacs
+        Also very popular, uses LISP as a scripting language, can even be used as a pseudo OS
+
     - Gedit
+        Fully-featured yet simple
+
     - Leafpad
+        Simplest possible text editor, very few features
+
     - Kate
+        Advanced GUI editor designed for KDE
+
     - XFW
+        Another simple GUI editor
+
     - XED
+        Another simple GUI editor
+
 
 
 - Learning Vim
 
+    - Vim has an excellent tutorial, 'vimtutor', which is a great way to learn it.  It
+        is included in the 'vim-enhanced' package.
+
+        # Install the vim-enhanced package (as root)
+        $ dnf -y install vim-enhanced
+
+        # Start the tutorial
+        $ vimtutor
+
+
 
 - Vim Example - Disabling SELinux
+
+    - SELinux is a security protocol originally created by the NSA to prevent hackers
+        from making changes to a Linux machine even if they gain access.  Since it makes
+        the experiments in this book harder, we'll disable it.
+
+        $ vim /etc/selinux/config
+
+        # Update setting
+        SELINUX=disabled
+
+        # Must reboot after making change
