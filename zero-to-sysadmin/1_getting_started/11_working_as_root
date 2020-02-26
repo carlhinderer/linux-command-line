@@ -237,12 +237,24 @@ CHAPTER 11 - WORKING AS ROOT
 
     4. Real Sysadmins don't sudo
 
+         - Many people misuse sudo.  They'll perform SysAdmin tasks from a normal account and
+             preface every command with sudo.  This is a misuse of the feature.
+
 
     5. sudo or not sudo
 
+         - Some distros (like Ubuntu) use the sudo command in a manner that is intended to
+             make the use of commands that require root privileges a little more difficult.
+             In these distros, it is not possible to directly log in as the root user, so
+             the sudo just forces regular users to think about what they're doing.
 
-    6. Bypass sudo
-    7. Valid Uses for sudo
+         - In many peoples' opinions, this does nothing more than provide a false sense of
+             security.  Any user can execute any command.  All they have to do is type sudo and
+             their own password.  It provides no protection at all.
 
 
-- Using sudo as root
+    6. Valid Uses for sudo
+
+         - The real intent of sudo is to enable the root user to delegate one or two
+             specific responsibilities to other users.  This can save the SysAdmin a lot
+             of time if the commands are needed frequently.
