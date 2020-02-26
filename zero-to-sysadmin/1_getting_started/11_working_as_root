@@ -165,14 +165,80 @@ CHAPTER 11 - WORKING AS ROOT
 
     3. The sudoers File
 
+         - We use the 'visudo' command to edit the /etc/sudoers file instead of a regular text
+             editor.  This command will also enable any changes you have made after the file
+             is edited.
+
+
+         - File Details:
+
+             - Host aliases
+
+                 The host aliases section is used to create groups of hosts on which commands
+                   or command aliases can be used to provide access.  The basic idea is that
+                   this single file will be maintained for all hosts in an organization and
+                   copied to /etc of each host.
+
+                 This allows some hosts to be configured as a group, with the ability to start
+                   and stop services like HTTPD and DNS, mount filesystems, etc.
+                 
+
+             - User aliases
+
+                 The user aliases allow root to sort users into aliased groups so that an
+                   entire group can be provided access to certain root capabilities.
+
+                   User_Alias AUDIO = dboth, ruser
+
+
+             - Command aliases
+
+                 The command aliases are lists of related commands (such as networking commands
+                   or update commands).  They make it simpler to provide access to groups of
+                   commands.
+
+
+             - Environment defaults
+
+                 This section sets up some default environment variables.  
+
+
+             - Command section
+
+                 This section is the main part of the suders file.  It uses the aliases already
+                   defined above to tell sudo who can do what on which hosts.  
+
+                   # First ALL allows ruser to run the commands on any host
+                   # Second ALL allows ruser to run commands as any other user
+                   # Third ALL means ruser can run all commands without restrictions
+                   ruser     ALL=(ALL) ALL
+
+                   # Specifies that users in AUDIO group can run program
+                   AUDIO     guest1=/usr/local/bin/myprog
+
+
+             - Bypassing passwords
+
+                 It is possible to use NOPASSWORD to allow the users in the AUDIO group to a
+                   program without needing to enter their passwords.
+
+                   # Don't require a pw when running myprog
+                   AUDIO     guest1=NOPASSWORD : /usr/local/bin/myprog
+
+
+             - wheel
+
+                 The wheel specification in the command section of the sudoers file is used to
+                   delegate full root powers to multiple users without requiring the root 
+                   password.
+
+                   %wheel    ALL=(ALL) ALL
 
 
     4. Real Sysadmins don't sudo
 
 
-
     5. sudo or not sudo
-
 
 
     6. Bypass sudo
