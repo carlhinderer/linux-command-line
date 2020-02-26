@@ -102,14 +102,79 @@ CHAPTER 11 - WORKING AS ROOT
 
 - Disadvantages of root
 
+    - Because root can do anything on a Linux system, any error made by root has the
+        potential to create catastrophic harm.  
+
+
 
 - Escalating User Privilege
 
+    It is a common requirement for non-root users to perform some task that normally requires
+      root permissions.  This can be done safely!
+
+
     1. The Bad Ways
+
+         - Just giving local users the root password is bad.
+
+         - Sometimes, you'll also see admins just change the UID and GID of a local user to
+             zero.  You can do this by editing the passwd, group, and shadow files.  It is
+             a good idea to check for this when taking over as a new SysAdmin.
+
+
     2. Using Sudo
+
+         - Using the sudo facility can reduce the SysAdmin's workload while maintaining security
+             and a log of the users' actions by ID and command.  It allows unpriveleged users
+             some escalation of privileges for one command or group of commands.
+
+
+         - Here, we'll display our internet connections:
+
+             # Login as root
+             $ su -
+
+             # List internet connections
+             $ ip addr
+             1: lo: <LOOPBACK,UP,LOWER_UP>
+             ...
+             2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP>
+             ...
+
+             # Switch back to the student user and try to View the details of your NIC
+             $ su - student
+             $ mii-tool -v enp0s3
+             SIOCGMIIPHY on 'enp0s3' failed: Operation not permitted
+
+
+         - This failed because the student does not have the privileges required to run that
+             command.  We'll give the user sudo access to this single command.
+
+             # Switch back to root and enter the sudoers file
+             $ su -
+             $ visudo
+
+             # Then enter this line at the end of the file
+             student ALL=/usr/sbin/mii-tool
+
+
+             # Now we can run the command as student as sudo
+             $ su - student
+             $ sudo mii-tool -v enp0s3
+
+
     3. The sudoers File
+
+
+
     4. Real Sysadmins don't sudo
+
+
+
     5. sudo or not sudo
+
+
+
     6. Bypass sudo
     7. Valid Uses for sudo
 
