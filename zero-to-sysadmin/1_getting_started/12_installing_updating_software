@@ -80,11 +80,67 @@ CHAPTER 12 - INSTALLING & UPDATING SOFTWARE
 
 - Installing Packages
 
+    # Install package using dnf
+    $ dnf -y install ./utils-1.0.0-1.noarch.rpm
+
+    # Get list of packages for a repo
+    $ dnf repoquery --deplist mc
+
+
 
 - Installing Updates
 
+    - To install all available updates:
+
+        # Check for updates that need to be installed
+        $ dnf check-update
+    
+        # Perform the updates
+        # (tee duplicates a data stream that is sent to STDOUT to a file)
+        $ dnf -y update | tee /tmp/update.log
+
+
+    - The update process has these steps:
+
+        1. Determine which installed packages have updates available
+        2. Check for and add dependencies
+        3. Download the required packages or deltas
+        4. Rebuild RPMs using deltas
+        5. Install the updates
+
+
+    - DNF also creates logs.  To view them:
+
+        # View the list of dnf logs created
+        $ cd /var/log
+        $ ll dnf*
+
+
+    - Helpful commands to get information about dnf:
+
+        # List most recently installed packages
+        $ dnf list recent
+
+        # List all installed packages
+        $ dnf list installed
+
+        # List all available packages
+        $ dnf list available
+
+
+    - If a new kernel was installed, a reboot is necessary.  It is also a good idea to
+        reboot if 'glibc' is updated.
+
+
 
 - Post-Update Tasks
+
+    - If many RPM packages have been updated, it is also a good idea to update their
+        documentation:
+
+        # Update RPM package documentation
+        $ mandb
+
 
 
 - Removing Packages
