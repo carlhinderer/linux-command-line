@@ -11,7 +11,91 @@ CHAPTER 13 - TOOLS FOR PROBLEM SOLVING
     5. Test
 
 
+
 - System Performance and Problem Solving with top
+
+    - There are a large number of Linux commands that are used in the process of analyzing
+        system performance and problem determination.  Most of these commands obtain their
+        information from various files in the /proc filesystem.
+
+
+    - The 'nice' command can be used to change the nice number (renice) of a process in 
+        order to modify its priority level.
+
+
+    - The 'top' command has been around for a very long time and is nearly always present
+        in Linux installations.  It observes memory and CPU usage as well as load averages
+        in a dynamic setting.  It is the first tool used to troubleshoot many problems.
+
+        $ top
+
+        top - 21:48:21 up 7 days,  8:50,  7 users,  load average: 0.00, 0.00, 0.00
+        Tasks: 195 total,   1 running, 136 sleeping,   0 stopped,   0 zombie
+        %Cpu(s):  0.0 us,  0.2 sy,  0.0 ni, 99.7 id,  0.0 wa,  0.0 hi,  0.2 si,  0.0 st
+        KiB Mem :  4038488 total,  2369772 free,   562972 used,  1105744 buff/cache
+        KiB Swap: 10485756 total, 10485756 free,        0 used.  3207808 avail Mem
+          PID USER     PR  NI    VIRT   RES   SHR S  %CPU %MEM     TIME+ COMMAND
+         5173 student  20   0  316084  3328  2884 S   0.3  0.1   5:16.42 VBoxClient
+         7396 root     20   0  257356  4504  3620 R   0.3  0.1   0:00.03 top
+            1 root     20   0  237000  9820  6764 S   0.0  0.2   0:23.54 systemd
+            2 root     20   0       0     0     0 S   0.0  0.0   0:00.26 kthreadd
+            3 root      0 -20       0     0     0 I   0.0  0.0   0:00.00 rcu_gp
+            4 root      0 -20       0     0     0 I   0.0  0.0   0:00.00 rcu_par_gp
+            6 root      0 -20       0     0     0 I   0.0  0.0   0:00.00 kworker/0:0H-kb
+            8 root      0 -20       0     0     0 I   0.0  0.0   0:00.00 mm_percpu_wq
+            9 root     20   0       0     0     0 S   0.0  0.0   0:01.40 ksoftirqd/0
+           10 root     20   0       0     0     0 I   0.0  0.0   0:10.44 rcu_sched
+           11 root     20   0       0     0     0 I   0.0  0.0   0:00.00 rcu_bh
+
+
+    - We can press 's', then '1' to change the update interval from 3s to 1s.  
+      Then, we press '1' to toggle from aggregate CPU to each CPU on a separate line.
+      Finally, we press 'W' to save the changes we made.
+
+
+    - We can press 'h' for help, then press 'h' again to go to the other help screen.
+      Then, we press 'q' to go back to the active display.
+
+
+
+- top Summary Section
+
+    top - 21:48:21 up 7 days,  8:50,  7 users,  load average: 0.00, 0.00, 0.00
+
+    
+    - Load averages are 1-minute, 5-minute, and 15-minute averages.  
+
+      The load average is a measure of demand for the CPU.  It is the average number of 
+        instructions waiting for CPU time.  Thus, in a single processor system, a fully 
+        utilized CPU would lave a load average of 1.
+
+      If the load average is <1, the CPU is underutilized.
+      If the load average is >1, there is pent-up demand.
+
+    
+    - If a 4-CPU system has a load average of 4, there is perfect utilization.  If it
+        is <4, the CPUs are underutilized.  If the load average is >4, there is pent-up
+        demand.
+
+
+
+- top CPU Usage
+
+    - The CPU usage is a fairly simple measure of how much CPU time is being used executing
+        instructions.  They are displayed as percentages and represent the amount of time a 
+        CPU is being used during the defined time period.
+
+        Cpu0   :  0.0%us,  0.0%sy,  0.0%ni,  100.0%id,  0.0%wa,  0.0%hi,  0.0%si,  0.0%st
+
+        us = % of time spent performing tasks in user space
+        sy = % of time spent performing system (kernel) tasks
+        ni = % of time spent on tasks that have a positive nice number
+        id = % of idle time CPU is free or waiting for I/O
+        wa = % of time waiting on I/O
+        hi = % of time waiting on hardware interrupts
+        si = % of time waiting for software interrupts (high number could indicate race condition)
+        st = % of time stolen from VM by another VM due to hypervisor allocation
+
 
 
 - Other top-like Tools
