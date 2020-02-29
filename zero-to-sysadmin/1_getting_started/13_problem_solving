@@ -98,6 +98,123 @@ CHAPTER 13 - TOOLS FOR PROBLEM SOLVING
 
 
 
+- top Process Section
+
+    PID  USER     PR  NI    VIRT   RES   SHR S  %CPU %MEM     TIME+ COMMAND
+    5173 student  20   0  316084  3328  2884 S   0.3  0.1   5:16.42 VBoxClient
+    7396 root     20   0  257356  4504  3620 R   0.3  0.1   0:00.03 top
+
+        PID      = process ID
+        USER     = username of the process owner
+        PR       = priority of the process
+        NI       = nice number of the process
+        VIRT     = amount of virtual memory allocated to the process
+        RES      = resident size of physical RAM consumed by the process (in KB)
+        SHR      = amount of shared memory used by the process (in KB)
+        S        = status of the process
+                     R = running
+                     I = idle
+                     S = sleeping
+                     Z = zombie
+                     T = traced or stopped
+                     D = deep, uninterruptable sleep
+        %CPU     = % of CPU cycles used by this process
+        %MEM     = % of physical RAM used by the process
+        TIME+    = cumulated CPU time consumed by process since start
+        COMMAND  = command used to launch the process
+
+
+    - The 'PageUp' and 'PageDown' keys can be used to page through the process list.
+      The 'k' key can be used to kill a process, and 'r' can be used to renice it.
+
+
+
+- Experiment - Observing a CPU Hog
+
+    - First, we'll create a program that is a CPU hog.
+
+        # Create the script file
+        $ touch cpuHog
+        $ chmod 755 cpuHog
+
+        # Here is the script
+        #!/bin/bash
+        # This little program is a cpu hog
+        X=0;while [ 1 ];do echo $X;X=$((X+1));done
+
+        # Now, run the script
+        $ ./cpuHog
+
+
+    - Then, we can create another instance of the cpuHog program.  We'll see that they
+        use nearly the same amount of CPU while they are running.
+
+      If we then change the nice number for one of the processes from +20 to -19, it will
+        have a higher priority and will eventually accumulate more CPU time.
+
+
+
+- top Memory Statistics
+
+    KiB Mem :  4038488 total,  2369772 free,   562972 used,  1105744 buff/cache
+    KiB Swap: 10485756 total, 10485756 free,        0 used.  3207808 avail Mem
+
+    - The total memory, free, used, and swap are shown.
+
+
+    - The 'buff/cache' is RAM, but not swap space, that is used for temporary storage.  
+        Buffers are typically a designated area of memory where the OS will store data 
+        that is being transmitted over the network, a serial communication line, or
+        to another program.  The data is stored for a short period of time until the program
+        or utility using that data can catch up and process it.
+
+      Data in the buffer is not altered until it is removed and used.  Buffers enable 
+        processes that may work at different speeds to communicate without data loss.
+
+
+    - Linux provides a tool called a named pipe that works as a storage buffer between 
+        2 or more programs.  Named pipes can provide inter-process communication between
+        scripts and other executable programs, as well as a place to store output data for
+        later used by other programs.  They are FIFO data structures.
+
+
+    - Cache is RAM memory that is allocated especially to data that may be changing and 
+        may be used in the near future.  Buffers and cache are similar in that they are 
+        both allocated in RAM and used for temporary storage.  The difference is the manner
+        in which they are used.
+
+
+
+- Experiment - Named Pipes
+
+    - We'll need 2 termial sessions for this experiment.  In the first terminal, create a 
+        named pipe.  
+
+        # Create a named pipe called 'mypipe' in home directory
+        $ mkfifo mypipe
+
+        # Now look at contents of home directory
+        $ ll
+
+        ...
+        prw-rw-r--  1 student student     0 Oct 25 21:21 mypipe
+        ...
+
+
+        # Now, we can put a list of the disk drives into the pipe
+        $ lsblk -i > mypipe
+
+
+    - Now, in the other terminal, well use the cat command to read from the pipe.
+
+        # Read from named pipe
+        $ cat mypipe
+
+      Once all the data from the pipe is sent to STDOUT, both terminals should return to
+        the command prompt.
+
+
+
 - Other top-like Tools
 
     - htop
