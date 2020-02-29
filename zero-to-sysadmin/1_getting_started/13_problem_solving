@@ -215,10 +215,63 @@ CHAPTER 13 - TOOLS FOR PROBLEM SOLVING
 
 
 
+- top Signals
+
+    - The top, atop, and htop utilities allow you to send signals to running processes.  Each
+        of these signals has a specific function.
+
+
+    - The 'kill' command can also be used to send signals to processes.  
+
+        SIGTERM (15)
+          Tells the program to terminate itself, can be intercepted of the program has a
+            signal handler
+
+        SIGKILL (9)
+          Terminates program without waiting for cleanup, will kill both the program and the
+            shell in which it is running (if any), cannot be intercepted by a signal handler.
+
+        SIGINT (2)
+          Sends an interrupt to the running program, similar to pressing Cntl+C in a shell.
+
+
+
 - Other top-like Tools
 
+    - Here are tools we need to install:
+
+        $ dnf -y install htop atop iotop
+
+
     - htop
+
+        The htop utility is like top, but it allows selection of multiple running processes
+          so they can be acted on simultaneously.  It allows you to kill, renice, or send
+          signals to one or more processes simultaneously.  
+
+        $ htop
+
+        Commands:
+          space   = Select a process in the list
+          F1      = Help  
+          F2      = Setup  
+          F3      = Search 
+          F4      = Filter 
+          F5      = Tree  
+          F6      = SortBy 
+          F7      = Nice - 
+          F8      = Nice + 
+          F9      = Kill  
+          F10     = Quit
+
+
     - atop
+
+        The atop utility is also like top, but it also displays detailed information on I/O
+          usage including aggregated, per device, and per process data.
+
+        $ atop
+
 
 
 - Memory Tools
