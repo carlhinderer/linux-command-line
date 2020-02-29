@@ -240,7 +240,7 @@ CHAPTER 13 - TOOLS FOR PROBLEM SOLVING
 
     - Here are tools we need to install:
 
-        $ dnf -y install htop atop iotop
+        $ dnf install -y htop atop iotop
 
 
     - htop
@@ -351,11 +351,112 @@ CHAPTER 13 - TOOLS FOR PROBLEM SOLVING
 
 - The /proc Filesystem
 
+    - All the tools in this chapter get their information from the /proc filesystem, since the
+        kernel already stores this data in an easily accessible location in ASCII.
+
+
+    - There are 2 things to understand about the /proc filesystem:
+
+        1. It is a virtual filesystem.  It does not exist on any physical hard drive.  It only
+             exists in RAM.
+
+        2. The /proc filesystem is a direct interface between the internal conditions and 
+             configuration settings of the kernel itself and the rest of the OS.  
+
+
+    - To get information about a running process:
+
+        # Navigate to directory for a pid
+        $ cd /proc/4691
+
+        # Get userid of user that started process
+        $ cat loginuid
+
+
+    - To get raw aggregate information:
+
+        # Navigate to /proc filesystem
+        $ cd /proc
+
+        # Get raw information
+        $ cat /proc/meminfo
+        $ cat /proc/cpuinfo
+        $ cat /proc/loadavg
+
+
 
 - Exploring Hardware
 
+    - Sometimes we need to know specific information about the hardware installed on a
+        host.  The 'lshw' (list hardware) and 'dmidecode' (Desktop Management Interface)
+        commands, which both display as much information as is available in SMBIOS.
+
+
+    - These utilities use data stored in SMBIOS, which is a data storage area on system
+        motherboards that allows the BIOS boot process to store data about the system
+        hardware.  Because the task of collecting hardware data is performed at BIOS boot
+        time, the OS does not need to probe the hardware directly to get this information.
+
+
+    - To explore hardware:
+
+        # Install the required package
+        $ dnf install -y lshw
+
+        # List installed hardware with lshw
+        $ lshw | less
+
+        # List installed hardware with dmidecode
+        $ dmidecode | less
+
+
+    - To view the available USB and PCI devices:
+
+        # List USB devices
+        $ lsusb -v | less
+
+        # List PCI devices
+        $ lspci -v | less
+
+
+    - Note that due to vendor inconsistencies, the results from lshw and dmidecode are often
+        inaccurate, incomplete, or simply wrong.
+
+
 
 - Monitoring Hardware Temperatures
+
+    - Modern computers have many sensors built into various components to enable monitoring of
+        temperatures, fan speeds, and voltages.  Linux has some software tools available to
+        allow SysAdmins to monitor these sensors.  These tools are based on the 'lm_sensors',
+        'SMART', and 'hddtemp' library modules.
+
+
+    - The 'sensors' command is the simplest tool.  Before the command is run, the 
+        'sensors-detect' command is used to detect as many of the installed sensors as possible.
+        The 'sensors' command then produces output including motherboard and CPU temperatures,
+        voltages at various points on the motherboard, and fan speeds.
+
+
+    - The 'hddtemp' command displays temperatures for a specified hard drive.  The 'smartctl'
+        command shows the current temperature of the hard drive and various other measurements
+        that may predict failure.
+
+
+    - To use these tools:
+
+        # Install required packages
+        $ dnf -y install lm_sensors hddtemp
+
+        # Detect sensors (this is very interactive, so skip the questions)
+        $ yes | sensors-detect
+
+        # Get sensor data
+        $ sensors
+
+        # Get hard drive temperatures
+        $ hddtemp
+
 
 
 - Monitoring Hard Drives
