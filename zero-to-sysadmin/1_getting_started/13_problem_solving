@@ -276,8 +276,77 @@ CHAPTER 13 - TOOLS FOR PROBLEM SOLVING
 
 - Memory Tools
 
+    - The 'free' command to display the system memory information.  It should look the same
+        as the memory information in 'top', since they both get their information from the
+        /proc filesystem.
+
+        $ free
+
+                     total       used       free     shared  buff/cache  available
+        Mem:       4038488     255292    2865144       6092      918052    3517436
+        Swap:     10485756          0   10485756
+
+
+    - The 'vmstat' command shows the virtual memory statistics including some of the data
+        shown in 'top'.
+
+        $ vmstat
+
+        procs --------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+        r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+        3  0      0 2865308 138528 779548    0    0     5    13  149   41 13 28 58  1  0
+
+
+    - Neither of these commands is continuous.  If we want them to be repeating, we can use
+        the 'watch' command.
+
+        $ watch free
+
+
 
 - Tools That Display Disk I/O Statistics
+
+    - Although 'top' and 'atop' both provide some insight into I/O usage, this data is
+        limited to I/O waits.  The 'iostat' program provides a point-in-time view of disk
+        I/O statistics.  The 'iotop' command provides a top-like view of disk I/O statistics.
+
+
+    - To get point-in-time, as well as cumulative, information about disk reads and writes:
+
+        $ iostat
+
+        Linux 4.18.9-200.fc28.x86_64 (studentvm1)   10/28/2018  _x86_64_    (2 CPU)
+
+        avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+                   8.55   11.09   42.74    0.54    0.00   37.08
+
+        Device             tps    kB_read/s    kB_wrtn/s    kB_read    kB_wrtn
+        sda               2.08         2.58        15.58     670835    4051880
+        dm-0              0.00         0.00         0.00        280         44
+
+
+    - To display information about disk reads and writes that is continuously updating:
+
+        $ iotop
+
+        Total DISK READ :       0.00 B/s | Total DISK WRITE :       0.00 B/s
+        Actual DISK READ:       0.00 B/s | Actual DISK WRITE:       0.00 B/s
+
+        TID  PRIO  USER   DISK READ  DISK WRITE  SWAPIN     IO>    COMMAND
+        1    be/4  root   0.00 B/s   0.00 B/s    0.00 %  0.00 %    systemd --switched-root~system 
+                                                                      --deserialize 32
+        2    be/4  root   0.00 B/s   0.00 B/s    0.00 %  0.00 %    [kthreadd]
+        3    be/0  root   0.00 B/s   0.00 B/s    0.00 %  0.00 %    [rcu_gp]
+        4    be/0  root   0.00 B/s   0.00 B/s    0.00 %  0.00 %    [rcu_par_gp]
+
+        <snip>
+
+
+    - To perform an experiment that uses a lot of disk I/O:
+
+        # Make an image backup of the ./home filesystem in /tmp
+        $ time dd if=/dev/mapper/fedora_sutdentvm1-home of=/tmp/home.bak
+
 
 
 - The /proc Filesystem
