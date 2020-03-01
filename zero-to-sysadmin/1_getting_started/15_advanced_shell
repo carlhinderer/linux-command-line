@@ -82,6 +82,63 @@ CHAPTER 15 - ADVANCED SHELL TOPICS
 
 - The PATH
 
+    - The $PATH variable defines a colon-separated list of directories in which the 
+        system and the shell look for executable files.  The shell looks in each directory
+        listed in $PATH for executable files when a non-internal command is entered.
+
+        # Display the default value of PATH
+        $ echo $PATH
+
+        /usr/local/bin:
+        /usr/bin:
+        /usr/local/sbin:
+        /usr/sbin:
+        /home/student/.local/bin:
+        /home/student/bin
+
+
+    - Looking more closely:
+
+        /usr/local/bin
+        --------------------
+          Specifically defined location for storing locally created shell scripts such as
+            shell scripts for SysAdmins or use by all users.
+
+        /usr/local/etc
+        --------------------
+          Used for storing configuration files for the executables in /usr/local/bin.
+
+        /usr/bin
+        --------------------
+          Most user-executable binary files go here.  It is intended for use by all users.
+
+        /usr/sbin
+        --------------------
+          Same as /usr/bin, but for binaries that require superuser privileges.
+
+        /usr/local/sbin
+        --------------------
+          Standard, but non-essential system binaries for use by the SysAdmin.
+
+        /home/student/.local/bin
+        --------------------
+          A user's private executables which were locally created.
+
+        /home/student/bin
+        --------------------
+          A user's private executables which were not locally created.
+
+
+
+    - Note that our home folder is not in the path, which is why we have to precede our
+        executable with the directory name.
+
+        # Different ways to run an executable in our home directory
+        $ ./cpuHog
+        $ ~/cpuHog
+        $ /home/student/cpuHog
+
+
 
 - Internal Commands
 
