@@ -4,20 +4,64 @@ CHAPTER 14 - TERMINAL EMULATOR MANIA
 
 - Requirements
 
+    - We first install all of the terminal emulators we will look at:
+
+        # Install terminal emulators
+        $ dnf -y install tilix lxterminal konsole5 rxvt terminator
+
+
 
 - RXVT
 
+    - RXVT is a very minimalist terminal.  It doesn't have multiple tabs or pains, it's
+        font support is primitive, and it has no menu or icon bars.
 
-- XFCE4-Terminal
+
+
+- Xfce4-Terminal
+
+    - The Xfce4-Terminal is powerful yet simple.  It allows multiple tabs, and each tab
+        can be logged in as a separate user.
+
+    - To customize the terminal's look and feel, navigate to 
+        Edit > Preferences > Appearance.
+
 
 
 - LXTerminal
 
+    - LXTerminal has some simple features, including tabs.  However, it uses a very small
+        amount of RAM and has a very small executable file.
+
+    - To access the terminal's minimal configuration options, navigate to
+        Edit > Preferences > Display.
+
+
 
 - Tilix
+
+    - Tilix allows us to keep a very large number of terminal sessions in a single
+        window, with a lot of flexibility about they are displayed.  This can be useful
+        when monitoring multiple hosts at the same time, for instance.
+
+    - Buttons on the Tilix menu bar will open a new terminal to the side or below of an 
+        existing terminal.  We can also create multiple 'sessions' that we can toggle
+        back and forth between, each with their own set of terminals.
+
+    - There are other popular options for managing multiple terminal sessions in a 
+        single window.  The GNU 'screen' utility and 'tmux' are 2 of the most commonly 
+        used.
+
 
 
 - Konsole
 
+    - Konsole is the default emulator for the KDE desktop environment.  It has lots of
+        features, but installs a lot of KDE libraries so is rarely used outside of KDE.
+
+
 
 - Terminator
+
+    - Terminator is another powerful and feature-rich terminal emulator.  It is based
+        on GNOME-terminal.  
