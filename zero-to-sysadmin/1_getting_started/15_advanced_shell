@@ -4,11 +4,80 @@ CHAPTER 15 - ADVANCED SHELL TOPICS
 
 - The bash Shell
 
+    - The bash shell, like any other shell, is a command-line interpreter.  It takes
+        commands entered onto the command line, expands any file globs (like * and ?),
+        converts the results into tokens for use by the kernel, then passes the
+        resulting command to the kernel for execution.
+
+
+    - bash is both a command interpreter and a programming language.  
+
+
 
 - Shell Options
 
+    - There are a wide varitey of shell options available, but the defaults rarely need to be
+        changed.
+
+        # List the current settings for shell options
+        $ shopt
+
+
 
 - Shell Variables
+
+    - We use the $ operator to reference variables.  Note that bash does not allow spaces
+        before or after the = assignment operator.
+
+        # Print an existing variable
+        $ echo $HOSTNAME
+
+        # Create a variable and print it
+        $ MYVAR="Hello World!"
+        $ echo $MYVAR
+
+
+
+- Commands
+
+    - Commands fall into 2 categories:
+
+        1. Internal Commands = commands that are an integral part of the shell
+
+        2. External Commands = commands with a separate existence, which have their own
+                                 executable files, like GNU and Linux core utilities
+
+
+    - Internal commands are executed before an external command with the same name.  For
+        instance, there is an internal 'echo' command and an external 'echo' command.  
+        Unless you specify the path to an external command, the internal one will be used.
+
+
+    - When a command is entered, this is how the bash shell works:
+
+        1. Type the command and press Enter.
+
+        2. Bash parses the command to see if a path is prepended to the command name.  If it
+             is, go to Step 4.
+
+        3. Bash checks to see if the command is internal.  If it is, bash runs the command
+             immediately.
+
+        4. If a path is used as part of the command, bash forks a new subprocess in which to
+             execute the command and then runs the command.  This forking takes time as well
+             as CPU, I/O, and RAM.
+
+        5. If no path is specified, and this is not an internal command, bash searches the
+             list of aliases and shell functions (system- and user-created procedures).  If
+             one is found, it forks a new shell subprocess and executes the function or alias.
+
+        6. If no alias or function is located, bash then searches the list of directories 
+             specified in the $PATH shell variable.  When the command is located, bash forks
+             a new subshell to execute the command.
+
+        7. If a command is run in a subshell, the subshell terminates and execution is 
+             returned to the parent shell.
+
 
 
 - The PATH
