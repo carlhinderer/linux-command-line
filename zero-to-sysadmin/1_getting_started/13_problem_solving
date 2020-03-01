@@ -461,12 +461,80 @@ CHAPTER 13 - TOOLS FOR PROBLEM SOLVING
 
 - Monitoring Hard Drives
 
+    - Hard drives are one of the most common failure points in computers, right after fans.
+        Since they have moving parts, they are more prone to failure than electronic integrated
+        circuit chips.
+
+
+    - The SMART (Self-Monitoring, Analysis, and Reporting Technology) capabilities built into
+        modern hard drives enable SysAdmins to identify drives that are likely to fail soon and
+        replace them during scheduled maintenance.  The 'smartctl' command is used to access 
+        data and statistics from SMART-enabled hard drives (almost all drives today).
+
+
+    - To use it:
+
+        # Install required packages
+        $ dnf -y install smartmontools
+
+        # Get the name of the hard drive you want to check
+        $ lsblk -i
+
+        # Print all details for a hard drive
+        $ smartctl -x /dev/sda
+
+
+    - The 'smartctl' command provides a large number of metrics about hard drive performance.
+        A cloud company that managages 40,000 hard drives found these metrics are the best
+        predictors of impending failure:
+
+        SMART 5:   Reallocated_Sector_Count
+        SMART 187: Reported_Uncorrectable_Errors
+        SMART 188: Command_Timeout
+        SMART 197: Current_Pending_Sector_Count
+        SMART 198: Offline_Uncorrectable
+
+
 
 - System Statistics with SAR
 
-    - Installation and Configuration
-    - Examining Collected Data
-    - 
+    - The 'sar' (System Activity Reporter) utility collects performance data for each day
+        and stores it in log files for later display.  
 
 
-- Cleanup
+    - By default, data is collected in 10-minute increments and stored for a month.  The SAR
+        data is stored in 2 files per day in the /var/log/sa directory.  
+
+
+    - SAR is installed as part of the 'sysstat' package in Red Hat-based distros.  Once that
+        package is installed, SAR will start collecting data by default.
+
+
+    - To view the collected data:
+
+        # Display aggregate CPU performance data for the current day
+        $ sar
+
+        # View details for each individual CPU
+        $ sar -P ALL
+
+        # View disk statistics
+        $ sar -dh
+
+        # View all of the output for a current day
+        $ sar -A
+
+        # View CPU, memory, and swap space data
+        $ sar -urS
+
+        # View individual and aggregate CPU data for a specified time period
+        $ sar -P ALL -s 07:50:00 -e 08:11:00
+
+        # View network statistics for all interfaces
+        $ sar -n ALL
+
+        # View data in a previous day's log file
+        $ sar -A -f /var/log/sa/sa02 | less
+
+        # Display memory usage in 5 second intervals for 10 iterations
+        $ sar -r 5 10
