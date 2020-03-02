@@ -339,5 +339,63 @@ CHAPTER 15 - ADVANCED SHELL TOPICS
 
 - Using grep
 
+    - File globbing is useful, but it is only for use on file names, not the contents
+        of the files.  The 'grep' tool can be used to extract and print to STDOUT
+        all of the lines from a data stream based on matching patterns.  These 
+        patterns can be simple text patterns or complex regex's.
+
+
+    - grep was written by Ken Thompson in 1974, and is now maintained by the GNU project.
+        It is installed by default on all Linux distros.
+
+
+    - To find lines with 'eth' in the kernel logs using less:
+
+        # Page through the kernel logs
+        $ dmesg | less
+
+        # Then, can type /eth to find instances in the logs
+
+
+    - To find lines with 'eth' in the kernel logs using grep:
+
+        # Find all lines that contain 'eth'
+        $ dmesg | grep -i eth 
+
+        # Use grep on specified file globs
+        $ cd /var/log ; grep -i eth messages*
+
+
+        # Find lines that contain 'eth' followed by 0-9
+        $ grep -i eth[0-9] messages*
+
+        # Specify multiple search expressions
+        $ grep -i -e eth[0-9] -e enp0 messages*
+
+
+    - The regex's above are BREs (basic regular expressions).  We can also use EREs
+        (extended regular expressions) with the -E option.
+
+        # Use ERE
+        $ grep -Ei "eth[0-9]|enp0" messages*
+
+      Traditionally, the 'egrep' command was used for EREs, but that command is now
+        deprecated and may not be available in the future.  The grep -E "ERE" command should
+        be used instead.
+
+
+    - For another example, suppose we need to list all the configuration files in the /etc
+        directory.  These files typically end with '.conf', '.cnf', or 'rc'. 
+
+      To do this, we need to use the $ anchor to specify that search string is at the end of
+        the string being searched.
+
+        # -R flag searches all subdirectories recursively
+        $ ls -aR | grep -E "conf$|cnf$|rc$"
+
+        # The ^ is used to anchor the beginning of the string
+        $ ls -R | grep -E "^kde"
+
+
 
 - Finding Files
