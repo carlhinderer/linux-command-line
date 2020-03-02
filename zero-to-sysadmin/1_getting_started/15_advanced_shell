@@ -142,14 +142,92 @@ CHAPTER 15 - ADVANCED SHELL TOPICS
 
 - Internal Commands
 
+    - The bash shell has a large number of built-in internal commands.
+
+        # Get list of built-in commands
+        $ help
+
+        # Get help for a single built-in command
+        $ help echo
+
+        # Note that help pages are for internals, while man pages are for externals
+        $ man Bash
+
+
+    - The 'type' command lets us identify which commands are built-in.
+
+        # Get types of commands
+        $ type echo getopts egrep
+
+        echo is a shell builtin
+        getopts is a shell builtin
+        egrep is aliased to `egrep --color=auto'
+
+
 
 - External Commands
 
+    - External commands are those that exist as executable files and which are not part
+        of the shell.  The executable files are stored in locations like /bin, /usr/bin,
+        /sbin, and so on.
 
-- Forcing the Use of External Commands
+        # Look at files in /bin and locate some familiar commands
+        $ cd /bin
+        $ ll
+
+        # Get types of commands and the locations of their executables with -a option
+        $ type -a echo getopts egrep
+
+        echo is a shell builtin
+        echo is /usr/bin/echo
+        getopts is a shell builtin
+        getopts is /usr/bin/getopts
+        egrep is aliased to `egrep --color=auto'
+        egrep is /usr/bin/egrep
+
 
 
 - Compound Commands
+
+    - The simplest form of compound command is to just string together multiple commands
+        on a single line:
+
+        $ command1 ; command2 ; command3 ; command4 ; command5
+
+
+    - We can anticipate the possibility of errors by using the && and || operators:
+
+        # If command1 is successful (0 return code), then run command2
+        $ command1 && command2
+
+        # If command1 fails (nonzero return code), then run command2
+        $ command1 || command2
+
+
+    - The && and || operators work since every command sends a return code (RC) to the 
+        shell that indicates whether it was successful or not.  By convention, a return
+        code of 0 indicates success, while any positive number indicates some type of
+        failure.  The bash shell uses the '$?' variable to store the RC of the last
+        operation.
+
+        # Successful command
+        $ ll ; echo "RC = $?"
+        RC = 0
+
+        # Unsuccessful command
+        $ ll /root ; echo "RC = $?"
+        ls: cannot open directory '/root': Permission denied
+        RC = 2
+
+
+    - Examples of && and || operators:
+
+        # If successful
+        $ mkdir ~/testdir/testdir9 && touch ~/testdir/testdir9/testfile1
+
+        # If unsuccessful
+        $ mkdir ~/testdir/testdir9 || echo "testdir9 was not created."
+
 
 
 - Brace Expansion
