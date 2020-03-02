@@ -232,8 +232,58 @@ CHAPTER 15 - ADVANCED SHELL TOPICS
 
 - Brace Expansion
 
+    - Brace expansion is a time-saving tool.  It can be used to generate lists of
+        arbitrary strings and insert them into a specific location.
+
+        # Simple brace expansion
+        $ echo {string1,string2,string3}
+        string1 string2 string3
+
+        # Brace expansion at end of string
+        $ echo "Hello "{David,Jen,Rikki,Jason}.
+        Hello David. Hello Jen. Hello Rikki. Hello Jason.
+
+        # Brace expansion in the middle of a string
+        $ echo b{ed,olt,ar}s
+        beds bolts bars
+
+
+    - We can also use brace expansion for sequences of numbers.
+
+        # Generate 10 test filenames
+        $ echo testfile{0,1,2,3,4,5,6,7,8,9}.txt
+
+        # Shorter way to generate 10 test filenames
+        $ echo testfile{0..9}.txt
+
+        # More complex example
+        $ echo test{0..9}.file{1..4}
+
+        # Characters can also be generated in a sequence
+        $ echo test{000..200}{a..f}.file
+
+
 
 - Special Characters (File Globbing)
+
+    - File globbing (aka using special pattern characters) allows us a lot of
+        flexibility in matching file names and other strings.
+
+        ? matches a single character
+        * matches one or more characters
+
+
+    - Some examples:
+
+        # Count the number of files with 'test' in the file name
+        $ ls *test* | wc -l
+
+        # Remove files that start with 'my' (-v print files that were deleted)
+        $ rm -v my*
+
+        # More complex pattern
+        $ ls *e.?6?*.asc
+
 
 
 - Sets
