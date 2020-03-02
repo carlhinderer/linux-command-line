@@ -399,3 +399,58 @@ CHAPTER 15 - ADVANCED SHELL TOPICS
 
 
 - Finding Files
+
+    - We can use the 'ls' command to find files, and we can use the '-R' flag
+        to search through subdirectories recursively.
+
+        # Find files recursively
+        $ ls -R | grep -E "^kde"
+
+
+    - The problem with the above command is that it will output file names, but not
+        the full path (with the subdirectory structure).  The 'find' command is used
+        to explicitly search for files in a directory tree using patterns and to 
+        either list the files (with their subdirectories) or perform some operation
+        on them.
+
+        # -name option used for patter, -iname used for case insensitive
+        $ find /etc -iname "kde*"
+
+
+    - Here are some examples:
+
+        # Get the number of empty files in your home directory with 'test.file' in name
+        $ find . -type f -empty -name "*test.file*" | wc -l
+
+        # Find empty files in your home directory without 'test.file' in name
+        $ find . -type f -empty ! -name "*test.file*"
+
+        # Find number of files that are not empty (! can be used with any option)
+        $ find . -type f ! -empty -name "*test.file*" | wc -l
+
+
+    - We can also perform some action on the files that are found.  For instance, we
+        can delete the empty files.
+
+        # Delete all the empty files with 'test.file' in the names
+        $ find . -type f -empty -name "*test.file*" -delete
+
+        # Check that empty files were deleted
+        $ find . -type f -empty -name "*test.file*"
+
+        # Check that nonempty files were not deleted
+        $ find . -type f ! -empty -name "*test.file*" | wc -l
+
+
+    - Here is a more advanced example:
+
+        # Generate a large file (~1GB)
+        $ pwgen -s 80 14000000 > testdir7/bigtestfile.txt
+
+        # Use -ls option to list files that were found and sort them 
+        #   (sorted by inode number since its column 1)
+        $ find . -type f ! -empty -name "*test.file*" -ls
+
+        # Sort files by size instead 
+        #   (-n for numeric sort, k=7 for 7th column which is size)
+        $ find -type f -size +3k -ls | sort -nk 7
