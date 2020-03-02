@@ -288,8 +288,53 @@ CHAPTER 15 - ADVANCED SHELL TOPICS
 
 - Sets
 
+    - Here are the character sets available:
+
+        [0-9]        Any numerical character
+        [a-z]        Lowercase alpha
+        [A-Z]        Uppercase alpha
+        [a-zA-Z]     Any uppercase or lowercase alpha
+        [abc]        The three lowercase alpha characters, a, b, and c
+        [!a-z]       No lowercase alpha
+        [!5-7]       No numbers 5, 6, or 7
+        [a-gxz]      Lowercase a through g, x, and z
+        [A-F0-9]     Uppercase A through F, or any numeric
+
+
+    - Examples:
+
+        # Find files that contain '6' in the middle of a 3-digit number
+        $ ls *[0-9][6][0-9]*
+
+        # Same, but we know the leftmost digit is 0 or 1
+        $ ls *[01][6][0-9]*
+
+        # Contains 6 in the center position, but not in either of the other digits
+        $ ls *[!6][6][!6]*
+
+        # Same, but filename ends in a 't'
+        $ ls *[!6][6][!6]*t
+
+        # Same, but have an 'a' or 'e' directly after the number
+        $ ls *[!6][6][!6][ae]*t
+
+
 
 - Meta-Characters
+
+    - Here is a list of meta-characters that have special meaning in the shell:
+
+        $           Shell variable
+        ~           Home directory variable
+        &           Run command in background
+        ;           Command termination/separation
+        >,>>,<      I/O redirection
+        |           Command pipe
+        ‘,”,\       Meta quotes
+        `...`       Command substitution
+        (), {}      Command grouping
+        &&, ||      Shell control operators. Conditional command execution
+
 
 
 - Using grep
