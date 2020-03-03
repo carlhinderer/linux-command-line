@@ -63,9 +63,95 @@ CHAPTER 16 - LINUX BOOT & STARTUP
 
 
 
-    - GRUB stage 1.5
-    - GRUB stage 2
+- GRUB stage 1
 
+    - After the BIOS/UEFI POST, BIOS/UEFI searches the attached disks for a boot
+        record, which is located in the MBR (Master Boot Record).  It loads the
+        first one it finds into memory and then starts execution of the boot record.
+
+
+    - The bootstrap code (GRUB Stage 1) is very small, since it must fit into the
+        first 512-byte sector on the hard drive along with the partition table.  
+
+      The total amount of space allocated for a classic, generic MBR is 446 bytes.  This
+        file is named 'boot.img', and does not contain the partition table.  The
+        partition table is created when the device is partitioned onto the boot record
+        starting at byte 447.
+
+
+    - In UEFI systems, the partition table has been moved out of the MBR and into the
+        space immediately following the MBR.  This provides more space for defining 
+        partitions, so a larger number of partitions can be created.
+
+
+    - Because the boot record must be so small, it is not smart and does not understand
+        filesystem structures like ext4.  It's sole purpose is to load GRUB stage 1.5.  
+
+      In order to accomplish this, stage 1.5 must be located in the space between the
+        partition table and the first partition on the drive.
+
+
+    - To view the boot partition:
+
+        # List disk drives
+        $ lsblk -i
+        NAME                       MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+        sda                          8:0    0   60G  0 disk
+        |-sda1                       8:1    0    1G  0 part /boot
+        `-sda2                       8:2    0   59G  0 part
+        ...
+
+        # Examine the boot record of the boot drive
+        $ dd if =/dev/sda bs=512 count=1
+
+
+    - Note that the output is unreadable, since it is in a binary format.  For a
+        different view of the boot record, we can use the 'od' command to display  
+        the data in octal instead, with the '-a' option to try and convert the
+        octal values to ASCII characters when possible.
+
+        # Display boot record in octal
+        $ dd if=/dev/sda bs=512 count=1 | od -a -
+
+
+    - There is a generic boot record without a partition table in the /boot directory.
+        We can look at it to see the boot record by itself.
+
+        # Display the generic boot record
+        $ od -a /boot/grub2/i386-pc/boot.img
+
+        # The 'strings' command will output only the ASCII characters in the record
+        $ strings /boot/grub2/i386-pc/boot.img
+
+
+
+- GRUB stage 1.5
+
+    - GRUB stage 1.5 must be located in the space between the partition table and the
+        first partition on the hard drive.  This space was left unused historically for
+        compatibility reasons, and is sometimes called the 'boot track' or 'MBR gap'.
+
+      The first partition on our hard drive begins at sector 63, and with the MBR in 
+        sector 0, that leaves 62 512-byte sectors in which to store stage 1.5.
+
+
+    - To look at GRUB stage 1.5:
+
+        # Look at the first sector of stage 1.5
+        $ dd if=/dev/sda bs=512 count=1 skip=1 | od -a -
+
+
+    - Because of the larger amount of space available for stage 1.5, it can have enough
+        code to include a few common filesystem drivers (like EXT, XFS, FAT, and NTFS).
+
+
+    - Note that the /boot directory must be located on a filesystem that is supported by
+        GRUB such as EXT4.
+
+
+
+- GRUB stage 2
+ 
 
 - Configuring GRUB
 
