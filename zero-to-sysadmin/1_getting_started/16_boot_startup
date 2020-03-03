@@ -2,12 +2,67 @@
 CHAPTER 16 - LINUX BOOT & STARTUP
 -----------------------------------------------------------
 
+- Boot and Startup Process
+
+    - There are 3 parts to the complete boot and startup process:
+
+        1. Hardware boot (which initializes the system hardware)
+        2. Linux boot (which loads the Linux kernel and systemd)
+        3. Linux startup (in which systemd makes the host ready for productive work)
+
+
+
 - Hardware Boot
+
+    - The hardware boot process is the same for any Intel-based OS:
+
+        1. When power is first applied to the computer, it runs the POST (Power On Self
+             Test), which is part of BIOS (Basic Input Output System) or the newer UEFI
+             (Unified Extensible Firmware Interface).
+
+           If POST fails, the computer may not be usable, so the boot process does not
+             continue.
+
+
+        2. Once POST has checked basic operability of the hardware, it locates the boot
+             sectors on all attached bootable devices, including hard drives, DVDs/CDs,
+             or bootable USB sticks.  
+
+           The first boot sector it finds that contains a valid MBR is loaded into RAM,
+             and control is then transferred to the RAM copy of the boot sector.
+
+
+    - The BIOS/UEFI interface can be used to configure the system hardware for things
+        like overclocking, specifying CPU cores as active or inactive, and specifying 
+        devices from which the system can boot and their sequence.
+
+
+    - It is convenient to make the USB drive the first boot device, since this allows
+        inserting a live boot USB if needed for troubleshooting.  However, in most
+        commercial environments it is more secure to allow boot from an internal drive
+        only.
+
 
 
 - Linux Boot
 
-    - GRUB stage 1
+    - GRUB
+
+        - GRUB2 (Grand Unified Bootloader) is the newest version of the GRUB bootloader 
+            and is the standard bootloader for most common.  GRUB is the program that
+            makes the computer just smart enough to find the OS kernel and load it into
+            memory.
+
+        - GRUB has been designed to be compatible with the multiboot specification, 
+            which allows it to boot many versions of Linux and other free OS's.
+
+        - GRUB can allow the user to choose to boot from among several different kernels
+            for your distro if more than one is present due to system updates.
+
+        - GRUB can be configured using the /boot/grub/grub.conf file.
+
+
+
     - GRUB stage 1.5
     - GRUB stage 2
 
