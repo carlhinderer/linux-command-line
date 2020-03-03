@@ -151,9 +151,69 @@ CHAPTER 16 - LINUX BOOT & STARTUP
 
 
 - GRUB stage 2
+
+    - All of the files for GRUB stage 2 are located in the /boot/grub2 directory and its
+        subdirectories.  GRUB2 does not have an image file like stages 1 and 1.5. 
+
+      Instead, stage 2 consists of the files and runtime kernel modules that are loaded as
+        needed from the /boot/grub2 directory and its subdirectories.
+
+
+    - The function of GRUB stage 2 is to locate and load a Linux kernel into RAM and turn
+        control over to the kernel.  
+
+      The kernel and its associated files are located in the /boot directory.  The kernel
+        files are all named starting with 'vmlinuz'.
+
+        # List currently installed kernels
+        $ ll /boot
  
+      The 'System.map' files are symbol tables that map the physical addresses of the symbols
+        such as variables and functions.  The 'initramfs' files are used early in the Linux
+        boot process before the filesystem drivers have been loaded and the filesystems
+        mounted.
+
+
 
 - Configuring GRUB
+
+    - GRUB is configured with /boot/grub2/grub.cfg, but we do not change the file because
+        it can be overwritten when the kernel is updated to a new version.  Instead, we
+        make modifications to the /etc/default/grub file.
+
+        # Look at unmodified version of the /etc/default/grub file:
+        $ cd /etc/default ; cat grub
+
+        GRUB_TIMEOUT=5
+        GRUB_DISTRIBUTOR="$(sed 's, release .*$,,g' /etc/system-release)"
+        GRUB_DEFAULT=saved
+        GRUB_DISABLE_SUBMENU=true
+        GRUB_TERMINAL_OUTPUT="console"
+        GRUB_CMDLINE_LINUX="resume=/dev/mapper/fedora_studentvm1-swap
+                            rd.lvm.lv=fedora_studentvm1/root
+                            rd.lvm.lv=fedora_studentvm1/swap
+                            rd.lvm.lv=fedora_studentvm1/usr rhgb quiet"
+        GRUB_DISABLE_RECOVERY="true"
+
+
+    - The options:
+
+        GRUB_TIMEOUT
+          Amount of seconds for the GRUB menu countdown
+
+        GRUB_DISABLE_RECOVERY
+          Toggles whether the GRUB rescue option is available
+
+        GRUB_CMDLINE_LINUX
+          List of arguments passed to the kernel at boot time
+
+
+    - Once we have updated the grub config file, we need to run the 'grub2-mkconfig'
+        command to reflect the updates.
+
+        # Update the grub config
+        $ grub2-mkconfig > /boot/grub2/grub.cfg
+
 
 
 - The Linux Kernel
