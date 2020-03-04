@@ -82,8 +82,90 @@ CHAPTER 18 - FILES, DIRECTORIES, & LINKS
             (group 100), and thus all the files created belonged to that group.
 
 
+        - Here, we change the user and group ownerships of one of our test files as the
+            student user:
+
+            # Look at one of our test files
+            $ ll file09
+
+            # Try to change user ownership
+            $ chown student1 file09
+            chown: changing ownership of 'file09': Operation not permitted
+
+            # Try to change group ownership
+            $ chgrp student1 file09
+            chgrp: changing group of 'file09': Operation not permitted
+
+
+        - As we can see, the user cannot change the file's user and group ownerships.  But
+            what if we want to share the file with another user?  One way is to copy the
+            file to /tmp.
+
+            # First, add some data to our file
+            $ echo "Hello world." > file09
+            $ cat file09
+
+            # Now, copy the file to /tmp
+            $ cp file09 /tmp
+
+
+            # Now, open a new terminal tab and switch to the new user
+            $ su - student1
+
+            # We can view the file
+            $ cat /tmp/file09
+
+            # And we can copy the file to the new user's home directory
+            $ cp /tmp/file09 . ; cat file09
+
+
     - File Permissions
+
+        - The file permissions (aka the 'file mode'), along with the file ownership, provide
+            a means of defining which users and groups have access to specific files and
+            directories.  
+
+
+        - The User permissions define the access rights of the user who owns the file.  The
+            Group permissions define the access rights of the group that owns the file.
+            The Other permissions defines what everyone else can do.
+
+                             User       Group        Other
+            -------------------------------------------------------
+            Permissions      r w x      r w x        r w x
+            Bits             1 1 1      1 1 1        1 1 1
+            Octal value      4 2 1      4 2 1        4 2 1
+
+
+        - In our previous example, since Other has read permissions, the 'student1' user was
+            able to copy the file from /tmp to their home directory.
+
+          Here, we change the permissions so that Other cannot read the file:
+
+            # Change the permissions
+            $ su - student
+            $ cd /tmp
+            $ chmod 660 file09
+
+            # Now the student1 user cannot read the file
+            $ su - student1
+            $ cat /tmp/file09
+
+
     - Directory Permissions
+
+        - Directory permissions are similar to file permissions:
+
+            1. The read permission on a directory allows access to list the content of the
+                 directory.
+
+            2. The write permission allows users of a class to create, change, and delete
+                 files in the directory.
+
+            3. The execute permission allows the users of a class to make the directory 
+                 the PWD.
+
+
     - Implications of Group Ownership
     - umask
     - Changing File Permissions
