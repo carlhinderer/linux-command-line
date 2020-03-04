@@ -84,11 +84,69 @@ CHAPTER 17 - SHELL CONFIGURATION
 
 - Exploring the Global Configuration Scripts
 
+    # Look at the /etc/profile script
+    $ cat /etc/program
+
+    # List startup program files
+    $ ll /etc/profile.d/*.sh
+
+
 
 - Exploring the Local Configuration Scripts
 
+    # Look at local config scripts
+    $ cat .bash_profile
+    $ cat .bashrc
+
+
 
 - Testing It
+
+    - A good troubleshooting strategy to figure out the order in which things occur is to
+        just add an 'echo' statement to each one to see the order.
+
+        1. Edit /etc/profile
+
+             # /etc/profile
+             echo "Running /etc/profile"
+
+        2. Edit /etc.bashrc
+
+             # /etc.bashrc
+             echo "Running /etc.bashrc"
+
+        3. Create a new script /etc/profile.d/myBashConfig.sh
+
+             # /etc/profile.d/myBashConfig.sh
+             echo "Running /etc/profile.d/myBashConfig.sh"
+
+        4. Edit ~/.bash_profile
+
+             # ~/.bash_profile
+             echo "Running ~/.bash_profile"
+
+        5. Edit ~/.bashrc
+
+             # ~/.bashrc
+             echo "Running ~/.bashrc" 
+
+
+    - When we start a non-login shell (open a terminal):
+
+        Running ~/.bashrc
+        Running /etc/bashrc
+        Running /etc/profile.d/myBashConfig.sh
+
+
+    - When we start a login shell (switch to virtual console 2 and login):
+
+        Running /etc/profile
+        Running /etc/profile.d/myBashConfig.sh
+        Running /etc/bashrc
+        Running ~/.bash_profile
+        Running ~/.bashrc
+        Running /etc/bashrc
+
 
 
 - Exploring the Environment
