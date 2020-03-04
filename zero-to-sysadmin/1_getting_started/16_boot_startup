@@ -218,9 +218,85 @@ CHAPTER 16 - LINUX BOOT & STARTUP
 
 - The Linux Kernel
 
+    - All Linux kernels are self-extracting, compressed format to save space.  The kernels
+        are located in /boot, along with an initial RAM disk image and symbol maps.  
+
+      Once the selected kernel is loaded into memory by GRUB and begins executing, it must
+        first extract itself from the condensed version of the file before it can perform
+        any useful work.  The kernel has extracted itself, loads systemd, and turns 
+        control over to it.
+
+
+    - This is the end of the boot process.  At this point, the Linux kernel and systemd are
+        running but unable to perform any productive tasks for the end user, because nothing
+        else is running.
+
+
 
 - Linux Startup
 
     - systemd
+
+        - systemd is the mother of all processes, and it is responsible for bringing the Linux
+            host up to a state in which productive work can be done.  
+
+          Some of it's functions, which are far more extensive than the old SystemV init program,
+            are to manage many aspects of a running Linux host, including mounting filesystems
+            and starting and managing system services.
+
+
+        - Here is a list of the systemd targets that are progressed through as the system starts
+            up:
+
+            SystemV        systemd               Description
+            Runlevel       Target
+            --------------------------------------------------------------------------------
+                           halt.target           Halts the system without powering down
+
+            0              poweroff.target       Halts the system and powers down
+
+            S              emergency.target      Single user mode, no services running 
+                                                   or filesystems mounted
+
+            1              rescue.target         Filesystems mounted and basic services running
+
+            2                                    Multiuser, non-GUI services except NFS running
+
+            3              multi-user.target     All services running, but command-line only
+
+            4                                    Unused, but identical to 3.
+
+            5              graphical.target      Same as 3, but with a GUI.
+
+            6              reboot.target         Reboot
+
+                           default.target        Aliased to either 3 or 5
+
+
+        - Each target has a set of dependencies described in the config file.  systemd starts
+            all the required dependencies, which are the services required to run the Linux
+            host at the specific level of functionality.  When all the dependencies are
+            loaded and running, the system is running at the target level.
+
+
+        - The 'sysinit.target' and 'basic.target' targets are checkpoints to the startup
+            process.  
+
+            sysinit.target:
+              - Mount filesystems
+              - Set up swap files
+              - Start udev
+              - Set the random number generator seed
+              - Initiate low-level services
+              - Set up cryptographic services if filesystems are encrpyted
+
+            basic.target:
+              - Starts units required for next targets
+              - Set up paths to various executables
+              - Set up communication sockets
+              - Set up timers
+
+
+
     - Graphical Login Screen
     - About the Login
