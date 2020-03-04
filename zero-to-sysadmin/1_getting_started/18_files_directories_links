@@ -2,15 +2,86 @@
 CHAPTER 18 - FILES, DIRECTORIES, & LINKS
 -----------------------------------------------------------
 
+- Files
+
+    - A 'file' is a unit of storage consisting of a single sequence of data with a finite
+        length that is stored on nonvolatile storage medium.
+
+    - Files are stored in directories and are accessed using a file name and an optional
+        path.  Files also support various attributes such as permissions and timestamps
+        for creation, last modification, and last access.
+
+
+
 - Preparation
+
+    - Here, we'll set up some files for the exercises in this chapter:
+
+        # Create some files
+        $ cd ~/Documents
+        $ for I in `seq -w 20` ; do dmesg > testfile$I ; touch test$I file$I ; done
+
+
+           `seq -w 20`     
+
+               - 'seq' prints a sequence of numbers (0 to 20 in this case)
+
+               - `` around the command cause the results to be expanded into a list that can 
+                   be used by the 'for' command
+
+               - '-w' option specifies that all numbers will have the same length (smaller
+                   numbers are padded with zeros)
+
+
+        # Now we can see the files we created
+        $ ll -h
+
+
+    - Now, we'll create a new user for testing also:
+
+        # Create new user
+        $ useradd -c "Student user 1" student1
+
+        # Set the pw for the new user
+        $ passwd student1
+
 
 
 - User Accounts and Security
+
+    - User accounts are the first line of security on your Linux computer.  The security of 
+        the computer and the data stored there are based on the user accounts created by the 
+        Linux SysAdmin or by some form of centralized authorization system.
+
+    - A user cannot access any resources on a Linux system without loggin on with an account
+        ID and password.
+
+    - Each file and directory on a Linux system has an owner and a set of access permissions.
+        Setting the ownership and permissions correctly allows user to access the files that
+        belong to them, but not files belonging to others.
+
 
 
 - File Attributes
 
     - File Ownership
+
+        - File ownership is one of the attributes that is part of Linux file security protocols:
+
+            -rw-rw-r--  1  student  student  44K  Dec  4  09:47  testfile09
+
+
+        - There are 2 owners associated with every file, the User who owns the file, and the
+            Group ownership.  
+
+          The user who created the file is always the owner of the file, unless it is changed.
+
+          In RedHat-based distros, each user has their own private group and files created by
+            them also belong to that group.  This 'RedHat private group' method is used to 
+            improve security.  In many older distros, all users are added to a common group
+            (group 100), and thus all the files created belonged to that group.
+
+
     - File Permissions
     - Directory Permissions
     - Implications of Group Ownership
