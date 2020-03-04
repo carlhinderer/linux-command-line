@@ -241,3 +241,13 @@ CHAPTER 17 - SHELL CONFIGURATION
 
 
 - Aliases
+
+    - Aliases are a good way to reduce typing for the lazy SysAdmin.  
+
+        # Display the current list of aliases
+        $ alias
+
+
+    - Most of the aliases we have defined are added to the global environment by config
+        files in /etc/profile.d, although we can add them to local config files as well
+        as just adding them from the command line.
