@@ -119,6 +119,7 @@ CHAPTER 18 - FILES, DIRECTORIES, & LINKS
             $ cp /tmp/file09 . ; cat file09
 
 
+
     - File Permissions
 
         - The file permissions (aka the 'file mode'), along with the file ownership, provide
@@ -152,6 +153,7 @@ CHAPTER 18 - FILES, DIRECTORIES, & LINKS
             $ cat /tmp/file09
 
 
+
     - Directory Permissions
 
         - Directory permissions are similar to file permissions:
@@ -164,6 +166,7 @@ CHAPTER 18 - FILES, DIRECTORIES, & LINKS
 
             3. The execute permission allows the users of a class to make the directory 
                  the PWD.
+
 
 
     - Implications of Group Ownership
@@ -260,10 +263,63 @@ CHAPTER 18 - FILES, DIRECTORIES, & LINKS
             $ chmod 2770 dev
 
 
+
     - umask
+
+        - When a user creates a new file using commands like 'touch', or by redirecting output
+            to a file, the default permissions look like '-rw-rw-r--'.  This is because of
+            'umask'.
+
+          The umask is a setting that Linux uses to specify the default permissions of all new
+            files.  It is set in the /etc/profile bash config script.
+
+
+        - The umask for root is 0022.  The umask for other users is 0002.  These numbers are
+            the reverse of normal octal permissions, since they define the permissions we
+            want to turn off, rather than turn on.
+
+          The execute bit is always off for new files, so umask setting only applies to read
+            and write settings.  So if the umask is 000, the permissions would be 'rw-rw-rw-'.
+
+
+        - To set the umask:
+
+            # Display the current umask value
+            $ umask
+
+            # Change the umask value
+            $ umask 006
+
+
+
     - Changing File Permissions
+
+        - In addition to using octal codes, we can use character codes to set permissions:
+
+            # Set permissions with character codes
+            $ chmod g+rx,g-w file013 file026 file027 file036 file053 file092
+
+
+
     - Applying Permissions
+
+        - Permissions can sometimes be tricky.  For instance, if we have a file with ownership
+            'student.student' and the permissions '---rw-rw-', you would expect the user to
+            be able to read the file.
+
+          However, permissions are scanned from left to right.  The kernel sees the '---' user
+            permissions first, and denies permission to access the file.
+
+
+
     - Timestamps
+
+        - All files are created with 3 timestamps:
+
+            1. atime (last access)
+            2. mtime (last modify)
+            3. ctime (last change of ownership or permissions)
+
 
 
 - File Meta-Structures
