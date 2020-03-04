@@ -151,8 +151,93 @@ CHAPTER 17 - SHELL CONFIGURATION
 
 - Exploring the Environment
 
+    - Environment variables affect how the shell behaves under certain circumstances.
+
+        VARIABLE_NAME=value
+
+
+    - To view the currently defined environment variables and their values:
+
+        # View all current variables
+        $ printenv | less
+
+        # View the value of a variable
+        $ echo $HOME
+
+
 
 - User Shell Variables
+
+    - Shell variables are part of the local envioronment, so they are accessible to
+        programs, scripts, and user commands.  Users can create environment variables
+        within a shell which then become part of the environment for that one shell.
+
+      No other shells have access to these local user variables.
+
+
+    - If a change is made to a user shell variable or a new one is created, it must be
+        explicitly 'exported' in order for any subprocesses forked to see the change.
+
+      To make a shell variable available as an environment variable for shells launched
+        after the change:
+
+        # Do not use the $ on the variable name
+        $ export VARNAME
+
+
+    - Here, we create a variable but we don't export it:
+
+        # Create a variable that doesn't currently exist
+        $ echo $MyVar ; MyVar="MyVariable" ; echo $MyVar
+
+        # Now, open a new terminal tab, and the new variable doesn't exist
+        $ echo $MyVar
+
+        # Now, start a new screen session, and we see that the variable still doesn't exit
+        $ screen
+        $ echo $MyVar
+        $ exit
+
+
+    - Now, we export the variable:
+
+        # Export the environment variable
+        $ export MyVar="MyVariable" ; echo $MyVar
+
+        # Start a new screen session, and the variable does exist
+        $ screen
+        $ echo $MyVar
+        $ exit
+
+
+    - Now, we unset the variable:
+
+        # Unset the environment variable
+        $ unset MyVar
+
+        # Now the variable is not defined
+        $ echo $MyVar
+
+
+    - The 'env' utility allows us to set an environment variable temporarily for a program
+        (or in this case a subshell).  The 'Bash' command must be an argument in order for
+        this to work.
+
+        # Temporarily export an environment variable
+        $ env MyVar=MyVariable Bash
+
+        # Now, we can see the variable is set
+        $ echo $MyVar
+
+
+    - As we can see, when local variables are set, they become part of the environment for
+        that shell only.  Even after exporting the available, it only becomes part of the
+        environment of a new shell if it is launched via the 'screen' command.
+
+      There is seldom any reason to temporarily create a local user environment variable.
+        It's usually better to add the variable to ~/.bashrc if it's only needed for a 
+        single user, and to /etc/profile.d if it's needed for all users.
+
 
 
 - Aliases
