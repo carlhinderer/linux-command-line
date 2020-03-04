@@ -401,6 +401,98 @@ CHAPTER 18 - FILES, DIRECTORIES, & LINKS
 
 - Links
 
+    - Links make some tasks easier by providing access to files from multiple locations
+        in the directory tree without the need for typing long pathnames.  
+
+
+    - For instance, almost all applications that link to libraries use a generic name with
+        only a major version for the link name, which points to an actual library file
+        with a minor number also.
+
+
+
     - Hard Links
+
+       - A hard link is a directory entry that points to the inode of a file.
+
+           # Remove files in test directory and add a new one
+           $ cd ~/tester ; rm -rf *
+           $ echo "Hello World" >> file001
+
+           # Look at number of links to file
+           $ stat file001
+
+
+           # Create a hard link to the file
+           $ ln file001 link1
+
+           # Display the file contents
+           $ cat link1
+
+           # Display the details of the link
+           $ stat link1
+
+
+           # We can create a link to another link
+           $ ln link1 link2
+
+           # We can view the inode information of files with the -i flag
+           $ ll -i
+
+
+       - Hard links are limited to files contained within a single filesystem.  This is
+           because inode numbers are unique only within each filesystem.
+
+           # This will fail
+           $ link file001 /tmp/link4
+
+
+
     - Locating Files with Several Hard Links
+
+       - One of the consequences of hard links is that deleting the actual file inode and
+           data also requires deleting all of the links.  The problem that it may not be
+           obvious where all of the links are located.
+
+
+       - We can use the 'find' command to locate files with multiple hard links.  This will
+           allow us to locate all of the hard links for a file.
+
+           # Find files with exactly 4 hard links
+           $ find / -type f -links 4
+
+
+
     - Symbolic Links
+
+        - Soft links (aka symbolic links) can circumvent the problem of hard links not working
+            across filesystem boundaries.  
+
+          Whereas a hard link points directly to the inode belonging to a file, soft links point
+            directly to a directory entry (one of the hard links).  Because soft links point
+            to a hard link of a file instead of the inode, they are not dependent on the inode
+            number and can work across filesystem boundaries.  Also, soft links can point to
+            directories.
+
+
+        - The downside of soft links is that if the hard link the symlink points to is deleted
+            or renamed, the symlink is broken.
+
+
+        - To create symlinks:
+
+            # Create a symlink to a hard link
+            $ ln -s link1 softlink1
+
+            # View details about the symlink
+            $ stat softlink1 link1
+
+
+            # Create a symlink across filesystem boundaries
+            $ cd /tmp ; ln -s ~/testdir/file001 softlink2
+
+            # View file through symlink
+            $ cat softlink2
+
+
+        - The 'unlink' command can also be used to delete files and links.
