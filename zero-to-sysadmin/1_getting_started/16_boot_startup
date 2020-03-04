@@ -299,4 +299,47 @@ CHAPTER 16 - LINUX BOOT & STARTUP
 
 
     - Graphical Login Screen
+
+        - There are still 2 components that figure in the very end of the boot and
+            startup process for graphical.target.  
+
+
+            1. The display manager (dm) has the sole function of providing the GUI
+                 login screen for your Linux desktop.  After you log in, the display
+                 manager turns control over to the window manager.
+
+               When you log out of the desktop, control is turned back over to the
+                 display manager to wait for another login.
+
+
+            2. The window manager (wm) manages the creation, movement, and destruction
+                 of windows on a GUI desktop, including the GUI login screen.  The
+                 window manager works with the Xwindow system (or the newer Wayland)
+                 to perform these tasks.
+
+               The window manager also controls the appearance of the windows it
+                 generates.  This includes the look and feel of buttons, sliders, 
+                 window frames, pop up menus, etc.
+
+
+        - For some common desktops:
+
+            Desktop         Display Manager         Window Manager
+            -----------------------------------------------------------
+            GNOME           gdm                     Metacity
+            KDE             kdm                     Kwin
+
+
+
     - About the Login
+
+        - The CLI login screen is initiated by a program called getty (GET TTY).  The
+            historical function of getty was to wait for a connection to a dumb 
+            terminal to come in on a serial communications line.
+
+          The getty woud spawn the login screen and wait for a login to occur.  When the
+            remote user would log in, the getty would terminate and the default shell
+            for the user would launch.  
+
+
+        - Today, we use agetty, and advanced form of getty.
