@@ -167,6 +167,99 @@ CHAPTER 18 - FILES, DIRECTORIES, & LINKS
 
 
     - Implications of Group Ownership
+
+        - We still need a way for users to share files with some users, but not all users.
+            This is where Linux groups shine - they allow sharing of files in a secure way.
+
+          A 'group' is an entity defined in the /etc/group file that lists the user IDs of the
+            members of the group.  
+
+
+        - To create a group and add some users:
+
+            # Create another new user
+            $ su -
+            $ useradd -c "Student User 2" student2
+            $ passwd student2
+
+
+            # Create a group
+            $ groupadd -g 5000 dev
+
+            # Add 2 of the users to the group
+            $ usermod -G 5000 student
+            $ usermod -G 5000 student1
+
+
+            # The 'gpasswd' command can be also be used to add multiple users
+            $ gpasswd -M student,student1 dev
+
+
+            # Look at the last 10 lines of /etc/groups
+            $ tail /etc/group
+
+            vboxsf:x:981:
+            dnsmasq:x:980:
+            tcpdump:x:72:
+            student:x:1000:
+            screen:x:84:
+            systemd-timesync:x:979:
+            dictd:x:978:
+            student1:x:1001:
+            student2:x:1002:
+            dev:x:5000:student,student1
+
+
+        - Now, as the root user, create the shared directory /home/dev, and set the group
+            ownership to dev and the permissions to 770, which will prevent users who aren't in
+            the group from accessing the directory.
+
+            # Create the new directory
+            $ cd /home ; mkdir dev
+
+            # Set the group ownership
+            $ chgrp dev dev
+
+            # Change the permissions
+            $ chmod 770 dev
+
+
+        - Since the /etc/groups file is read when the login shell is started, we'll need
+            to restart the shell to see our changes reflected.  
+
+          Now, as the 'student' user, create a file in the /home/dev directory and change the
+            group ownership and permissions of the file.
+
+            # Create new file
+            $ cd /home/dev
+            $ echo "Hello World" > file01
+
+            # Change the group ownership
+            $ chgrp dev file01
+
+
+            # Now, the other users in the group can edit the file also
+            $ su - student1
+            $ cd ../dev
+            $ echo "Hello to you, too" >> file01
+
+
+        - There is one last thing we can do for convenience.  When we created the new file in
+            the /dev directory, it had the group ID that belonged to the user that created it,
+            but we changed it to the 'dev' group.
+
+          We can add the setgid (Set Group ID) bit on the directory, which informs Linux to 
+            create files in the /dev directory with the same group ID as the directory.
+
+            # Set the setgid bit on the directory
+            $ su -
+            $ cd /home
+            $ chmod g+s dev
+
+            # If we wanted to use octal instead
+            $ chmod 2770 dev
+
+
     - umask
     - Changing File Permissions
     - Applying Permissions
