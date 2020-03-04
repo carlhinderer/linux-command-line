@@ -4,11 +4,82 @@ CHAPTER 17 - SHELL CONFIGURATION
 
 - Staring the Shell
 
+    - When a shell is started, a sequence of events takes place, first with global
+        config files, then with local config files that allow users to override
+        global settings.
+
+
+    - A 'login shell' is one in which you need to use a user id and password to gain
+        access.  This is the case with a virtual console, an SSH session, or a GUI
+        desktop.
+
+      A 'non-login shell' is one that is spawned or launched within another, 
+        already-running shell.  Non-login shells can be launched from within the GUI
+        desktop by the 'screen' command or within a terminal emulator with multiple
+        tabs.
+
+
+    - There are 5 main files and one directory that are used to configure the bash 
+        environment.  
+
+        1. /etc/profile
+             System-wide environment and startup programs
+
+        2. /etd/bashrc
+             System-wide functions and aliases
+
+        3. /etc/profile.d
+             This directory contains system-wide scripts for configuring various CLI
+               tools such as vim and mc.  The SysAdmin can also place custom config
+               scripts in this directory.
+
+        4. ~/.bash_profile
+             User-specific environment and startup programs
+
+        5. ~/.bashrc
+             User-specific aliases and functions
+
+        6. ~/.bash_logout
+             User-specific commands to execute when the user logs out
+
+
+    - All user shell config files are located in the /etc/skel directory, and are copied
+        into the home directory when a new account is created.
+
+
 
 - Non-Login Shell Startup
 
+    1. The shell is started.
+
+    2. We execute ~/.bashrc which calls /etc.bashrc
+
+    3. The /etc.bashrc program contains code that calls each of the files ending with 
+         '*.sh' and the file 'sh.local' that are located in /etc/profile.d.
+
+    4. After this, control is returned to ~/.bashrc, which performs any extra actions
+         and exits.
+
+
 
 - Login Shell Startup
+
+    1. The shell is started.
+
+    2. The /etc/profile script is executed.  It executes all the files ending with '*.sh'
+         and the file 'sh.local' in /etc/profile.d
+
+    3. The shell now looks for 3 files in sequence: 
+         ~/.bash_profile
+         ~/.Bash_login
+         ~/.profile
+       It runs the first one it finds and ignores the others.
+
+    4. The ~/.bash_profile script also calls the ~/.bashrc file which is also executed,
+         then it returns control to ~/.bash_profile
+
+    5. When ~/.bash_profile finishes execution, the shell config is complete.
+
 
 
 - Exploring the Global Configuration Scripts
