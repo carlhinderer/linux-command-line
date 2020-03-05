@@ -346,19 +346,94 @@ CHAPTER 19 - FILESYSTEMS
             file, the file mode, and the 3 timestamps.  It does not include the name of the file.
 
 
+
     - Journal
+
+        - The journal (introduced in EXT3) was created to overcome the massive amount of time 
+            the 'fsck' program required to fully recover a disk structure damaged by an improper
+            shutdown that occurred during a file update.
+
+        - Instead of writing to disk data areas directly, the journal provides for writing of
+            file data to a specified area on disk along with its metadata.  Once the data is
+            safe on the hard drive, it can be merged or appended to the target file with no
+            chance of data loss.
+
+        - If a shutdown occurs, a consistency check will be done at the next boot and any data
+            remaining in the journal will be committed to the data areas of disk.
+
+
+        - Journaling does impact write performance.  For this reason, there are 3 options 
+            available for the journal to allow users to choose between performance and data
+            integrity:
+
+            1. Journal = both metadata and file contents are written to journal, greatest reliability, 
+                           but worst performance since all writes happen twice
+
+            2. Writeback = only metadata is written to journal, faster but subject to out-of-order
+                             writes
+
+            3. Ordered = compromise between journal and writeback, forces file contents to be
+                           written before adding metadata to journal (this is the default on EXT4)
+
+          This option can be changed in /etc/fstab.
+
 
 
 - Data Allocation Strategies
 
-    - Data Fragmentation
+    - The EXT filesystem implements several data allocation strategies that ensured minimal
+        file fragmentation.  Data allocation for EXT4 is handled using extents.
+
+      An extent is described by its beginning and ending place on the hard drive, which greatly
+        reduces the number of pointers needed to describe the location of data in larger files.
+
+
+    - EXT4 reduces fragmentation by scattering newly created files around the disk instead of
+        bunching them up in one location.  
+
+
+
+- Data Fragmentation
+
+    - For many older PC filesystems such as FAT and NTFS, fragmentation is a significant problem,
+        resulting in hard drive performance degradation.  For this reason, defragmentation became
+        an industry in itself.  
+
+      This was partially mitigated by the rise of SSD drives, where there is no performance 
+        penalty for fragmentation.
+
+
+    - We can use the 'fsck' utility to check for file system fragmentation if we need to.
+
+        # Generate report on filesystem (-f to force checking and -n to not fix problems)
+        $ fsck -fn /dev/mapper/fedora_studentvm1-home
+
+
+    - The 'tune2fs' and 'e4defrag' utilities can be used when advanced defragmenting stragegies 
+        are required.
+
 
 
 - Repairing Problems
 
-    - The /etc/fstab File
-    - Repairing Damaged Filesystems
-    - Finding Lost Files
+    - We can repair problems that cause the host not to boot, such as a misconfigured /etc/fstab
+        file, but in order to do so, the filesystem where the config files resides must be
+        mounted.
+
+
+    - The /etc/fstab file entries have the following format:
+
+        Filesystem label     Mount point          Type       List of options         Used for backups        
+         ------------------------------------------------------------------------------------------
+        LABEL=SS-R100        /media/SS-R100       vfat       user,noauto,defaults    0  0
+        
+
+    - Sometimes, the file system will be damanged by an unexpected shutdown.  If this does happen,
+        the 'fsck' utility can be used to fix most problems.
+
+        # Check for fsck messages that occurred during boot time
+        $ cd /var/log ; grep fsck messages
+
 
 
 - Creating a New Filesystem
