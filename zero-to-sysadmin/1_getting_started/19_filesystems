@@ -288,8 +288,64 @@ CHAPTER 19 - FILESYSTEMS
 
 - The Linux ext4 Filesystem
 
+    - The EXT filesystem has its roots in the Minix OS (released in 1987 by Andrew 
+        Tannenbaum).  When Linus was writing the original Linux kernel, he needed a 
+        filesystem and didn't want to write one at that point, so he just included the
+        Minix filesystem.
+
+      The original EXT filesystem (Extended) was written by Remy Card and released with 
+        Linux in 1992 to overcome the size limitations of the Minix filesystem.  EXT2,
+        EXT3, and EXT4 each followed with additional fixes and features.
+
+
+    - The EXT4 filesystem has the following meta-structures:
+
+        - A boot sector in the first sector of the hard drive on which it is installed.
+            The boot block includes a very small boot record and a partition table that
+            supports up to 4 partitions.
+
+        - After the boot sector, has some reserved space which spans the space between
+            the boot record and the first partition (which is usually on the next cylinder
+            boundary).  The GRUB boot loader uses this space for its boot code.
+
+        - The space in each EXT4 partition is divided into cylinder groups that allow for
+            more granular management of the data space.  Typically, each group usually
+            amounts to about 8 MB.  
+
+        - Each cylinder group contains:
+
+            - A superblock which contains the metadata that defines the other filesystem
+                structures and locates them on the physical disk assigned to the group.
+
+            - An inode bitmap block that is used to determine which inodes are used and 
+                which are free.
+
+            - The inodes which have their own space on the disk.
+
+            - A zone bitmap to keep track of the used and free data zones.
+
+        - A journal which records in advance the changes that will be performed to the 
+            filesystem and which helps eliminate data loss due to crashes and power failures.
+
+
+
     - Cylinder Groups
+
+        - The 'dumpe2fs' utility can be used to dump the data from the cylinder group's primary
+            superblock.
+
+            # Display superblock data for the root / filesystem
+            $ dumpe2fs -h /dev/mapper/fedora_studentvm1-root
+            
+
+
     - The inode
+
+        - An inode (index node) is a 256-byte block on the disk that stores data about the file.
+            This includes the size of the file, the user id and group ids of the owners of the
+            file, the file mode, and the 3 timestamps.  It does not include the name of the file.
+
+
     - Journal
 
 
