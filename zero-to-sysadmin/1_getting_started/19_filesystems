@@ -433,13 +433,3 @@ CHAPTER 19 - FILESYSTEMS
 
         # Check for fsck messages that occurred during boot time
         $ cd /var/log ; grep fsck messages
-
-
-
-- Creating a New Filesystem
-
-    - Finding Space
-    - Adding a Virtual Hard Drive
-
-
-- Other Filesystems
