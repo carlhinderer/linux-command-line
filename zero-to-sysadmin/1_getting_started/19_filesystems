@@ -192,18 +192,98 @@ CHAPTER 19 - FILESYSTEMS
             Temporary files to be preserved between reboots. 
 
 
+
     - Problem Solving
+
+        - Adhering to the FHS makes problem solving as easy as possible, since many applications
+            expect things to be in certain places.
+
+        - Since most Linux utilities are consistent in their use of /etc for config files, the
+            config file for a give program is easy to find.
+
+
     - Using the Filesystem Incorrectly
+
+        - One example of using the filesystem incorrectly is when a developer installed an 
+            application in /var.  The application was crashing, because the /var system was
+            full, and the log files (stored in /var/log) could not be appended to.  
+
+          Removing the application and reinstalling it in /opt resolved the problem.
+
+
     - Adhering to the Standard
+
+        - As SysAdmins, we often create our own scripts to make our work easier.  When
+            we create scripts, they should be stored in /usr/local/bin and any config
+            files should be stored in /usr/local/etc.  
+
+          There is also a /var/local directory in which database files for local programs
+            can be stored.
+
+        - By always adhering to this standard, it is much easier to remember where things
+            are installed when you need to troubleshoot them.
+
 
 
 - Linux Unified Directory Structure
 
+    - The Linux filesystem unifies all physical hard drives and partitions into a single
+        directory structure starting in the / root directory.   This means there is only
+        one single directory tree in which to search for files and programs.
+
+    - This can only work because a filesystem such as /home, /tmp, /var, /opt, or /usr
+        can be created on separate physical hard drives.  Even removable drives like USB
+        will be mounted onto the root filesystem.
+
+
 
 - Filesystem Types
 
+    - Linux supports reading about 100 partition types.  It can create and write to only 
+        a few of those.  But it is common to mount filesystems of different types on the
+        same root filesystem.
+
+
+    - The choices available when creating a new filesystem in Fedora are:
+
+            btrfs
+            cramfs
+            ext2
+            ext3
+            ext4
+            fat
+            gfs2
+            hfsplus
+            minix
+            msdos
+            ntfs
+            reiserfs
+            vfat
+            xfs
+
+
 
 - Mounting
+
+    - The term 'mounting' a filesystem refers back to the early days of computing when a
+        tape or removable disk pack would need to be physically mounted on an appropriate
+        drive device.
+
+
+    - A 'mount point' is simply an empty directory, like any other, which is created as
+        part of the root filesystem.  So, for example, the home filesystem is mounted on
+        the directory /home.  
+
+
+    - Mounting of filesystems during the startup process is managed by the /etc/fstab 
+        (filesystem table) config file.  It is a list of filesystems that are to be mounted,
+        their designated mount points, and any options needed.
+
+
+    - Filesystems are mounted on an eixsting directory using the 'mount' command.  In general,
+        any directory used as a mount point should be empty.  However, Linux will not 
+        prevent you from mounting a filesystem over a directory that already contains files.
+
 
 
 - The Linux ext4 Filesystem
