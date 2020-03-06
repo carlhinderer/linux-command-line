@@ -108,6 +108,31 @@ CHAPTER 1 - LOGICAL VOLUME MANAGEMENT
 
     - Create a New Volume Group 2
 
+        - In situations in which there is no existing space to be found, it will be necessary
+            to add a new drive in order to create space.
+
+            # Determine identifier of new drive
+            $ lsblk
+
+
+        - We'll create a new physical volume on the new hard drive:
+
+            # Create new physical volume
+            $ pvcreate /dev/sdc
+
+
+        - Now, we'll extend the volume group and logical volume:
+
+            # Extend the volume group to include the new physical volume
+            $ vgextend NewVG-01 /dev/sdc
+
+            # Extend the logical volume by adding the new space
+            $ lvextend /dev/NewVG-01/TestVol1 /dev/sdc
+
+            # Resize the filesystem
+            $ resize2fs /dev/NewVG-01/TestVol1
+
+
 
 - Tips
 
