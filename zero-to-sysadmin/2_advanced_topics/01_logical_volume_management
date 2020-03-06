@@ -4,19 +4,65 @@ CHAPTER 1 - LOGICAL VOLUME MANAGEMENT
 
 - The Need For Logical Volume Management
 
-    - Running Out of Disk Space in VirtualBox
-    - Recovery
+    - Managing disk space has always been a significant task for SysAdmins.  Running out of
+        disk space usually led to a long and complex series of tasks.  
+
+      It required taking the system offline, installing a new hard drive, booting to recovery
+        mode, creating new partitions and filesystems, changing the /etc/fstab file, and
+        rebooting.
+
+
+    - The introduction LVM has made these tasks much easier.  It provides features like the
+        ability to add disk space to a filesystem.  It also allows for a collection of 
+        multiple physical hard drives and partitions in a single volume group which can then
+        be divided into logical volumes.
+
+      We can do all of this without rebooting or unmounting the original filesystems.
+
 
 
 - LVM Structure
 
+    - LVM enables combining multiple physical hard drives into a 'volume group'.  
+
+      The volume group can then be divided into 'logical volumes'.  
+
+      Regular filesystems like EXT4 can then be created on a logical volume.
+
+
 
 - Extending a Logical Volume
+
+    - Although we can resize a mounted and active volume while it is in use, this is probably not
+        recommended for critical systems.  However, it can and is done frequently.
+
+
+    - To view existing volumes:
+
+        # List all filesystems
+        $ lsblk -i
+
+        # List all volume groups
+        $ vgs
+
+        # List all logical volumes
+        $ lvs
+
+
+    - To expand a logical volume from existing free space within the volume group:
+
+        # Expand with existing free space
+        $ lvextend -L +2G /dev/fedora_studentvm1/home
+
+        # Expand the ext4 filesystem to fill the new space
+        $ resize2fs /dev/fedora_studentvm1/home
+
 
 
 - Extending Volume Groups
 
-    - Create a New Volume Group 1
+
+
     - Create a New Volume Group 2
 
 
