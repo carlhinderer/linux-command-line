@@ -4,17 +4,60 @@ CHAPTER 2 - FILE MANAGERS
 
 - The Default File Manager
 
+    - The 'Thunar' graphical file manager is the default manager for the Xfce desktop.
+
 
 - Text-Mode File Managers
 
     - Midnight Commander
+
+        - 'Midnight Commander' is a text-based program used to interact with local and remote
+            Linux computers using the CLI.  It can be used with any of the common shells or SSH.
+            It can be used to copy, edit, move, or delete files and directories.
+
+        - To use Midnight Commander:
+
+            # Install midnight commander
+            $ dnf -y install mc
+
+            # Start midnight commander
+            $ mc
+
+            # Get help
+            $ man mc
+
+
     - VIFM
+
+        - Vifm is a dual-pane file manager that provides a Vim-like environment.  All the normal
+            vim commands work, so it's great for vim people.
+
+
     - nnn
+
+        - The 'nnn' file manager is a simple, single-pane tool with no frills.  Only one
+            directory and its content is displayed at a time.  
+
 
 
 - Graphical File Managers
 
     - Krusader
+
+        - Krusader is a graphical file manager modeled after Midnight Commander.  It uses the
+            same commands and layout.
+
+
     - Thunar
+
+        - Thunar is the default file manager for the Xfce desktop.  
+
+
     - Dolphin
+
+        - Dolphin is simple in a similar way to Krusader, but requires a lot more dependencies.
+
+
     - XFE
+
+        - XFE is more flexible and fully-featured than Thunar or Dolphin.
