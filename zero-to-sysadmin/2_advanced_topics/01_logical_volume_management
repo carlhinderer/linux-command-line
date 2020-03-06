@@ -136,5 +136,20 @@ CHAPTER 1 - LOGICAL VOLUME MANAGEMENT
 
 - Tips
 
+    - Use meaningful volume and volume group names to help make identification easy while
+        working on them.  Filesystem labels can make mounting easier and reduce a lot of
+        typing.
+
+    - Be aware that volume groups that span multiple physical volumes will fail completely
+        if one of the physical devices composing them fails.  LVM is not inherently fault
+        tolerant.  However, a properly designed software RAID system using LVM can be.  As 
+        always, make frequent backups.
+
+
 
 - Advanced Capabilities
+
+    - LVM can be used to create hybrid volumes that consist of both rotating hard drives along
+        with SSDs, in which the SSDs act as a data cache for the slower drives.
+
+    - LVM can also be used to create RAID volumes, mirror volumes, and snapshot volumes.
