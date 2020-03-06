@@ -61,6 +61,49 @@ CHAPTER 1 - LOGICAL VOLUME MANAGEMENT
 
 - Extending Volume Groups
 
+    - Create a New Volume Group 1
+
+        - Here, we use an existing but unused partition to create a volume group:
+
+            # Verify the amount of space we have left on /dev/sdb
+            $ lsblk
+            sdb                          8:16   0   20G  0 disk
+            |-sdb1                       8:17   0    2G  0 part /TestFS
+
+
+        - Next, create the physical partitions and volume group:
+
+            # Create 2 physical volumes
+            $ pvcreate /dev/sdb2 /dev/sdb3
+
+            # Create a volume group encompassing both of the new partitions
+            $ vgcreate NewVG-01 /dev/sdb2 /dev/sdb3
+
+            # Verify the new volume group
+            $ vgs
+
+
+        - Now, create the logical volume on the new volume group:
+
+            # Create a new logical volume on new volume group
+            $ lvcreate -L 2G NewVG-01 --name TestVol1
+
+            # Verify new logical volume
+            $ lvs
+
+
+        - Now, create an EXT4 filesystem on the new volume, mount it temporarily on /mnt,
+            and test it by creating a few files:
+
+            # Create ext4 filesystem
+            $ mkfs -t ext4 /dev/mapper/NewVG--01-TestVol1
+
+            # Mount the new filesystem
+            $ mount /dev/mapper/NewVG--01-TestVol1 /mnt
+
+            # Verify the mount
+            $ ll /mnt
+
 
 
     - Create a New Volume Group 2
