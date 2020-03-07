@@ -4,14 +4,98 @@ CHAPTER 3 - EVERYTHING IS A FILE
 
 - What is a File?
 
+    - In Linux, everything is a file.  That is, everything can be the source of a data stream, 
+        the target of a data stream, or in many cases both.  This allows us to use common
+        tools to operate on different things.
+
+
+    - Here are some examples of things that are treated as files in Linux:
+
+        Directories
+        Shell scripts
+        Running terminal emulators
+        LibreOffice documents
+        Serial ports
+        Kernel data structures
+        Kernel tuning parameters
+        Hard drives – /dev/sda
+        /dev/null
+        Partitions – /dev/sda1
+        Logical volumes (LVM) – /dev/mapper/volume1-tmp
+        Printers
+        Sockets
+
+
 
 - Device Files
+
+    - Device files are technically known as 'device special files'.  They are employed to provide
+        the OS and user an interface to the devices they represent.  
+
+
+    - All Linux device files are located in the /dev directory, which is an integral part of the
+        root (/) filesystem, because they must be available to the OS in the early stages of the
+        boot process.
+
+
+    - Over the years, chaos overtook the /dev directory with huge numbers of mostly unneeded 
+        devices.  The 'udev' daemon was created to simplify this problem.  
+
+      In the past, device files were created at the time the OS was created.  This meant that all
+        possible devices that could ever be used on the system had to be created in advance.  Tens
+        of thousands had to be created to handle all the possiblities!
+  
 
 
 - udev Simplification
 
+    - udev is designed to simplify this problem by creating entities in /dev only for those
+        devices that currently exist at boot time or have a high probability of actually 
+        existing on the host.  
+
+
+    - In addition, udev assigns names to devices when they are plugged into the system.  In fact,
+        udev treats all devices as plug and play, even at boot time.  This makes dealing with
+        devices consistent whether at boot time or when they are plugged in later.
+
+
+    - In modern versions of Fedora, udev stores its default naming rules in /usr/lib/udev/rules.d
+        and local and config files in the /etc/udev/rules.d directory.  Using a consistent
+        naming scheme makes the devices much easier to manage.
+
+      However, these conventions have changed over time, which has led to some headaches.
+
+
 
 - Device Data Flow
+
+    - Here is an example of data flow for a simple command:
+
+        $ cat /etc/resolv.conf
+
+              
+                    -->   cat /etc/resolv.conf  --
+                    |                            |
+                    |                            v
+                Device file                  Device file
+                    ^                            |
+                    |                            v
+                Device driver                Device driver
+                    ^                            |
+                    |                            v
+                /dev/sda2                     /dev/pts/6
+                Hard Drive                     BASH Shell
+
+
+    - The device special files make it very easy to use standard streams (STDIO) and 
+        redirection to access any and every device on a Linux computer.  Simply directing
+        a data stream to a device file sends the data to that device.
+
+
+    - It's important to remember that device special files are not device drivers.  They are
+        gateways to device drivers.  Data is passed from an application or OS to the device 
+        file, which passes it to the device driver, which passes it to the physical device.
+
 
 
 - Device File Classification
