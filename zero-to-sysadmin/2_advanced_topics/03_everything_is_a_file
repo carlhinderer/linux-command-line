@@ -100,11 +100,123 @@ CHAPTER 3 - EVERYTHING IS A FILE
 
 - Device File Classification
 
+    - Device files can be classified in at least 2 ways.  The first and most commonly used
+        classification is that of the type of data stream commonly associated with the 
+        device.
 
-- Fun with Device Files
+      For example, tty and serial devices are character-based, since the data stream is 
+        transferred and handled one character (or byte) at a time.  Block-type devices such
+        as hard drives transfer data in blocks, typically a multiple of 256 bytes.
+
+
+    - To see which types we have in the /dev directory:
+
+        $ ls -l /dev | less
+
+                                    Major  Minor
+        <snip>
+        brw-rw----. 1 root    disk      8,   0 Jan 30 06:53 sda
+        brw-rw----. 1 root    disk      8,   1 Jan 30 06:53 sda1
+        brw-rw----. 1 root    disk      8,   2 Jan 30 06:53 sda2
+        brw-rw----. 1 root    disk      8,  16 Jan 30 06:53 sdb
+        brw-rw----. 1 root    disk      8,  17 Jan 30 06:53 sdb1
+        brw-rw----. 1 root    disk      8,  18 Jan 30 06:53 sdb2
+        brw-rw----. 1 root    disk      8,  19 Jan 30 06:53 sdb3
+        brw-rw----. 1 root    disk      8,  32 Jan 30 06:53 sdc
+        <snip>
+        crw-rw-rw-. 1 root    tty       5,   0 Jan 30 06:53 tty
+        crw--w----. 1 root    tty       4,   0 Jan 30 06:53 tty0
+        crw--w----. 1 root    tty       4,   1 Jan 30 11:53 tty1
+        crw--w----. 1 root    tty       4,  10 Jan 30 06:53 tty10
+        crw--w----. 1 root    tty       4,  11 Jan 30 06:53 tty11
+        crw--w----. 1 root    tty       4,  12 Jan 30 06:53 tty12
+        <snip>
+
+      The entries that begin with 'b' are block-type, and the entries that begin with 'c' are
+        character-type.
+
+
+    - The more detailed and explicit way to identify device files is using the device major
+        and minor numbers.
+
+      The disk drives have a major number of '8', which designates them as SCSI block devices.
+        Note that ATA and SATA drives are managed by the SCSI subsystem, so they are included
+        also.  They are referred to as 'sd[a-z]'.
+
+      The minor numbers 8, 16, 24, ..., 240 are the whole disk numbers.  For instance,
+        major/minor 8/16 represents the whold disk /dev/sdb.  8/17 is the device file for the
+        first partition sdb/1.  Numbers 8/34 would be /dev/sdc2.
+
+      The tty devices are numbered tty0-tty63.  
+
+
+
+- Example - Sending Data with Device Files
+
+    - Most Linux distros have virtual consoles that can be accessed with HostKey+F1...F7.
+
+        # Switch to console 2
+        HostKey+F2
+
+        # Get the tty device connected to the console
+        $ who am i
+        student  tty2        2019-01-30 15:32
+
+      This shows the date and time the user logged in.
+
+
+    - Now, let's look at the tty2 and tty3 devices.
+
+        # Look at listing of tty2 and tty3
+        $ ls -l /dev/tty[23]
+        crw--w----. 1 student tty 4, 2 Jan 30 15:39 /dev/tty2
+        crw--w----. 1 root    tty 4, 3 Jan 30 06:53 /dev/tty3
+
+      Notice the 'c' in the first column for character type.
+
+
+    - Now, switch to console 3.
+
+        # Switch to console 3
+        HostKey+F3
+
+        # Verify you are on console 3
+        $ who am i
+        student  tty3        2019-01-30 15:38
+
+        # Send data to console 3
+        $ echo "Hello world" > /dev/tty2
+
+      Switch to console 2, and now "Hello world" should be displayed.
+
+
+    - Now, return to the graphical desktop (HostKey+F1), and open 2 terminal emulator 
+        sessions.
+
+        # Determine which device file first terminal is connected to
+        $ who am i
+        student  pts/9        2017-10-19 13:21 (192.168.0.1)
+
+      'pts' indicates it is a pseudo-terminal.
+
+        # List the tasks being run on each terminal session
+        $ w
+        08:47:38 up 1 day, 20:12,  6 users,  load average: 0.11, 0.06, 0.01
+        USER     TTY        LOGIN@   IDLE   JCPU   PCPU WHAT
+        student  tty1      Wed12    2days 14.16s  0.06s /bin/sh /etc/xdg/xfce4/xinitrc -- vt
+        root     pts/1     Thu17   10:50m  0.03s  0.03s /bin/bash
+        root     pts/2     Thu17   15:18m  0.02s  0.02s /bin/bash
+        root     pts/3     Thu17   10:48m  0.02s  0.02s /bin/bash
+        student  pts/5    
+
+        # Send some data to another terminal
+        $ echo "Hello world" > /dev/pts/5
 
 
 - Randomness, Zero, and More
+
+    - The devices special files 'null', 'zero', 'random', and 'urandom' are not associated
+        with any physical devices.
 
 
 - Back up the MBR
