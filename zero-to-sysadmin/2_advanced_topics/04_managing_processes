@@ -4,28 +4,97 @@ CHAPTER 4 - MANAGING PROCESSES
 
 - Processes
 
-    - Process Scheduling in the Kernel
+    - The function of an OS is to run programs that perform tasks for users.  Behind the
+        scenes, the OS runs its own programs that are used to manage the computer hardware,
+        the devices attached to it, and the programs themselves.
+
+      Each program consists of one or more processes.  A process is a running program and 
+        consumes resources such as memory and CPU time.
 
 
-- Tools
 
-    - top
-    - Summary Section
-    - Process Section
+- Process Scheduling in the Kernel
 
-
-- More About Load Averages
+    - Most Linux distros of the last decade use CFS (Completely Fair Scheduler, 2007) for 
+        determining which processes get CPU time.
 
 
-- Signals
+    - The overall objective of CPU scheduling in a modern OS is to ensure that critical
+        processes such as memory allocation or emptying a communications buffer get CPU time
+        immediately when they need it, while also ensuring that system administration and
+        user-level processes get CPU time and are responsive to users.
 
 
-- CPU Hogs
+    - Each process has its existence in a kernel data structure as an abstraction with data
+        about the process including:
+
+          - its PID
+          - memory locations assigned to it
+          - its priority and nice number
+          - how much CPU time it has recently used
+          - how long ago it was actually on CPU
+          - files opened by the process
+
 
 
 - Process Scheduling
 
-    - Nice Numbers
+    - Linux schedules each task for time on the CPU using an algorithm that considers basic
+        factors, including:
+
+          - length of time waiting for CPU
+          - amount of CPU time recently consumed
+          - nice number
+          - priority of the process
+          - priorities of other processes waiting for CPU 
+
+
+    - Linux processes have a priority number from 0-39, with 0 being the highest and 39 
+        being the lowest.  
+
+      There is also an 'RT' (ReatTime) priority which is used by some processes that need to
+        get CPU time immediately when some event occurs.  For instance, it may be a hardware
+        interrupt handler or a process that empties a communication buffer.
+
+
+
+- Nice Numbers
+
+    - Nice numbers are the mechanism used by admins to affect the priority of a process.
+        It is not possible to change a process's priority directly, but changing it's nice
+        number can affect the results of the scheduler's priority setting algorithm.
+
+
+    - Nice numbers range from -20 to +19, where higher numbers are nicer.  The default nice
+        number for a process is 0, and the default priority is 20.  
+
+      Setting the nice number higher than 0 increases the priority number and thus makes the
+        process 'nicer', or less greedy of CPU cycles.  Setting the nice number below 0 makes
+        the process less nice.
+
+
+    - Nice numbers can be changed using the 'renice' command, or from within the 'top', 'atop', 
+        and 'htop' command.
+
+
+    - To renice a process:
+
+        # Renice process 5036 your uid owns to a nicer number (is allowed)
+        $ renice 15 5036
+        5036 (process ID) old priority 10, new priority 15
+
+        # Renice process your uid owns to a less nice number (not allowed)
+        $ renice -20 5036
+        renice: failed to set priority for 5036 (process ID): Permission denied
+
+      If a process needs to be set to a lower (less nice) number, it must be done by root.
+
+
+    - Note that we can also set the nice number of a process when we launch it:
+
+        # Run the program with a specified nice number
+        $ nice -n +15 ./cpuHog
+
 
 
 - Killing Processes
