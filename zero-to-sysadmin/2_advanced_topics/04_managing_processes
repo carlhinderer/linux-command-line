@@ -198,5 +198,57 @@ CHAPTER 4 - MANAGING PROCESSES
 
 - Other Tools
 
+    - The 'ps' command produces a static list of processes.
+
+        # List currently running processes that belong to my user
+        $ ps -r
+
+        # List all processes whether they are running or not
+        $ ps -ef
+
+        # Locate specific processes using appropriate filters
+        $ ps -ef | grep xfce
+
+        # List all processes belonging to the user 'student'
+        $ ps -austudent
+
+
+    - The 'psgrep' command lists the PID numbers for each process whose name matches the
+        pattern specified as an argument.
+
+        # List PIDs of processes matching the name 'cpuHog'
+        $ psgrep cpuHog
+
+        8
+        14
+        15
+        2272
+        2273
+
+        # List PIDs and names of processes matching the name 'cpuHog'
+        $ psgrep -l cpu
+
+        8 mm_percpu_wq
+        14 cpuhp/0
+        15 cpuhp/1
+        2272 cpuHog
+        2273 cpuHog
+
+
+    - The 'pkill' command has the same matching as 'psgrep', but it just kills process instead
+        of searching for them.
+
+        # Kill processes based on match
+        $ pkill cpuH
+
+
 
 - The Impact of Measurement
+
+    - In physics, the 'Observer Effect' states that simply observing a situation or phenomenon
+        necessarily changes that phenomenon.  This is also true when observing Linux system
+        performance.  
+
+
+    - This is especially true when using a monitoring tool (ie Glances) that itself uses a lot
+        of features.
