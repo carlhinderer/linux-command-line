@@ -4,6 +4,91 @@ CHAPTER 5 - SPECIAL FILESYSTEMS
 
 - The /proc Filesystem
 
+    - The /proc and /sys filesystems are used by the kernel to store the performance data
+        of the running kernel and more.  The data is always there and is easy to access.  
+
+      These are virtual filesystems that exist only in RAM while the Linux host is running.
+        They do not exist on physical disk.  They are recreated each time the computer boots.
+
+
+    - The /proc filesystem is defined by the FHS as the location for Linux to store information
+        about the system, kernel, and all processes running on the host.  
+
+      It is also designed to provide access to view kernel config parameters and to modify many
+        of them when necessary in order to allow the SysAdmin to tune the system without
+        rebooting.
+
+
+    - If we look in the /proc directory, we'll see a lot of numeric entries, each of which is a
+        PID.  It also contains lots of named files, each of which gives information about
+        the system.
+
+        # List pids and information files
+        $ ll /proc
+
+        1
+        12
+        100
+        ...
+        acpi
+        asound
+        bus
+        ...
+
+
+    - The 'cpuInfo' file is mostly static.  It contains information about all installed CPUs.
+
+        # View installed cpus
+        $ cat cpuinfo
+
+
+    - The 'meminfo' file contains information about memory.  The 'free' command reads this file
+        and displays a few summary statistics.
+
+        # View all memory info
+        $ cat meminfo
+
+        # View some statistics from meminfo files
+        $ free
+
+
+
+- Looking at Individual Processes in /proc
+
+    - Now, we'll look a little deeper into the individual process entries in /proc.
+
+        # Navigate into individual pid
+        $ cd /proc/1
+
+        # Look at the 'cmdline' file
+        $ cat cmdline
+        /usr/lib/systemd/systemd--switched-root--system--deserialize24
+
+      As we can see, pid 1 is always 'systemd'.
+
+
+    - Now, we can start an instance of 'cpuHog', navigate to it's pid:
+
+        # Look in our pid's directory
+        $ cd /proc/18107 ; ll | less
+
+        total 0
+        dr-xr-xr-x. 2 student student 0 Feb 11 20:29 attr
+        --w-------. 1 student student 0 Feb 11 20:29 clear_refs
+        -r--r--r--. 1 student student 0 Feb 11 20:29 cmdline
+        -rw-r--r--. 1 student student 0 Feb 11 20:29 comm
+        -rw-r--r--. 1 student student 0 Feb 11 20:29 coredump_filter
+        -r--r--r--. 1 student student 0 Feb 11 20:29 cpuset
+        lrwxrwxrwx. 1 student student 0 Feb 11 20:29 cwd -> /home/student
+        -r--------. 1 student student 0 Feb 11 20:29 environ
+        lrwxrwxrwx. 1 student student 0 Feb 11 20:29 exe -> /usr/bin/bash
+        dr-x------. 2 student student 0 Feb 11 20:29 fd
+        <snip>
+
+      Note that the 'cwd' entry points to the current working directory, and the 'exe' entry
+        points to the executable file for the bash process, which is the bash shell.
+
+
 
 - The /sys Filesystem
 
