@@ -281,12 +281,42 @@ CHAPTER 3 - EVERYTHING IS A FILE
 
         # Display output from /dev/zero
         $ dd if=/dev/zero  bs=512 count=500 | od -c
-        
+
         0000000  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0
 
 
 
-- Back up the MBR
+- Backing up the MBR
+
+    - On occasion, we may need to restore and recreate an MBR of a hard drive, particulary the
+        partition table.  In this exercise, we'll back up our MBR.
+
+
+    - First, we'll create a backup of our MBR in the /tmp directory:
+
+        # Create a backup of the MBR
+        $ dd if=/dev/sda of=/tmp/myMBR.bak bs=512 count=1
+
+
+    - If we need to restore the backup, we'll need to boot the rescue disk and use this command:
+
+        # Restore from backup
+        $ dd if=tmp/myMBR.bak of=/dev/sda
+
 
 
 - Implications of Everything is a File
+
+    - We can leverage the 'everything is a file' to do many interesting things, including:
+
+        Clone hard drives.
+        Back up partitions.
+        Back up the master boot record (MBR).
+        Install ISO images onto USB thumb drives.
+        Communicate with users on other terminals.
+        Print files to a printer.
+        Change the contents of certain files in the /proc pseudo-filesystem to modify 
+          configuration parameters of the running kernel.
+        Overwrite files, partitions, or entire hard drives with random data or zeros.
+        Redirect unwanted output from commands to a null device where it disappears forever.
+        etc., etc., etc.
