@@ -99,14 +99,101 @@ CHAPTER 4 - MANAGING PROCESSES
 
 - Killing Processes
 
+    - Sometimes a process must be killed because it cannot otherwise be controlled.  There
+        are a number of ways to do this.
 
-- Other Interactive Tools
 
-    - atop
-    - htop
+    - To kill a process using top:
+
+        # Start top
+        $ top
+
+      Now, type 'k', and top will ask 'Which PID to kill?'.  We just type in the PID and 
+        press Enter.  By default, signal 15 will be selected for the kill, but we can also
+        scroll through the options if we need signal 2 or 9 instead.
+
+
+    - To kill a process using the command line:
+
+        # Terminate a program nicely (give it a chance to clean up any resources)
+        $ kill -15 7533
+
+        # Terminate a program without being nice
+        $ kill -9 7533
+
+        # Terminate the program (same as Cntl+C in terminal session)
+        $ kill -2 7533
+
+
+
+- atop
+
+    - The 'atop' tool is an excellent monitor when you need more details about I/O activity.
+        The default refresh interval is 10 seconds, but this can be changed.  
+
+
+    - One nice feature of atop is that it can save raw performance data to a file and then
+        play it back later for close inspection.  This is handy for tracking intermittent
+        problems.  The 'atopsar' program is used to play back data in the saved file.
+
+
+    - To run atop:
+
+        # Install atop
+        $ dnf -y install atop
+
+        # Run atop
+        $ atop
+
+
+
+- htop
+
+    - The 'htop' program is like top on steroids.  It provides some extra utilities that top
+        does not.  However, it does not provide disk, network, or I/O information like atop
+        does.
+
+
+    - The 'csw' (Context Switch) and 'intr' (Interrupts) data is often useful.  Context
+        switches are the number of times per interval that the CPU switches from one program
+        to another.  Interrupts displays the number of times per interval that software or
+        hardware interrupts occur and cause the CPU to handle those interrupts.
+
+
+    - To run htop:
+
+        # Install htop
+        $ dnf -y install htop
+
+        # Run htop
+        $ htop
+
+
+    - Each user has their own config file, ~/.config/htop/htoprc, and config changes are stored
+        there automatically.  There is no global config file for htop.
+
 
 
 - Glances
+
+    - The 'glances' utility can display more information than the other text-mode monitors
+        we've looked at.  It includes filesystem I/O, network I/O, and sensor readouts that
+        can display CPU and other hardware temperatures as well as fan speeds and disk usage
+        by hardware device and logical volume.
+
+
+    - The drawback to having all of this information is that Glances uses a significant 
+        amount of CPU resources (~10-18 % on most systems).  It is written in Python.
+
+
+    - To run glances:
+
+        # Install glances
+        $ dnf -y install glances
+
+        # Run glances
+        $ glances
+
 
 
 - Other Tools
