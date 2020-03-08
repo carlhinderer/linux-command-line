@@ -213,10 +213,77 @@ CHAPTER 3 - EVERYTHING IS A FILE
         $ echo "Hello world" > /dev/pts/5
 
 
+
+- Example - Sending A Document to a Printer
+
+    - First, create a simple PDF file 'test.pdf' with LibreOffice.  
+
+    - Now plug your USB printer into a USB port.  Then, look in /dev/usb for 'lp0', which is
+        usually the default printer.  
+
+    - Now, print the pdf document to the printer:
+
+        # Print document
+        $ cat test.pdf > dev/usb/lp0
+
+
+
+- Example - Reading the Contents of RAM
+
+    - The /dev/mem device special file through which direct access to memory can be achieved.
+        Only the root user can read RAM, and no user can write to it.  
+
+        # Dump the first 200K of RAM to STDOUT
+        $ dd if=/dev/mem bs=2048 count=100
+
+        # Make contents slightly more readable
+        $ dd if=/dev/mem bs=2048 count=100 | od -c
+
+
+    - Note that for security reasons, a user cannot access another user's memory space.  There
+        are many malware attacks that depend on privilege escalation to read contents of memory
+        that would not normally be readable.  
+
+
+
 - Randomness, Zero, and More
 
     - The devices special files 'null', 'zero', 'random', and 'urandom' are not associated
         with any physical devices.
+
+
+    - The /dev/null device special file is frequently used to prevent users from getting output
+        that is confusing or irrelevant.  /dev/null simply returns an EOF (End of File) character.
+
+        # Remove output from the data stream
+        $ echo "Hello world" > /dev/null
+
+
+    - The /dev/random and /dev/urandom devices are useful as data stream sources that produce 
+        random output - not just numbers but any and all byte combinations.
+
+      The /dev/urandom produces a deterministic stream of random output and is very fast.  The
+        /dev/random produces a nondeterministic stream but is slower.
+
+        # Display some random data
+        $ cat /dev/urandom
+
+        # Display 128 bytes of random octal data
+        $ od /dev/urandom -N 128
+
+        0000000 043514 022412 112660 052071 161447 057027 114243 061412
+        0000020 154627 105675 154470 110352 135013 127206 103057 136555
+        ...
+
+
+    - The /dev/zero device file produces an unending string of zeros as output.  Note that
+        these are octal zeros and not the ASCII character zero.
+
+        # Display output from /dev/zero
+        $ dd if=/dev/zero  bs=512 count=500 | od -c
+        
+        0000000  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0
+
 
 
 - Back up the MBR
