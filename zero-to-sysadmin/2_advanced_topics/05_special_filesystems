@@ -272,5 +272,45 @@ CHAPTER 5 - SPECIAL FILESYSTEMS
 
 
 - Adding Swap to an LVM Disk Environment
-- Other Swap Options with LVM
 
+    - If our disk setup uses LVM, adding swap space is fairly easy.  By default, LVM creates a
+        swap partition during installation.  So, we can just resize the swap partition.  The
+        basic steps in this case are:
+
+        1. Turn off all swap.
+        2. Add a new hard drive or SDD if necessary.
+        3. Prepare the new device if one was installed, and extend the volume group.
+        4. Increase the size of the logical volume designated for swap.
+        5. Configure the resized volume as swap space.
+        6. Turn on swap.
+
+
+    - To increase the swap space:
+
+        # Verify swap exists in a logical volume
+        $ lvs
+
+        # Verfiy there is space available to extend the swap volume
+        $ vgs
+
+        # Find the swap device we want to turn off (either of these will work)
+        $ cat /proc/swaps
+        $ swapon -s
+
+
+        # Turn off swap 
+        $ swapoff /dev/dm-1 ; cat /proc/swaps
+
+        # Increase the size of the logical volume
+        $ lvextend -L +2G /dev/mapper/fedora_studentvm1-swap
+
+        # Verify the volume was resized
+        $ lvs
+
+
+        # Turn the entire partition into swap space
+        $ mkswap /dev/mapper/fedora_studentvm1-swap
+
+        # Turn swap back on and verify it is on
+        $ swapon -a
+        $ cat /proc/swaps
