@@ -167,11 +167,110 @@ CHAPTER 5 - SPECIAL FILESYSTEMS
 
 
 
+- Example - Getting USB Information
+
+    - The /sys filesystem also contains data about the PCI and USB system bus hardware and any
+        attached devices.  
+
+        # Get information about usb devices
+        $ ls /sys/bus/usb/devices/usb2
+
+
+    - The 'lsusb' command can also be used to get summary information about attached usb devices.
+
+        # Get summary information about usb devices
+        $ lsusb
+
+
+    - The 'lspci' command can be used to get summary information about attached pci devices.
+
+        # Get summary information about pci devices
+        $ lspci
+
+
+
 - Swap Space
 
-    - Types of Linux Swap
-    - Thrashing
-    - What is the Right Amount of Swap Space?
-    - Adding More Swap Space on a Non-LVM Disk Partition
-    - Adding Swap to an LVM Disk Environment
-    - Other Swap Options with LVM
+    - Swap space is used to increase the amount of virtual memory available to a host.  It can 
+        use one or more dedicated swap partitions or a swap file on a regular filesystem or
+        logical volume.
+
+
+    - The kernel uses a memory management program that locates blocks (aka pages) of memory in 
+        which the contents have not been used recently.  The memory management program swaps 
+        these infrequently used blocks onto a special partition on the hard drive used for
+        paging.  
+
+
+    - Linux supports up to 32 swap areas, any or all of which can be online at the same time.
+        A swap area can be a disk partition, logical volume, or a file.
+
+
+    - There are 2 types of swap area, partitions (or volumes) and files.  Most Linux systems
+        create a swap partition or volume.  A standard partition can be designated as swap space
+        with the 'mkswap' command.  
+
+      A file can be used if there is no free space that can be used, but this is not normally
+        recommended.  However, it may make sense on systems that have so much RAM it never 
+        fills up.
+
+
+    - Thrashing can occur when total virtual memory (RAM and swap space) become nearly full.
+        The system will become completely unresponsive or quite slow.  
+
+
+
+- Adding More Swap Space on a Non-LVM Disk Partition
+
+    - It may become necessary to modify the amount of swap space defined for a system due to
+        changing requirements.  The basic steps to take are:
+
+        1. Turn off the existing swap space.
+        2. Create a new swap partition of the desired size.
+        3. Re-read the partition table.
+        4. Configure the partition as swap space.
+        5. Add the new partition/etc/fstab.
+        6. Turn on swap.
+
+
+    - For safety sake, before turning off swap, at the very least you should ensure no applications
+        are running and no swap space is in use with the 'free' or 'top' commands.
+
+        # Turn off all swap space
+        $ swapoff -a
+
+        # Find the current swap partition and look for a partition to create new swap partition
+        $ lsblk -i
+
+        # We'll use /dev/sdd1 for our additional swap space
+        # Start fdisk in interactive mode
+        $ fdisk /dev/sdd
+
+
+        # Create new partiton with fdisk
+        Command: t       # Specify partition type
+
+        Hex code (type L to list all codes): L
+        ...
+        82  Linux swap / So
+        ...
+
+        Command: p       # Creates partition
+
+        Command: w       # Writes changes to partition table
+
+
+        # Verify that new swap partition exists
+        $ fdisk -l /dev/sdd
+
+        # Now, define the partition as a swap partition
+        $ mkswap /dev/sdd1
+
+        # Finally, turn swap back on
+        $ swapon -a
+
+
+
+- Adding Swap to an LVM Disk Environment
+- Other Swap Options with LVM
+
