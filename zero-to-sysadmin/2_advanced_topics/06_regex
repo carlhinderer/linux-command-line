@@ -4,12 +4,138 @@ CHAPTER 6 - REGULAR EXPRESSIONS
 
 - Regular Expressions
 
+    - The difference betwween 'basic regular expressions' and 'extended regular expressions' 
+        is in the syntax used and how metacharacters are specified.  
 
-- Getting Started
+      In basic regex's, the metacharacters '?', '+', '(', etc. lose their special meaning.  
+        We have to use escape sequences like '\?', '\+', '(' must be used.
 
-    - The Mailing List
-    - First Solution
-    - Second Solution
+
+
+- The Mailing List
+
+    - If we have to manage listservs, people will send us email addresses to add to the lists.
+        For instance, we might get a word document with a bunch of addresses.  These addresses
+        will most likely not use standard formatting.  They will have extra whitespace and empty
+        lines.
+
+        # Example email address file
+        Team 1  Apr 3
+        Leader  Virginia Jones  vjones88@example.com
+        Frank Brown  FBrown398@example.com
+        Cindy Williams  cinwill@example.com
+        Marge smith   msmith21@example.com
+         [Fred Mack]   edd@example.com
+
+        Team 2  March 14
+        leader  Alice Wonder  Wonder1@example.com
+        John broth  bros34@example.com
+        Ray Clarkson  Ray.Clarks@example.com
+        Kim West    kimwest@example.com
+        [JoAnne Blank]  jblank@example.com
+
+        Team 3  Apr 1
+        Leader  Steve Jones  sjones23876@example.com
+        Bullwinkle Moose bmoose@example.com
+        Rocket Squirrel RJSquirrel@example.com
+        Julie Lisbon  julielisbon234@example.com
+        [Mary Lastware) mary@example.com
+
+
+
+- First Solution
+
+    - As a lazy SysAdmin, we obviously want to automate the task.  We will create a Bash 
+        program to produce an output file, 'addresses.txt'.
+
+        # Download the example input file
+        $ mkdir chapter6 ; ch chapter6
+        $ wget https://raw.githubusercontent.com/Apress/linux-volume-2/master/Experiment_6-1.txt
+
+        # Look at the example file
+        $ cat Experiment_6-1.txt
+
+
+    - To do some of the easier filtering:
+
+        # Remove lines with the word 'Team'
+        $ cat Experiment_6-1.txt | grep -v Team
+
+        # Also remove the blank lines
+        $ cat Experiment_6-1.txt | grep -v Team | grep -v "^\s*$"
+
+        Leader  Virginia Jones  vjones88@example.com
+        Frank Brown  FBrown398@example.com
+        Cindy Williams  cinwill@example.com
+        Marge smith   msmith21@example.com
+         [Fred Mack]   edd@example.com
+        leader  Alice Wonder  Wonder1@example.com
+        John broth  bros34@example.com
+        Ray Clarkson  Ray.Clarks@example.com
+        Kim West    kimwest@example.com
+        [JoAnne Blank]  jblank@example.com
+        Leader  Steve Jones  sjones23876@example.com
+        Bullwinkle Moose bmoose@example.com
+        Rocket Squirrel RJSquirrel@example.com
+        Julie Lisbon  julielisbon234@example.com
+        [Mary Lastware) mary@example.com
+
+
+    - Next, we need to get rid of the 'Leader' string.  We can use the 'sed' (stream editor) 
+        command for this which will substitute a new string (a null string in our case) 
+        for the pattern it matches.
+
+        # Remove 'Leader'
+        $ cat Experiment_6-1.txt | grep -v Team | grep -v "^\s*$" | sed -e "s/[Ll]eader//"
+
+
+      In the sed command, 
+
+        - The '-e' means the quote-enclosed expression is a script that produces a desired result
+        - The 's' in the expression means that this is a substitution
+        - The basic form of substitution is s/regex/replacment_string/
+        - The [Ll] matches either L or l
+
+
+    - Now, we'll get rid of extraneous characters like [] and ().
+
+        # Remove extraneous characters [] and ()
+        $ cat Experiment_6-1.txt | 
+          grep -v Team | 
+          grep -v "^\s*$" | 
+          sed -e "s/[Ll]eader//" -e "s/\[//g" -e "s/]//g" -e "s/)//g" -e "s/(//g"
+
+
+    - Now, we want to remove leading spaces from some of the lines.  We could use 'sed' for this,
+        but the 'awk' command can do that as well as other fields if necessary, and add the <>
+        characters around the email address.
+
+      The awk utility is actually a very powerful programming language that can accept data stream
+        on its STDIN.  This makes it extremely useful in command-line programs and scripts.
+
+      The awk utility works on data fields and the default field separator is spaces (any amount
+        of whitespace).  The data stream we have so far is 3 fields: first, last, and email.
+
+
+        # This takes each of the 3 fields, extracts them without leading or trailing
+        #   whitespace, then prints them with a single space between them and encloses
+        #   the email address with <>.
+
+        $ awk '{print $1" "$2" <"$3">"}'
+
+
+    - Putting all of this together:
+
+        # Extract email addresses
+        $ cat Experiment_6-1.txt | 
+          grep -v Team | 
+          grep -v "^\s*$" | 
+          sed -e "s/[Ll]eader//" -e "s/\[//g" -e "s/]//g" -e "s/)//g" -e "s/(//g" |
+          awk '{print $1" "$2" <"$3">"}'
+
+
+
+- Second Solution
 
 
 - grep
