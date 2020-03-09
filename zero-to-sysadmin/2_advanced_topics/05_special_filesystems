@@ -89,8 +89,82 @@ CHAPTER 5 - SPECIAL FILESYSTEMS
         points to the executable file for the bash process, which is the bash shell.
 
 
+    - If we need to find the pid of a process, and there are multiple processes with the same
+        name, we can use the 'pstree' command.
+
+        # Show the entire process tree
+        $ pstree
+
+
+
+- Example - Using IP Forwarding
+
+    - Linux is very flexible, and can do many interesting things.  For instance, any Linux
+        host with multiple NICs can act as a router.  All it takes is a little knowledge, 
+        a simple command, and some changes to the firewall.
+
+
+    - Routing is a task managed by the kernel.  So to turn it on or off, we need to change a
+        kernel config parameter.  But we don't even need to reboot to do this!
+
+        # Check whether IP forwarding is on
+        $ cd /proc/sys/net/ipv4 ; cat ip_forward
+        0
+
+        # Turn IP forwarding on
+        $ echo 1 > ip_forward ; cat ip_forward
+        1
+
+
+    - Next, we would need to update the 'iptables' firewall and the routing table.  Those
+        changes would define the specifics of which packets get routed where.
+
+
 
 - The /sys Filesystem
+
+    - The /sys directory maintains a list of hardware hierarchically for each bus type in the
+        computer hardware.  
+
+        # Look at contents of /sys directory
+        $ cd /sys
+        $ ls
+
+        block  bus  class  dev  devices  firmware  fs  hypervisor kernel module power
+
+
+    - The /sys/block directory has different types of disk (block) devices, and the 'sda' device
+        is one of them.  
+
+        # List the contents of /sys/block/sda
+        $ ls block/sda
+
+        alignment_offset   events_async       queue      slaves
+        bdi                events_poll_msecs  range      stat
+        capability         ext_range          removable  subsystem
+        dev                holders            ro         trace
+        device             inflight           sda1       uevent
+        discard_alignment  integrity          sda2
+        events             power              size
+
+
+        # Get the device major and minor numbers
+        $ cat block/sda/dev
+        8:0
+
+
+        # Get other information about device
+        $ ls block/sda/device
+        $ cat block/sda/device/model
+        $ cat /sys/block/sda/device/model
+
+
+    - The 'smartctl' command will show us the same information these files do, and more.
+        It obtains this information from the /sys filesystem.
+
+        # List information about device
+        $ smartctl -x /dev/sda
+
 
 
 - Swap Space
