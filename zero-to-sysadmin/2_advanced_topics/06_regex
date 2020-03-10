@@ -58,7 +58,7 @@ CHAPTER 6 - REGULAR EXPRESSIONS
 
     - To do some of the easier filtering:
 
-        # Remove lines with the word 'Team'
+        # Remove lines with the word 'Team' (-v for inverted or NOT)
         $ cat Experiment_6-1.txt | grep -v Team
 
         # Also remove the blank lines
@@ -137,13 +137,79 @@ CHAPTER 6 - REGULAR EXPRESSIONS
 
 - Second Solution
 
+    - In this example, to simplify the command-line program, we'll combine the 2 grep
+        statements.
 
-- grep
+        # Combine grep statements
+        $ cat Experiment_6-1.txt | grep -vE "Team|^\s*$"
 
-    - Data Flow
-    - Regex Building Blocks
-    - Repetition
-    - Other Metacharacters
+
+
+- grep Data Flow
+
+    - All implementations of grep are line-based.  A pattern created by a combination of one
+        or more expressions is compared against each line in a data stream.  When a match is 
+        made, an action is taken on that line as prescribed by the tool being used.
+
+
+    - For example, when a pattern match occurs with grep, the usual action is to pass that line
+        on to STDOUT and lines that do not match the pattern are discarded.  The -v option
+        reverses those actions so that the lines with matches are discarded.
+
+
+
+- grep Regex Building Blocks
+
+    A-Z                 Literal characters
+    a-z
+    0-9
+
+    .                   Matches any single character
+
+    []                  Matches character in character list
+    [A-Za-z]
+
+    [:class name:]      Matches character in character class
+    [:alpha:]
+    [:space]
+
+    ^                   Anchors
+    $
+
+
+
+- Simple grep Examples
+
+    # Download sample file
+    $ wget https://raw.githubusercontent.com/Apress/linux-volume-2/master/Experiment_6-3.txt
+
+
+    # Get lines that end with 2 digits
+    $ grep [0-9][0-9]$ Experiment_6-3.txt
+
+    # Get lines that start with 'Lab Project' and end with a digit
+    $ grep "^Lab Project" Experiment_6-3.txt | grep "[0-9]$"
+
+    # Same, but using POSIX character class
+    $ grep "^Lab Project" Experiment_6-3.txt | grep "[[:digit:]]$"
+
+
+    # Get lines with 'systemd'
+    $ grep systemd Experiment_6-3.txt
+
+    # Get lines with 'systemd' case-insensitive and count words
+    $ grep -i systemd Experiment_6-3.txt | wc
+
+
+    # Get lines with '[' character (must escape it)
+    $ grep -i "\[" Experiment_6-3.txt
+
+
+
+- grep Regex Repetition
+
+
+- Other grep RegexMetacharacters
 
 
 - sed
