@@ -261,10 +261,30 @@ CHAPTER 6 - REGULAR EXPRESSIONS
 
 - sed
 
+    - grep can be used to create complex yet elegant search patterns.  However, it does
+        not provide any direct capability to edit or modify contents of a line.
 
-    - 
+      The sed utility allows searching for a pattern, along with modifying, editing, or
+        deleting the matched text.  
 
 
+    - We want to consolidate our email address formatter.  It is possible to combine 4 of the
+        5 sed expressions into a single expression, so our sed command now has 2 expressions
+        instead of 5.
+
+        # Combine sed expressions
+        $ sed -e "s/[Ll]eader//" -e "s/[]()\[]//g"
 
 
-- Other Tools that Implement Regex
+    - Looking closer at "s/[]()\[]//g":
+
+        \[    This character has to be escaped, since it is a metacharacter
+        g     Globally, meaning all instances will be changed
+
+
+    - Our complete transform script now looks like:
+
+        # Format email addresses
+        $ grep -vE "Team|^\s*$" Experiment_6-1.txt | 
+          sed -e "s/[Ll]eader//" -e "s/[]()\[]//g" | 
+          awk '{print $1" "$2" <"$3">"}'
