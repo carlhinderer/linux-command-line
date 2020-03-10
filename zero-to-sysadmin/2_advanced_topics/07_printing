@@ -79,6 +79,84 @@ CHAPTER 7 - PRINTING
 
 - Creating the Print Queue
 
+    - A 'print queue' is a directory that is used to store the print job data stream while
+        it is being spooled to the printer.  Although modern-day printers have internal
+        memory, large jobs can easily overfill it.
+
+      In a high-volume print environment, many jobs may be queued up faster than the printer
+        can print them so that they remain in the queue until the printer is ready for them.
+
+
+    - In general, the /var/spool directory contains data that is temporarily stored for later
+        processing. 
+
+      CUPS has a queue in /var/spool/cups which contains data about the print jobs as well 
+        as the data for the jobs themselves.
+
+      The /var/spool/lpd directory contains a subdirectory for each printer which is used only
+        to store lock files to prevent multiple overlapping attempts to access each printer.
+
+
+    - To create the print queue:
+
+        # Find USB printer device
+        $ lsusb
+
+
+        # Printer commands start with 'lp' (Line Printer in the old days)
+        # List all available buses, protocols, and printers attached to each
+        $ lpinfo -v
+
+        network https
+        network ipp
+        network http
+        network ipps
+        network beh
+        direct usb://Brother/HL-2270DW%20series?serial=C1J695917
+        network socket
+        network lpd
+        network smb
+
+        # We also need to find the PPD file for this printer
+        $ lpinfo -m | less
+
+
+        # Now, we'll add the new print queue
+        #   -p  Printer name
+        #   -E  Enables the printer to accept jobs
+        #   -v  Printer URI
+        #   -m  PDD file
+        $ lpadmin -p Brother-HL-2270DW -E \
+          -v usb://Brother/HL-2270DW%20series?serial=C1J695917 \
+          -m gutenprint.5.2://brother-hl-2250dn/simple
+
+        # Verify that the print queue was created
+        $ lpstat -t
+
+
+    - To test the printer:
+
+        # List the name of all print queues
+        $ lpstat -er
+
+        # Send ASCII plain text file to printer
+        $ lpr -P Brother-HL-2270DW /etc/fstab
+
+
+        # Since that worked, we'll make our printer the default printer
+        $ lpoptions -d Brother-HL-2270DW
+
+        # Print to the default printer
+        $ lpr /etc/bashrc
+
+
+        # Set the pretty-print option, which adds the filename, date and time, and page num
+        $ lpoptions -p Brother-HL-2270DW -o prettyprint=true
+
+        # Verify that the pretty-printing is working
+        $ lpr cpuHog
+
+
 
 - Printing to a PDF File
 
