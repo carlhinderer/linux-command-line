@@ -4,10 +4,80 @@ CHAPTER 7 - PRINTING
 
 - About Printers
 
-    - Print Languages
-    - Printers and Linux
-    - CUPS
-    - Creating the Print Queue
+    - Printers build up an image of a page to be printed one line at a time.  Each line is as
+        wide as the vertical size of the print head.  
+
+
+    - Old dot matrix printers printed one line of text at a time.  Modern printers print images, 
+        even if the image is only text.  Ink jet printers print the image one line at a time
+        directly onto the paper.  Laser printers generate an entire image onto a drum inside the
+        printer, then transfer the entire image onto the page at one time.
+
+
+
+- Print Languages
+
+    - To create images to be printed, software must generate a data stream that can be 
+        interpreted and converted to an image for printing.  The data streams are created using
+        one of the common PDLs (page description language).
+
+      These PDLs describe the the appearance of the page when it is printed.  They use commands
+        like 'Draw a box at this location with this width and height' or 'Center some text using
+        this font'.
+
+
+    - There are many PDLs, but there are only 3 in common use by today's printers:
+
+        1. PCL
+             HP's Printer Control Language
+
+        2. Postscript
+             Adobe Systems' first PDL
+
+        3. PDF
+             Adobe Systems' Portable Document Format
+
+
+
+- Printers and Linux
+
+    - The 'Open Printing Database' maintains a list of printers that are compatible with Linux.
+        Brother, HP, and Xerox printers are pretty reliably compatible.
+
+
+    - Most printers are recognized automatically when plugged into a USB port, but they are not
+        necessarily automatically configured.
+
+      To see a list of printers configured for our VirtualBox VM, navigate to 
+        > Devices > USB
+
+
+
+- CUPS
+
+    - CUPS (Common Unix Printing System) was developed in the late 1990s.  It is a modular
+        printing system that makes configuring and printing with most modern printers easy
+        and painless.
+
+
+    - CUPS uses PostScript as the final printer data stream.  It accepts input in ASCII text,
+        PDF, HP/GL, and raster image formats, then runs them through a filter to transform
+        them into PostScript.
+
+      The PostScript is then passed to a software layer that converts the data to a rasterized
+        format that can be converted by various drivers to printer-specific language formats.
+
+      The data stream is then passed to the back-end filters that transfer printer commands to
+        printers or other printing devices.
+
+
+    - CUPS uses PDD (PostScript Printer Description) files to define the features available 
+        in each supported printer.  This allows CUPS to interact with features such as paper
+        trays, different paper sizes, different print qualities, duplex, color/B&W, and more.
+
+
+
+- Creating the Print Queue
 
 
 - Printing to a PDF File
