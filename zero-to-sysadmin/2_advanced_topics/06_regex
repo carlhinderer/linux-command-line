@@ -208,11 +208,63 @@ CHAPTER 6 - REGULAR EXPRESSIONS
 
 - grep Regex Repetition
 
+    ?          Zero or one occurrences of preceding character
+
+    *          Zero or more occurrences
+
+    +          One or more occurrences
+
+    {n}        Exactly n occurrences
+
+    {n,}       n or more occurrences
+
+    {,m}       Zero to m occurrences
+
+    {n,m}      n to m occurrences
+
+
 
 - Other grep RegexMetacharacters
 
+    \<         Matches empty string at beginning of word
+                 ("\<fun" matches on 'fun' and 'Function' but not 'refund')
+
+    \>         Matches space and punctuation at end of word
+                 ("environment\>" matches 'environment' and 'environment,')
+
+    ^          Negates a list of characters
+                 ([^a-c] matches any character but 'a', 'b', or 'c')
+
+    |          Logical or
+                 ("Team|^\s*$" matches any line with 'Team' or empty line)
+
+    ( and )    Logical and
+
+
+
+- Extended grep Examples
+
+    # Select all instances of 'drives' but not 'drive' or 'drivess'
+    $ grep -Ei "\<drives\>" Experiment_6-3.txt
+
+
+    # Search expressions to find 'tar' (-n will print line number)
+    $ grep -Ei "tar" Experiment_6-3.txt
+    $ grep -Ei "\<tar" Experiment_6-3.txt
+    $ grep -Ein "\<tar\>" Experiment_6-3.txt
+
+
+    # Search for 'shell script', 'shell program', or 'shell variable'
+    $ grep -Eni "\<shell (script|program|variable)" Experiment_6-3.txt
+
+
 
 - sed
+
+
+    - 
+
+
 
 
 - Other Tools that Implement Regex
