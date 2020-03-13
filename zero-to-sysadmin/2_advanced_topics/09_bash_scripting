@@ -2,22 +2,90 @@
 CHAPTER 9 - COMMAND LINE PROGRAMMING
 -----------------------------------------------------------
 
-- Simple CLI Programs
-
-
-- Basic Bash Syntax
-
-
 - Output to the Display
+
+    - The 'echo' command prints data to the screen.  
+
+        # Print home directory
+        $ echo "My home directory." ; ls
+
+        # The -e flag enables escape sequences
+        $ echo "FirstLine.\nSecondLine"
+
+
+    - The 'printf' command (print formatted) command allows more complex formatting.  The command
+        can also use all the C printf specs, so there are a ton of built-in formatting options.
+
+        # Escape sequences work
+        $ printf "FirstLine.\nSecondLine"
+
+        # Get details about C spces
+        $ man 3 printf
+
 
 
 - Variables
+
+    - Variables are assigned without a $, but they are accessed with a $.
+
+        # Set and print variable
+        $ echo $MyVar ; MyVar="Hello World" ; echo $MyVar
+
+        # Variables can be unset and returned to a null value
+        $ unset MyVar
+
+        # String variables can be combined in various ways
+        $ Var1="Hello World!" ; Var2="Welcome to Bash CLI programming."
+        $ printf "$Var1\n$Var2\n" ;
+
+
+    - Bash can perform basic integer math:
+
+        # Basic integer math
+        $ Var1="7" ; Var2="9" ; echo "Result = $((Var1∗Var2))"
+        Result = 63
 
 
 - Control Operators
 
     - Return Codes
+
+        - Every bash statement generates a return code.
+
+            # Check return code of last command run with $ operator
+            $ ll ; echo "RC = $"
+            ...
+            RC = 0
+
+
+            # Nonzero return code means command was unsuccessful
+            $ ll /root ; echo "RC = $?"
+            ls: cannot open directory '/root': Permission denied
+            RC = 2
+
+
     - The Operators
+
+        - The ; operator allows multiple statements on a single line.  A semicolon on the last
+            statement can beither implicit or explicit.
+
+
+        - The && operator runs the second command only if the first is successful.
+
+            # Create dirctory and file
+            $ Dir=chapter9
+            $ mkdir $Dir/subdirectory && touch $Dir/subdirectory/testfile
+
+
+        - The || operator runs the second command only if the first is unsuccessful.
+
+            # Handle unsuccessful command
+            $ Dir=chapter9
+            $ mkdir $Dir/subdirectory || echo "New file was not created."
+
+            mkdir: cannot create directory ‘chapter9/subdirectory’: Permission denied
+            New file was not created.
+
 
 
 - Program Flow Control
