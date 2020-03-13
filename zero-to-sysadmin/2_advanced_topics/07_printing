@@ -262,12 +262,105 @@ CHAPTER 7 - PRINTING
 
 - Operating System-Related Conversion Tools
 
+    - Different OS's use slightly different non-text codes when storing ASCII text files.
+        For example, 
+
+          - DOS/Windows use a carriage-return/line-feed (CR-LF) at the end of each line
+          - Unix/Linux use a single line-feed character
+          - Apple uses a carriage return
+
+
+    - Most simple display tools like 'less' will ignore line endings.  We can use tools like
+        'od' to display the character-level data.
+
+        # Show characters, including whitespace
+        $ od -c cpuHog
+
+        # Show characters as hexadecimal
+        $ od -x cpuHog
+
+
     - UNIX2DOS
+
+        - To convert from Linux to DOS format:
+
+            # Convert to DOS, without altering original file
+            $ unix2dos -n cpuHog cpuHog.dos
+
+            # Check line endings in character data
+            $ od -c cpuHog.dos
+
+            # Look at hex codes
+            $ od -x cpuHog.do
+
+
     - DOS2UNIX
+
+        - To convert from DOS to Linux format:
+
+            # Convert to Linux
+            $ dos2unix -n cpuHog.dos cpuHog.Linux
+
+
     - UNIX2MAC and MAC2UNIX
+
+        - To convert back and forth between Linux and Mac:
+
+            # Convert to Mac
+            $ unix2mac -n cpuHog.mac cpuHog.Linux
+
+            # Conver to Linux
+            $ mac2unix -n cpuHog.Linux cpuHog.mac
+
 
 
 - Miscellaneous Tools
 
     - lpmove
+
+        - The 'lpmove' command can be used to move a print job from one queue to another.  For
+            instance, this might be necessary of one printer is out of paper or not accepting
+            jobs.
+
+
+        - A dummy printer can also be useful for testing purposes.
+
+            # Add a new dummy print queue
+            $ lpadmin -p DummyPrinter -E -v file:/dev/null
+
+            # Verify queue is available
+            $ lpstat -t
+
+
+            # Print test document
+            $ lpr -P DummyPrinter cpuHog
+
+            # Check printer status
+            $ lpq -P DummyPrinter
+
+
+            # Now, disable the dummy printer
+            $ cupsdisable DummyPrinter
+
+            # lpstat -t
+
+
+            # Now, send the document again
+            $ lpr -P DummyPrinter cpuHog
+
+            # Job should be waiting in queue
+            $ lpq -P DummyPrinter
+
+
+            # Move job to Cups-PDF queue
+            $ lpmove 32 Cups-PDF
+
+            # Check the queues, should both be empty now
+            $ lpq
+
+
+
     - wvText and odt2txt
+
+        - The 'wxText' tool can be used to convert MS Word documents to text format.  The 
+            'odt2txt' tool converts OpenDocument Text to plain ASCII.
