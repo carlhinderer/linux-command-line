@@ -160,13 +160,104 @@ CHAPTER 7 - PRINTING
 
 - Printing to a PDF File
 
+    - First, we'll need to install the pdf printer:
+
+        # Install cups-pdf package
+        $ dnf -y install cups-pdf
+
+        # Verify that pdf printer is installed
+        $ lpstat -a
+
+
+    - Now, make the Cups-PDF queue the default:
+
+        # Make Cups-PDF the default
+        $ lpoptions -d Cups-PDF
+
+        # Verify the default (either will work)
+        $ lpq
+        $ lpstat -d
+
+
+    - By default, Cups-PDF prints to ~/Desktop, but we'll change that:
+
+        # Make directory for printed PDFs
+        $ mkdir ~/chapter7
+
+        # Update /etc/cups/cups-pdf.config
+        Out ${HOME}/chapter7
+
+        # Restart CUPS
+        $ systemctl restart cups
+
+
+    - Now, we can print a test file:
+
+        # Print test PDF file
+        $ lpr cpuHog
+
+        # Verify that PDF was printed
+        $ ll chapter7
+
+
 
 - File Conversion Tools
 
+    - As SysAdmins, we frequently work with ASCII plain text files and text files encoded as
+        UTF-8 or UTF-16.  ASCII files can be printed directly from the command line, but they
+        may not be well-formatted.  We also may need to convert MS-Word or LibreOffice format
+        files to ASCII.
+
+
+    - Many non-US users perform operations on UTF-8 or UTF-16 plain text files.  It's less of
+        an issue with system files, which will always be encoded as ASCII.
+
+
     - A2PS
+
+        - The 'a2ps' utility is used to convert plain text ASCII files to PostScript files
+            suitable for printing.  By default, the resulting data stream (in PostScript format)
+            is sent to the default printer.
+
+            # Install a2ps
+            $ dnf -y install a2ps
+
+            # Create a PostScript file from an ASCII file
+            $ cd chapter07
+            $ a2ps /etc/bashrc -o bashrc.ps
+
+            # Print the PostScript file
+            $ lpr bashrc.ps
+
+
     - PS2PDF
+
+        - The 'ps2pdf' utility converts PostScript files to PDF using Ghostscript.
+
+            # Convert PostScript file to PDF
+            $ ps2pdf bashrc.ps bashrc-2.pdf
+
+
     - PR
+
+        - The 'pr' utility converts plain text ASCII files into something a little prettier
+            for printing.
+
+            # Modifies file with nicer formatting
+            $ pr /etc/bashrc | less
+
+            # Add a left margin
+            $ pr -o 4 /etc/bashrc
+
+
     - PS2ASCII
+
+        - The 'ps2ascii' is a Ghostscript translator that can extract ASCII text from 
+            PostScript or PDF files.
+
+            # Extract ASCII from PostScript
+            $ ps2ascii bashrc.ps
+
 
 
 - Operating System-Related Conversion Tools
