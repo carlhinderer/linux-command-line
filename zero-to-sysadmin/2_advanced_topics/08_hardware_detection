@@ -4,20 +4,109 @@ CHAPTER 8 - HARDWARE DETECTION
 
 - Introduction
 
+    - Hardware detection is the ability to identify what hardware is installed in a Linux host,
+        and other information such as vendor, model, serial number, memory, and SSD/hard-drive
+        sizes, and other specifying information.
+
+
+    - The 'lshw' (list hardware) and 'dimdecode' (Desktop Management Interface) both display as
+        much hardware information as is available in SMBIOS (System Management BIOS).  These 
+        standards are closely related and are managed by the DMTF.
+
+
+    - SMBIOS is a data storage area on system motherboards that allows the BIOS boot process to
+        access data about the system hardware.  The hardware data is collected from the SMBIOS
+        and stored in the running system as the /sysfs special filesystem.
+
+      Because the task of collecting hardware data is performed by BIOS during the initial boot,
+        the OS does not need to probe hardware directly.  
+
+
+    - Note that much of the data in SMBIOS was hard-coded by hardware vendors, and was not built
+        by probing the hardware directly.  So, it might be wrong.
+
+
 
 - dmidecode
+
+    - The 'dmidecode' utility can provide us a ton of hardware information:
+
+        # Make sure printer is enabled
+        $ cupsenable Brother-HL-2270DW
+        $ lpstat -t
+
+        # Get all information available in SMBIOS
+        $ dmidecode | less
+
+        # Get information about individual DMI types (0 is the BIOS itself)
+        $ dmidecode -t 0
+
+        # Codes
+        #   0   bios
+        #   1   assembled system
+        #   2   motherboard
+        #   4   CPU
+        #   16  RAM
+        #   17  individual memory slots
+
 
 
 - lshw
 
+    - 'lshw' is similar to dmidecode, but it's output is a little more terse.
+
+        # Install lshw
+        $ dnf -y install lshw
+
+        # Get hardware summary
+        $ lshw | less
+
+
 
 - lsusb
+
+    - The 'lsusb' lists devices on the USB bus, including USB hubs and devices connected to
+        them.
+
+        # List usb devices
+        $ lsusb
+
+        # List devices in tree format
+        $ lsusb -t
+
 
 
 - usb-devices
 
+    - The 'usb-devices' utility lists devices also, but it provides more information about each
+        individual device.
+
+        # List devices, with device detail
+        $ usb-devices
+
+
 
 - lspci
 
+    - The 'lspci' utility lists devices on the PCI (Peripheral Component Interconnect) and it's
+        extensions, PCI-X and PCIe.  This includes motherboard devices like memory and bus
+        controllers, as well as devices like audio, Ethernet, SATA, and video devices.
+
+        # List PCI devices
+        $ lspci
+
+        # Get verbose output
+        $ lspci -v | less
+
+        # Get tree view
+        $ lspci -tv
+
+
 
 - Cleanup
+
+    - We no longer need the USB printer, so can disable it and remove it from the VM.
+
+        # Disable printer
+        $ cd /spool
+        $ cupsdisable Brother-HL-2270DW
