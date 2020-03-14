@@ -52,7 +52,7 @@ CHAPTER 9 - COMMAND LINE PROGRAMMING
 
         - Every bash statement generates a return code.
 
-            # Check return code of last command run with $ operator
+            # Check return code of last command run with $? operator
             $ ll ; echo "RC = $"
             ...
             RC = 0
@@ -90,10 +90,78 @@ CHAPTER 9 - COMMAND LINE PROGRAMMING
 
 - Program Flow Control
 
+    - The if Statement
+
+        - The syntax for the 'if' statement is:
+
+            if condition1; then list1; [ elif condition2; then list2; ] ... [ else list3; ] fi
+
+
+
     - true and false
+
+        - The 'true' command always produces a return code of 0, and the 'false' command always
+            produces a return code of 1.
+
+            # Return code 0
+            $ true ; echo $?
+            0
+
+            # Return code 1
+            $ false ; echo $?
+            1
+
+            # 'true' with operators
+            $ true && echo "True" || echo "False"
+            True
+
+            # 'false' with operators
+            $ false && echo "True" || echo "False"
+            False
+
+
+
     - Logical Operators
+
+        - The functional syntax of these comparison operators is 1 or 2 arguments with an 
+            operator that are placed within square braces.  We have a 'list' of program
+            statements that are executed if the statement is true, and an optional list
+            of program stratements if the condition is false.
+
+            # If only
+            if [ arg1 operator arg2 ] ; then list
+
+            # If/else
+            if [ arg1 operator arg2 ] ; then list ; else list ; fi
+
+
+        - The square braces are the traditional Bash symbols that are equivalent to the   
+            'test' command.  
+
+            # If only
+            if test arg1 operator arg2 ; then list
+
+
+        - There is also a more recent double square bracket syntax that has a few 
+            advantages.
+
+            # If only
+            if [[ arg1 operator arg2 ]] ; then list
+
+
+
+    - File Operators
+
+
+
     - String Comparison Operators
+
+
+
     - Numerical Comparison Operators
+
+
+
     - Miscellaneous Operators
 
 
