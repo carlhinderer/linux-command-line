@@ -152,17 +152,75 @@ CHAPTER 9 - COMMAND LINE PROGRAMMING
 
     - File Operators
 
+        Operators
+        ----------------------------------------------------------------------------------------
+        -a filename            True if file exists
+        -b filename            True if file exists and is block special file (ie /dev/sda1)
+        -c filename            True if file exists and is character special file (ie /dev/TTY1)
+        -d filename            True if file exists and is a directory
+        -e filename            True if file exists (same as -a)
+
+        -f filename            True if file exists and is regular file
+        -g filename            True if file exists and is set-group-id, SETGID
+        -h filename            True if file exists and is symbolic link
+        -k filename            True if file exists and its sticky bit is set
+        -p filename            True if file exists and is a named pipe (FIFO)
+
+        -r filename            True if file exists and is readable (has read bit set)
+        -s filename            True if file exists and has size greater than zero
+        -t fd                  True if file descriptor fd is open and refers to a terminal
+        -u filename            True if files exists and its set-user-id bit is set
+        -w filename            True if file exists and is writable
+        -x filename            True if file exists and is executable
+
+        -G filename            True if file exists and is owned by the effective group id
+        -L filename            True if file exists and is a symbolic link
+        -N filename            True if file exists and has been modified since it was last read
+        -O filename            True if file exists and is owned by effective user id
+        -S filename            True if file exists and is a socket
+
+        file1 -ef file2        True if file1 and file2 refer to the same device and inode number
+        file1 -nt file2        True if file1 is newer, or if file1 exists and file2 does not
+        file1 -ot file2        True if file1 is older, or if file2 exists and file1 does not
+
 
 
     - String Comparison Operators
+
+        Operators
+        --------------------------
+        -z string          True if length is zero
+        -n string          True if length is non-zero
+
+        str1 == str2       True if strings are equal
+        or                   - Second form should be used with test command
+        str1 = str2          - When used with [[ command, performs pattern matching
+
+        str1 != str2       True if strings are not equal
+
+        str1 < str2        True if str1 sorts before str2 lexicographically
+
+        str1 > str2        True if str1 sorts after str2 lexicographically
 
 
 
     - Numerical Comparison Operators
 
+        Operators
+        --------------------------
+        arg1 -eq arg2      Equal
+        arg1 -ne arg2      Not equal
+
+        arg1 -lt arg2      Less than
+        arg1 -le arg2      Lest than or equal to
+
+        arg1 -gt arg2      Greater than
+        arg1 -ge arg2      Greater than or equal to
+
 
 
     - Miscellaneous Operators
+
 
 
 - Grouping Program Statements
