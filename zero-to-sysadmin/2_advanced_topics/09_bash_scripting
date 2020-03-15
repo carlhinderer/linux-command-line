@@ -87,6 +87,16 @@ CHAPTER 9 - COMMAND LINE PROGRAMMING
             New file was not created.
 
 
+        - We can use && and || together to perform the sequence of statements we need to perform
+            and handle errors.
+
+            # Use && and || together
+            $ Dir=chapter9
+            $ mkdir $Dir/subdirectory && \
+               touch $Dir/subdirectory/testfile || \
+               echo "New file was not created."
+
+
 
 - The if Statement
 
@@ -180,6 +190,65 @@ CHAPTER 9 - COMMAND LINE PROGRAMMING
     file1 -ef file2        True if file1 and file2 refer to the same device and inode number
     file1 -nt file2        True if file1 is newer, or if file1 exists and file2 does not
     file1 -ot file2        True if file1 is older, or if file2 exists and file1 does not
+
+
+
+- File Operator Examples
+
+    - To check for the existence of a file:
+
+        # Check whether a file exists
+        $ File="cpuHog"
+        $ if [ -e $File ] ; then echo "The file $File exists." ; fi
+
+        # This does the same thing
+        $ if [[ -e $File ]] ; then echo "The file $File exists." ; fi
+
+        # This also does the same thing
+        $ if test -e $File ; then echo "The file $File exists." ; fi
+
+
+    - To also handle the case in which the file does not exist:
+
+        # Print message whether file exists or not
+        $ File="cpuHog"
+        $ if [ -e $File ] ; then echo "The file $File exists." ; \
+            else echo "The file $File does not exist." ; fi
+
+
+    - To check whether a file exists and is nonempty:
+
+        # Check if file is non-empty
+        $ File="Exp-9-7"
+        $ if [ -s $File ] ; then echo "$File exists and contains data." ; fi
+
+    
+    - We can add the 'elif' block to discriminate between a file that doesn't exist and one
+        that is empty:
+
+        # Check whether file exists and whether it is empty
+        $ File="Exp-9-7" ; touch $File
+        $ if [ -s $File ] ; then echo "$File exists and contains data." ; \
+            elif [ -e $File ] ; then echo "$File exists and is empty." ; \
+            else echo "$File does not exist." ; fi
+
+
+
+- Example - Formatted Bash Script
+
+    #!/bin/bash
+    
+    File='Exp-9-7'
+    echo "This is $File" > $File
+    if [ -s $File ]
+       then
+       echo "$File exists and contains data."
+    elif [ -e $File ]
+       then
+       echo "$File exists and is empty."
+    else
+       echo "$File does not exist."
+    fi
 
 
 
