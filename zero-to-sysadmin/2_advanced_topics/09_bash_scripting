@@ -486,8 +486,94 @@ CHAPTER 9 - COMMAND LINE PROGRAMMING
 
 - for Loops
 
+    - The syntax of the for loop in bash is:
+
+        for var in list1 ; do list2 ; done
+
+    - The values in 'list1' can be an explicit string of values or the result of a command
+        substition.
+
+        # String of values
+        $ for I in a b c d 1 2 3 4 ; do echo $I ; done
+
+
+        # More complex strings
+        $ for Dept in "Human Resources" Sales Finance "Information Technology" Engineering \
+            Administration Research ; do echo "Department $Dept" ; done
+        Department Human Resources
+        Department Sales
+        Department Finance
+        Department Information Technology
+        Department Engineering
+        Department Administration
+        Department Research
+
+
+        # Multiple commands (and directories are single word now)
+        $ for Dept in Human-Resources Sales Finance Information-Technology Engineering \
+            Administration Research ; \
+            do echo "Working on Department $Dept" ; mkdir "$Dept"  ; \
+            done
+
+
+
+- Example - Generating a List of Installed Packages
+
+    - Let's say we want to generate a list of all installed rpm packages and a description of each
+        package.
+
+        # Get list of packages
+        $ rpm -qa | sort | uniq
+
+
+        # Print all details of each package in a loop
+        $ for RPM in `rpm -qa | sort | uniq` ; do rpm -qi $RPM ; done
+
+
+        # Get just name and summary
+        for RPM in `rpm -qa | sort | uniq` ; do rpm -qi $RPM ; done | egrep -i "^Name|^Summary"
+
+        Name        : a2ps
+        Summary     : Converts text and other types of files to PostScript
+        ...
+
+
+        # Save the results to a file
+        $ for RPM in `rpm -qa | sort | uniq` ; \
+            do rpm -qi $RPM ; done | egrep -i "^Name|^Summary" \
+
+        Name        : a2ps
+        Summary     : Converts text and other types of files to PostScript
+
+
 
 - Other Loops
 
     - while Loops
+
+         The while loop syntax is:
+
+            while [ expression ] ; do list ; done 
+
+
+          # Run forever
+          #   (Notice that bash has postfix/prefix incrementers/decrementers) 
+          $ X=0 ; while [ true ] ; do echo $((X++)) ; done | head
+
+          # Changing condition
+          $ X=0 ; while [ $X -le 5 ] ; do echo $((X++)) ; done
+
+
+
     - until
+
+        - Until is the inverse of while.  It executes until the condition evaluates to true.
+
+            until [ expression ] ; do list ; done
+
+
+        # Run forever
+        $ X=0 ; until false  ; do echo $((X++)) ; done | head
+
+        # Changing condition
+        $ X=0 ; until [ $X -eq 5 ]  ; do echo $((X++)) ; done
