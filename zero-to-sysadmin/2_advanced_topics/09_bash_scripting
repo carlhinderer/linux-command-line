@@ -358,7 +358,54 @@ CHAPTER 9 - COMMAND LINE PROGRAMMING
 
 - Grouping Program Statements
 
-    - 
+    - The 'time' utility shows us the amount of real time, running time, and system time.
+
+        Real time = amount of clock time used by a program
+        User time = amount of time spent executing user code
+        System time = amount of time executing system code
+
+
+    - Time Example
+
+        # Time a progran
+        $ time cat dmesg.txt
+
+        <snip>
+        [40368.982838] IPv6: ADDRCONF(NETDEV_UP): enp0s3: link is not ready
+        [40371.049241] e1000: enp0s3 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX
+        [40371.049584] IPv6: ADDRCONF(NETDEV_CHANGE): enp0s3: link becomes ready
+        real    0m0.026s
+        user    0m0.001s
+        sys     0m0.002s
+
+        Note that the other 0.023s were spent waiting for I/O.
+
+
+        # If we run this command a bunch of times, the results will be cached in disk
+        real    0m0.007s
+        user    0m0.001s
+        sys     0m0.001s
+
+
+        # But if we redirect output to /dev/null
+        $ time cat dmesg.txt > /dev/null
+        real    0m0.002s
+        user    0m0.001s
+        sys     0m0.000s
+
+        This is because the time spent sending the result to the display takes all the time!
+
+
+    - Shredding a Storage Device
+
+       Here, we'll shred an entire storage device, including the boot record and partition table.
+
+       # This will give us times for the shred command only
+       $ time shred -vn 3 /dev/sdd ; dd if=/dev/sdd of=/dev/null
+
+       # This will give us the times for the entire operation
+       $ time ( shred -vn 3 /dev/sdd ; dd if=/dev/sdd of=/dev/null )
+
 
 
 - Expansions
