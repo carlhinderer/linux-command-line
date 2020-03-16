@@ -2,25 +2,130 @@
 CHAPTER 10 - AUTOMATION WITH BASH SCRIPTS
 -----------------------------------------------------------
 
-- Why Use Shell Scripts?
+- About Updates
 
-    - Shell Scripts
-    - Scripts vs Compiled Programs
+    - We want to make a script that will install required updates.  There are 2 things to
+        understand about Linux updates.
+
+        1. We can install updates while performing any other task.  Linux does not force us to
+             reboot after updates are installed.
+
+        2. There are times when rebooting after updating is a good idea, if certain packages
+             were updated.
 
 
-- Updates
 
-    - About Updates
-    - Create a List of Requirements
-    - The CLI Program
-    - Convert the CLI Program to a Script
-    - Add Some Logic
-    - Limit to Root
-    - Add Command-Line Options
-    - Check For Updates
-    - Is a Reboot Required?
-    - Adding a Help Function
-    - Finishing the Script
+- Create a List of Requirements
+
+    1. We must determine if updates are available.
+
+    2. We must determine if any packages that require a reboot are being updated (for instance
+         the kernel, glibc, or systemd).
+
+    3. At this point, we can install the update.
+
+    4. Before rebooting (if required), we run the 'mandb' utility to update the man pages.
+
+    5. If the kernel was updated, we need to rebuild the grub loader config file so that it
+         includes recovery options for each installed kernel.
+
+
+
+- The CLI Program
+
+    - There are 4 steps required to actually do the updates in the CLI program.  
+
+        1. Do the update
+        2. Update the man page database
+        3. Rebuild the grub config files
+        4. Reboot the host
+
+
+    - This CLI program (run as the root user) only checks for updates instead of actually doing
+        them.
+
+        # Update process
+        $ dnf check-update ; mandb ; grub2-mkconfig > /boot/grub2/grub.cfg ; reboot
+
+
+
+- Convert the CLI Program to a Script
+
+    - We'll create a minimal script to do run these commands.  We want to put the script in the
+        root user's home directory.  We want to make it executable for root and the root group,
+        but with no permissions for other users.
+
+        # Create the script
+        [root@studentvm1 ~]# cd ; touch doUpdates ; chmod 770 doUpdates
+
+
+    - Now, we can create the shell of our script:
+
+        doUpdates
+        -----------------------------------------
+        #!/usr/bin/bash
+        dnf check-update
+        mandb
+        grub2-mkconfig > /boot/grub2/grub.cfg
+        # reboot
+
+
+    - To run the script:
+
+        # Run the script
+        $ ./doUpdates
+
+
+
+- Add Some Logic
+
+    - First, we need to define some variables, $Check and $doReboot, and then we need to add
+        some logic around the 'dnf' and 'reboot' commands.
+
+
+        doUpdates
+        --------------------------------------------------
+        #!/usr/bin/bash
+        #
+
+        ############################################
+        # Initialize variables
+        ############################################
+        Check=1
+        doReboot=0
+
+        ############################################
+        # Main body of program
+        ############################################
+        # First we decide whether to do updates or just check whether any are available
+        if [ $Check == 1 ]
+        then
+           # Check for updates
+           dnf check-update
+        fi
+
+        # Update the man database
+        mandb
+
+        # Update the grub configuration
+        grub2-mkconfig > /boot/grub2/grub.cfg
+
+        # Reboot if necessary
+        if [ $doReboot ==1 ]
+        then
+           reboot
+        else
+           echo "Not rebooting"
+        fi
+
+
+
+- Limit to Root
+- Add Command-Line Options
+- Check For Updates
+- Is a Reboot Required?
+- Adding a Help Function
+- Finishing the Script
 
 
 - About Testing
