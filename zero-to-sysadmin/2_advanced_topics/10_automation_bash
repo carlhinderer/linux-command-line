@@ -189,10 +189,125 @@ CHAPTER 10 - AUTOMATION WITH BASH SCRIPTS
         done
 
 
+    - To test the command-line options:
+
+        # Invalid option
+        $ ./doUpdates -x
+        Error: Invalid option.
+
+        # Reboot option
+        $ ./doUpdates -r
+
+
 
 - Check For Updates
+
+    - Now, we want to see if updates are available and whether a reboot is needed.
+
+      We need to add this variable:
+
+          UpdatesFile = "/tmp/updates.list"
+
+      We can also remove this fragment:
+
+          if [ $Check == 1 ]
+          then
+             # Check for updates
+             dnf check-update
+          fi
+
+
+    - We will now add this just after the option processing code:
+
+        ############################################
+        # Are updates available?  Just quit with message if not.
+        # RC from dnf check-update = 100 if available and 0 if none available.
+        # One side effect is to create list of updates that can be searched for
+        # items that trigger a reboot.
+        ############################################
+        dnf check-update > $UpdateFile
+        UpdatesAvailable=$?
+
+        if [ $UpdatesAvailable === 0 ]
+        then
+           echo "Updates are NOT available for host $HOSTNAME at this time."
+           exit
+        else
+           echo "Updates ARE available for $HOSTNAME."
+           if [ $Check ==1 ]
+           then
+              exit
+           fi
+        fi    
+
+
+
 - Is a Reboot Required?
+
+    - Here we check to see if any of the packages that typically need a reboot are being
+        updated.  
+
+        # Does the update include a new kernel
+        if grep ^kernel $UpdatesFile > /dev/null
+        then
+           NeedsReboot=1
+           echo "Kernel update for $HOSTNAME."
+        fi
+
+        # Is there a new glibc
+        if grep ^glibc $UpdatesFile > /dev/null
+        then
+           NeedsReboot=1
+           echo "glibc update for $HOSTNAME."
+        fi
+
+        # Is there a new systemd
+        if grep ^systemd $UpdatesFile > /dev/null
+        then
+           NeedsReboot=1
+           echo "systemd update for $HOSTNAME."
+        fi
+
+        # Temporary exit
+        exit
+
+
+    - Now, we add the reboot logic to the bottom of the code:
+
+        # Reboot if necessary
+        if [ $NeedsReboot == 0 ]
+        then
+           echo
+           echo "############################################"
+           echo "A reboot is not required."
+           echo "############################################""
+           echo
+        elif [ $doReboot == 1 ] && [ $NeedsReboot == 1 ]
+        then
+           reboot
+        elif [ $doReboot == 0 ] && [ $NeedsReboot == 1 ]
+        then
+           echo
+           echo "############################################"
+           echo "A reboot is needed."
+           echo "Be sure to reboot at the earliest opportunity."
+           echo "############################################"
+           echo
+        else
+           echo
+           echo "############################################"
+           echo "############################################"
+           echo
+        fi
+
+
+
 - Adding a Help Function
+
+    - 
+
+
+
 - Finishing the Script
 
 
