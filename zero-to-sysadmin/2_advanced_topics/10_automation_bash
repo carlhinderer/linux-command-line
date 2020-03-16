@@ -386,8 +386,28 @@ CHAPTER 10 - AUTOMATION WITH BASH SCRIPTS
         done
 
 
+    - To see the help information:
+
+        # Get help for script
+        ./doUpdates -h
+
+
 
 - Finishing the Script
+
+    - We need to remove these 2 lines:
+
+        # Temporary exit
+        exit
+
+      And replace them with:
+
+        # Perform the update
+        dnf -y update
+
+
+    - The full script is included in the /zero-to-sysadmin/scripts folder.
+
 
 
 - About Testing
