@@ -296,15 +296,94 @@ CHAPTER 10 - AUTOMATION WITH BASH SCRIPTS
         else
            echo
            echo "############################################"
+           echo "An error has occurred and I cannot determine"
+           echo "whether to reboot or not. Intervention is required."
            echo "############################################"
            echo
         fi
 
 
 
+- Shell Functions
+
+    - Shell functions (aka procedures or subroutines) are lists of Bash statements that are
+        stored in the shell environment and which can be executed like any other command.
+        The syntax of a function is:
+
+        FunctionName(){list}
+
+
+    - To create a simple function:
+
+        # Create a function
+        $ hw(){ echo "Hi there kiddo"; }
+
+        # Call the function
+        $ hw
+        Hi there kiddo
+
+        
+        # List all currently defined functions
+        $ declare -f | less
+
+        <snip>
+        hw ()
+        {
+            echo "Hi there kiddo"
+        }
+        <snip>
+
+
+        # Unset the function since we don't need it any more and verify it's gone
+        $ unset -f hw ; hw
+        bash: hw: command not found
+
+
+
 - Adding a Help Function
 
-    - 
+    - Now, we can add our help function:
+
+        ############################################
+        # Help function
+        ############################################
+        Help()
+        {
+           echo "doUpdates"
+           echo ""
+           echo "Installs all available updates from Fedora repositories.  Can reboot"
+           echo "after updates if certain packages are updated.  Those packages are:
+           echo ""
+           echo "1. The kernel"
+           echo "2. glibc"
+           echo "3. systemd"
+           echo ""
+           echo "Syntax: doUpdates [-c|h|r]"
+           echo "Options:"
+           echo "-c   Check whether updates are available and exit."
+           echo "-h   Print this Help and exit."
+           echo "-r   Reboot if specific trigger packages are updated"
+           echo ""
+        }
+
+
+    - And, we need to add another case to our options:
+
+        # Get the options
+        while getopts ":hcr" option; do
+           case $option in
+              c)  # Check option
+                    Check=1;;
+              h)  # Help function
+                    Help
+                    exit;;
+              r)  # Reboot option
+                    doReboot=1;;
+             \?)  # Incorrect option
+                    echo "Error: Invalid option."
+                    exit;;
+           esac
+        done
 
 
 
