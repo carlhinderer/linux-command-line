@@ -121,7 +121,75 @@ CHAPTER 10 - AUTOMATION WITH BASH SCRIPTS
 
 
 - Limit to Root
+
+    - This script should be limited to usage by the root user.  We can do this partially
+        through ownership and permission settings, but we should also check for it in 
+        the script.
+
+        ############################################
+        # Check for root
+        ############################################        
+        if [ `id -u` != 0 ]
+        then
+           echo "You must be root user to run this program"
+           exit
+        fi
+
+
+    - To test this, we can run as root and also as a regular user.
+
+        # Run as root
+        $ ./doUpdates
+
+        # Run as non-root user
+        $ chmod 777 doUpdates
+        $ su - student
+        $ ./doUpdates
+
+        # Change permissions back
+        $ su - root
+        $ chmod 770 doUpdates
+
+
+
 - Add Command-Line Options
+
+    - Now, we want to add some command-line options.  The 'getopts' command gets options from
+        the command line, and along with the 'while' and 'case' structure, allows us to set
+        variables or perform other tasks based on the options read from the command line.
+
+
+    - First, we need to add some new variables:
+
+        ############################################
+        # Initialize variables
+        ############################################
+        Check=1
+        doReboot=0           # Will be set to true if -r flag is set
+        NeedsReboot=0        # Will be set to true if kernel or glibc is to be updated
+        UpdatesAvailable=0   # Will be set to true if 1 or more updates is available
+
+
+    - Now, we can process the input options:
+
+        ############################################
+        # Process the input options
+        ############################################
+        # Get the options
+        while getopts ":cr" option; do
+           case $option in
+              c) # Check option
+                   Check=1;;
+              r) # Reboot option
+                   doReboot=1;;
+             \?) # Incorrect option
+                   echo "Error: Invalid option."
+                   exit;;
+           esac
+        done
+
+
+
 - Check For Updates
 - Is a Reboot Required?
 - Adding a Help Function
