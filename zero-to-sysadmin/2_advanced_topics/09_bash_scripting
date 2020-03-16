@@ -237,7 +237,7 @@ CHAPTER 9 - COMMAND LINE PROGRAMMING
 - Example - Formatted Bash Script
 
     #!/bin/bash
-    
+
     File='Exp-9-7'
     echo "This is $File" > $File
     if [ -s $File ]
@@ -271,6 +271,33 @@ CHAPTER 9 - COMMAND LINE PROGRAMMING
 
 
 
+- String Operator Examples
+
+    # Test if string length is zero
+    $ MyVar="" 
+    $ if [ -z "$MyVar" ] ; then echo "MyVar is zero length." ; else echo "MyVar contains data" ; fi
+
+    # Test if string length is nonzero
+    $ MyVar="Random text" 
+    $ if [ -n "$MyVar" ] ; then echo "MyVar contains data." ; else echo "MyVar is zero length" ; fi
+
+
+    # Get string length
+    $ MyVar="" ; expr length "$MyVar"
+    0
+
+    $ MyVar="How long is this?" ; expr length "$MyVar"
+    17
+
+
+    # Test for String Equality
+    $ Var1="Hello World" ; Var2="Hello World" 
+    $ if [ "$Var1" == "$Var2" ] ; \
+        then echo "Var1 matches Var2" ; \
+        else echo "Var1 and Var2 do not match." ; fi
+
+
+
 - Numerical Comparison Operators
 
     Operators
@@ -282,15 +309,56 @@ CHAPTER 9 - COMMAND LINE PROGRAMMING
     arg1 -le arg2      Lest than or equal to
 
     arg1 -gt arg2      Greater than
-    arg1 -ge arg2      Greater than or equal to
+    arg1 -ge arg2      Greater than or equal 
+
+
+
+- Numerical Operator Examples
+
+    # Numerical comparison
+    $ X=1 ; if [ $X -eq 1 ] ; then echo "X equals 1" ; fi
+    X equals 1
+
+    # Does the same thing
+    $ [ $X == 1 ]
+
+
+    # The ! operator can be used to invert comparisons
+    $ X=0
+    $ if ! [ $X -eq 1 ] ; then echo "X does not equal 1" ; else echo "X equals 1" ; fi
+    X does not equal 1
 
 
 
 - Miscellaneous Operators
 
+    Operators
+    -----------------------------------------------------------------
+    -o optname         True if shell option 'optname' is enabled
+    -v varname         True if shell variable 'varname' is set
+    -R varname         True if shell variable 'varname' is set and is name reference
+
+
+    # Check whether a variable has been set
+    $ Var1="Hello World" ; echo $Var1 
+    $ if [ -v Var1 ] ; \
+        then echo "Var1 has been assigned a value." ; \
+        else echo "Var1 does not have a value." ; fi
+    Hello World
+    Var1 has been assigned a value.
+
+    # Unset a variable
+    $ unset Var1 ; echo $Var1
+    $ if [ -v Var1 ] ; \
+        then echo "Var1 has been assigned a value." ; \
+        else echo "Var1 does not have a value." ; fi
+    Var1 does not have a value.
+
 
 
 - Grouping Program Statements
+
+    - 
 
 
 - Expansions
