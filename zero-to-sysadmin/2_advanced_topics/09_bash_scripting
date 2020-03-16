@@ -411,10 +411,77 @@ CHAPTER 9 - COMMAND LINE PROGRAMMING
 - Expansions
 
     - Brace Expansion
+
+        - Brace expansion is used for generating arbitrary strings.
+
+        - It was discussed in detail in Volume 1, Chapter 15
+
+            # Brace expansion in the middle of a string
+            $ echo b{ed,olt,ar}s
+            beds bolts bars
+
+
     - Tilde Expansion
+
+        - The ~ operator points to the full home directory of the current user.
+
+            # Print home directory
+            $ ~
+
+            # Create new subdirectory of home folder
+            $ echo ~/Documents
+            /home/student/Documents
+
+
     - Pathname Expansion
+
+        - Pathname expansion is also known as 'file globbing' with ? and *.
+
+        - It was also discussed in detail in Volume 1, Chapter 15
+
+            # File globbing
+            $ ls Do*
+
+
     - Command Substitution
+
+        - Command substitution is a form of expansion.  It allows the STDOUT data stream of one
+            command to be used as the argument of another command.  For example, it can be used
+            to process a list of items in a loop.
+
+        - There are 2 forms of this substitution:
+
+            `command`
+            $(command)
+
+
+            # Simple command substition
+            $ echo "Todays date is `date`"
+            Todays date is Sun Apr  7 14:42:46 EDT 2019
+            [student@studentvm1 testdir7]$ echo "Todays date is $(date)"
+            Todays date is Sun Apr  7 14:42:59 EDT 2019
+
+            # Process a list of numbers
+            $ echo `seq 5`
+            1 2 3 4 5
+
+            # Create a bunch of empty files
+            $ for I in $(seq -w 5000) ; do touch file-$I ; done
+
+
+
     - Arithmetic Expansion
+
+        - Bash does basic integer math, but it is cumbersome.  The syntax for arithmetic expression
+            is $((arithmetic-expression))
+
+            # Basic Arithmetic
+            $ echo $((1+1))
+            2
+
+            $ Var1=5 ; Var2=7 ; Var3=$((Var1∗Var2)) ; echo "Var 3 = $Var3"
+            Var 3 = 35
+
 
 
 - for Loops
