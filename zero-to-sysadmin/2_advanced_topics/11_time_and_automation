@@ -2,13 +2,116 @@
 CHAPTER 11 - TIME AND AUTOMATION
 -----------------------------------------------------------
 
+- Time in Computers
+
+    - Timekeeping is very important to computer networks.  In banking, stock markets, and other
+        financial businesses, transactions must be maintained in proper order and exact time
+        sequences are important for that.
+
+
+    - In even the slowest modern Linux computers, we debug by looking at transaction logs with 
+        timestamps that resolve down to the nanosecond.
+
+      In very high-volume transaction environments, the difference between a few microseconds
+        might require you to look through thousands of transactions.
+
+
+
 - Keeping Time with Chrony
 
     - The NTP Server Hierarchy
+
+        - NTP (Network Time Protocol) is used by computers worldwide to synchronize their times
+            with internet standard reference clocks via a hierarchy of NTP servers.
+
+            Stratum 0  =  atomic clocks, radio receivers tuned to atomic clock signals, or GPS
+                            receivers using GPS satellite signals
+
+            Stratum 1  =  connected to Stratum 0 via satellite, radio, or modems over phone lines
+
+            Stratum 2  =  several thousand publicly available and open for all to use
+
+            Stratum 3  =  local time servers that communicate with Stratum 2 and in local network
+
+
     - NTP Choices
+
+        - The original ntp daemon 'ntpd' has been joined by a newer one, 'chronyd'.  Both perform 
+            the task of of keeping the time of the localhost synchronized with the time server,
+            and both are available and don't seem to be going anywhere.
+
+
+        - Some of the primary advantages of Chrony are:
+
+            - It can synchronize much faster than ntp.  It's good for laptops or desktops that don't
+                run frequently.
+
+            - It can compensate for fluctuating clock frequencies (ie when a host hibernates or enters
+                a sleep mode).
+
+            - It can handle intermittent network connections and bandwidth saturation.
+
+            - It adjusts for network delays and latency.
+
+            - After the initial time sync is accomplished, Chrony never stops the clock.  This ensures
+                stable and consistent time intervals.
+
+            - It can even work without a network connection of any type (if it is updated maunally).
+
+
     - Chrony Structure
+
+        - The chrony daemon, 'chronyd', runs in the background and monitors the time and status
+            of the time server specified in the 'chrony.conf' file.  
+
+          If the local time needs to be adjusted, chronyd does so smoothly without the jolt that 
+            would occur if the clock was suddenly set to a new time.
+
+
+        - Chrony also provides the 'chronyc' tool that allows us to monitor the current status of
+            Chrony and to make changes if necessary.  It can be used as a command that accepts
+            sub-commands or as an interactive tool.
+
+
     - Client Configuration
+
+        - The NTP client config is simple and requires little or no change.
+
+        - The NTP server can be defined by SysAdmins during Linux installation, or it can be
+            provided by the DHCP server at boot time.  Many of the various Linux distros have
+            their own sets of time servers.
+
+
+            # Get statistics about how far off the local system is from the reference server
+            $ chronyc tracking
+
+            # Get list of closest time sources
+            $ chronyc sources
+
+            # Include descriptions of all the fields
+            $ chronyc sources -v
+
+
+        - If we want our own server to be the preferred reference time source for a host, we would
+            add this line to the /etc/chronyc.conf file:
+
+            server 192.168.0.51 iburst prefer
+
+          The 'prefer' markds this as the preferred reference source, so it will always be used if
+            it is available.
+
+
+        - By default, Ubuntu uses 'timedatectl' / 'timesyncd' to synchronize time, and users can
+            optionally use chrony.
+
+
     - Chronyc as an Interactive Tool
+
+        - chronyc can also be used as an interactive tool:
+
+            # Interactive mode
+            $ chronyc
+
 
 
 - Using cron for Timely Automation
