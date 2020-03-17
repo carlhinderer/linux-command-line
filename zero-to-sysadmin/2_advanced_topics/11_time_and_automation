@@ -217,20 +217,102 @@ CHAPTER 11 - TIME AND AUTOMATION
 
 
 
-- Other Scheduling Options
+- /etc/cron.d
 
-    - /etc/cron.d
-    - anacron
+    - The directory /etc/cron.d is where some applications install cron files when there are
+        no users under which the program can run.  The root user can also place crontab files
+        in this directory.
 
 
-- Thoughts About cron
 
-    - Scheduling Tips
-    - Security
+- anacron
+
+    - The crond service assumes that the host computer runs all the time.  What that means 
+        is that if the computer is turned off, jobs scheduled during that time are ignored
+        until they are next scheduled to run.
+
+
+    - The anacron program performs the same function as crond, but it adds the ability to run
+        jobs that were skipped if the computer was off.  This is especially useful for systems
+        that get turned off regularly.
+
+      As soon as the computer is turned on and booted, anacron checks to see whether any
+        configured jobs have missed their last scheduled run.  If they have, they are run
+        almost immediately.
+
+
+    - The entries in the anacron files are identical to entries in crontab files.  We install
+        them in the directories:
+
+          /etc/cron.hourly
+          /etc/cron.daily
+          /etc/cron.weekly
+          /etc/cron.monthly
+
+
+    - For an example of how this works:
+
+        - The crond service runs the cron job specified in /etc/cron.d/0hourly once an hour.
+            It runs all of the scripts localted in the /etc/cron.hourly directory.  
+
+            # Run the hourly jobs
+            01 * * * * root run-parts /etc/cron.hourly
+
+
+        - The /etc/cron.hourly directory contains the '0anacron' script, which runs the anacron
+            program using the /etdc/anacrontab config file.
+
+
+        - The anacron program runs the jobs located in /etc/cron.daily once per day, the jobs
+            located in /etc/cron.weekly once per week, and the jobs located in
+            /etc/cron.monthly once per month.
+
+
+
+- cron Security
+
+    - There are a few security concerns when dealing with cron.  It's a good idea to prevent
+        non-root users from creating cron jobs.  In fact, it's a better idea to deny use of
+        the cron system to non-root users entirely.
+
+      This can be accomplished using the 'cron.allow' and 'cron.deny' files.
+
+
+        cron.allow           cron.deny           Effect
+        -------------------------------------------------------------------
+        Not present          Not present         Only root can use cron.
+
+        Present but empty    Not present         Only root can use cron.
+
+        Present              Not present         UserID must be listed in cron.allow to use cron.
+
+        Not present          Present but empty   All non-root users can use cron.
+
+        Not present          Present             Users listed in cron.deny are denied access to cron.
+
 
 
 - The at Command
 
-    - Syntax
-    - Time Specification
-    - Security
+    - The tasks we have looked at so far run on a recurring basis.  The 'at' command can be used
+        if a task just needs to be run once at some point in the future.  
+
+
+        # Set up a job to run in the future
+        $ at now +2 minutes
+        warning: commands will be executed using /bin/sh
+        at>  free
+        at>  <EOT>
+        job 1 at Thu May  2 15:06:00 2019
+
+
+        # Display list of jobs scheduled to be run
+        $ atq
+
+
+        # Once our job has run, we can verify that the queue is now empty
+        $ tail /var/log/cron
+
+
+    - The 'at' command uses the files 'at.allow' and 'at.deny' to specify which users have access
+        to the 'at' command.  The logic is the same as with 'cron.allow' and 'cron.deny'.
