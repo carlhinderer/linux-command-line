@@ -412,21 +412,128 @@ CHAPTER 10 - AUTOMATION WITH BASH SCRIPTS
 
 - About Testing
 
-    - Testing in Production
-    - Fuzzy Testing
-    - Testing the Script
+    - Testing procedures include:
+
+        1. Create a simple test plan
+        2. Start testing at the beginning of development
+        3. Perform a final test when the code is complete
+        4. Move to production and test more
 
 
-- Making it Better
+    - Though it is discouraged, testing in production is inevitable.  This is because you
+        can never fully recreate the production environment in your test environment.  The
+        production tests should not be the only tests, though!
+
+
+    - Fuzzy testing is a new buzzword often heard.  It means dealing with randomness in all
+        aspects of the test, such as:
+
+          - starting conditions
+          - very random input
+          - random combinations of options selected
+          - low memory
+          - high levels of CPU contention
+          - multiple instances of the program running at the same time
+          - and any other random combination you can think of
+
+
+    - Since we are testing this using our VM, we can test the same conditions over and over 
+        by taking a VM snapshot, running the test, then restoring to the snapshot and testing
+        again.
+
+
+    - BATS is a tool designed for automated testing of bash programs.
+
 
 
 - Licensing
 
+    - One of the best ways for us to give back to the open source community is to open source
+        our own programs and scripts with an open source license.  We should include the GPLv2
+        (or other preferred) license statement header as a command-line option that will 
+        print out the license to the console.
 
-- Automated Testing
+
+    - Add a function to print the GPL license:
+
+        ################################################################################
+        # Print the GPL license header                                                 #
+        ################################################################################
+        gpl()
+        {
+           echo
+           echo "################################################################################"
+           echo "#  Copyright (C) 2007, 2016  David Both                                        #"
+           echo "#  Millennium Technology Consulting LLC                                        #"
+           echo "#  http://www.millennium-technology.com                                        #"
+           echo "#                                                                              #"
+           echo "#  This program is free software; you can redistribute it and/or modify        #"
+           echo "#  it under the terms of the GNU General Public License as published by        #"
+           echo "#  the Free Software Foundation; either version 2 of the License, or           #"
+           echo "#  (at your option) any later version.                                         #"
+           echo "#                                                                              #"
+           echo "#  This program is distributed in the hope that it will be useful,             #"
+           echo "#  but WITHOUT ANY WARRANTY; without even the implied warranty of              #"
+           echo "#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               #"
+           echo "#  GNU General Public License for more details.                                #"
+           echo "#                                                                              #"
+           echo "#  You should have received a copy of the GNU General Public License           #"
+           echo "#  along with this program; if not, write to the Free Software                 #"
+           echo "#  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA   #"
+           echo "################################################################################"
+           echo
+        }
+
+
+    - And add it to our command-line options:
+
+        g)  # Display GPL
+              gpl
+              exit
+
 
 
 - Security
 
+    - This script should only run as root, and we have set the permissions and added a check in
+        the script to ensure it.  
+
+      We will also put the script in /root/bin, which means it is available at all times, but is
+        not accessible to non-root users.
+
+
+        # Create the /root/bin directory (not created by default) and run script
+        [root@studentvm1 ~]# cd ; mkdir bin ; mv doUpdates bin ; doUpdates -h
+
+
 
 - Additional Levels of Automation
+
+    - Now that we have our script, and we have copied it to /root/bin on all of our computers,
+        we can just log onto each of our hosts at a specific time and run it.
+
+      Or, we could use SSH to login and run the command remotely.
+
+
+        # Run the script remotely
+        $ ssh hostname doUpdates -r
+
+
+    - Assuming we have SSH public/private key pairs in use (and thus don't have to enter a pw),
+        we can update each of the hosts we need to update in a loop.
+
+        # Run on several hosts
+        $ for I in host1 host2 host3 ; do ssh $I doUpdates -r ; done
+
+
+    - We could keep the list of hostnames in a .conf file.
+
+        /usr/local/bin/doit
+        -----------------------------
+        #!/bin/bash
+        for I in `cat /usr/local/etc/doit.conf` ; do ssh $I doUpdates ; done
+
+        /usr/local/etc/doit.conf
+        -----------------------------
+        list of hostnames...
+        one per line...
