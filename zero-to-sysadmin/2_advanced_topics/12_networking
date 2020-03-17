@@ -4,14 +4,100 @@ CHAPTER 12 - NETWORKING
 
 - Basic Networking Concepts
 
-    - Definitions
+    - This book uses primarily IPv4, since it is still much more common on hosts.  Many
+        ISP's use IPv6 for their backbones.
+
+
+    - Basic Definitions
+
+        1. A 'node' is any device connected to and acessible on a network, including computers,
+             routers, printers, etc.
+
+        2. A 'host' is a node that is a computer attached to the network.
+
+        3. The 'Internet Protocol' allows computers to communicate.  IP is a best-effort, packet
+             switching protocol used to transmit data packets from one network node to another.
+             It is not reliable since packets can be lost or dropped for a number of reasons.
+
+        4. The 'Transmission Control Protocol' sits on top of IP.  It provides reliable communications
+             and flow control, including full duplex (communications can go in both directions
+             at the same time).
+
+        5. A 'network' is a web-like (or net-like) structure of communications system that allows
+             connected nodes to communicate with each other.
+
+
+    - Network Definitions
+
+        1. A 'NIC' is a network interface controller that is either built into a computer 
+             motherboard or added as a pluggable device card.
+
+        2. A 'network node' is any device connected to a network and is addressable by other
+             devices such that a connection can be made.
+
+        3. A 'switch' is a hardware device used to connect multiple nodes together on a logical
+             network segment.  The switch is connected to each node with an Ethernet cable.
+             They are physical-layer devices only.
+
+        4. A 'router' is a device that routes data packets between 2 or more networks based on the
+             destination IP address contained in the data packets.  Routers have IP addresses 
+             for each network to which they connect, and are visible to other devices on the
+             network.
+
+        5. At least one router on the network is the 'default gateway' to other networks or the
+             rest of the internet.  If a data packet is sent by a host and there are no other routes
+             defined, the default gateway sends the pacekt to the next router on the way to its
+             final destination.
+
+        6. A 'connection' is a logical link between 2 nodes on a network.  Connections exist at
+             each layer of the TCP/IP stack.
+
+
     - MAC Addresses
+
+
     - IP Addresses
 
 
 - TCP/IP
 
-    - The TCP/IP Network Model
+    - TCP/IP Network Model
+
+
+                          | Host1 |-------->| Router |--------->| Host2 | 
+                               |                                    ^
+        Protocols              v                                    |
+         HTTP, SSH,       | Application |                     | Application |
+         SMTP, POP, IMAP,      |                                    ^
+         etc.                  |                                    |
+                               v                                    |
+         TCP and UDP      | Transport |                       | Transport |
+                               |                                    ^
+                               v                                    |
+         IP               | Internet |    | Internet |        | Internet |
+                               |             ^   |                  ^
+                               v             |   v                  |       
+         Ethernet         | Datalink |    | Datalink |        | Datalink |
+                               |             ^   |                  ^
+                               v             |   v                  |
+         Fiber, copper,   | Physical |--->| Physical |------->| Physical |
+         NIC, etc.
+
+
+
+    - Layers
+
+        1. Application layer - Message
+
+        2. Transport layer - TCP Segment
+
+        3. Internet layer - Packet
+
+        4. Data link layer - Frame
+
+        5. Physical layer - Bits
+
+
     - Simple Example
 
 
