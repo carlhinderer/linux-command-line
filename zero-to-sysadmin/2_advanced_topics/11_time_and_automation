@@ -117,9 +117,104 @@ CHAPTER 11 - TIME AND AUTOMATION
 - Using cron for Timely Automation
 
     - The crond Daemon
+
+        - The 'crond' daemon is a background service that enables cron functionality.
+
+          The cron service checks for files in the /var/spool/cron and /etc/cron.d directories
+            and the /etc/anacrontab file.  The contents of these jobs define cron jobs that
+            are to be run at various intervals.
+
+            /var/spool/cron   =   individual user cron files
+            /etc/cron.d       =   cron files added by system services and applications
+            /etc/anacrontab   =   special case
+
+
     - Crontab
+
+        - Each user, including root, can have a crontab (chronos table) file.  The terms 
+            'crontab file' and 'cron file' are used interchangeably.
+
+          By default, no file exists, but using the 'crontab -e' command to edit a crontab
+            file creates them in the /var/spool/cron directory.  Using this command is 
+            recommended over editing the file directly, since it also restarts the crond
+            daemon after the change is made.
+
+
+            # Edit the crontab file, or create one if it doesn't exist
+            $ crontab -e
+
+            # Display crontab file contents
+            $ crontab -l
+
+            # Remove your current crontab file
+            $ crontab -r
+
+            # Remove your current crontab file, but prompt before removal
+            $ crontab -i
+
+            # Edit another user's crontab file (requires root privileges)
+            $ crontab -u <username>
+
+
+        - The individual jobs in the file have this format:
+
+            * * * * * command(s)
+            - - - - -
+            | | | | |
+            | | | | ----- Day of week (0 - 7) (Sunday=0 or 7)
+            | | | ------- Month (1 - 12)
+            | | --------- Day of month (1 - 31)
+            | ----------- Hour (0 - 23)
+            ------------- Minute (0 - 59)
+
+
     - cron Examples
+
+        - Each interval field of the crontab entries also supports lists and ranges of values as
+            well as calculated values. 
+
+            # Run a task on the 1st and 15th of every month, at 1AM
+            00 01 * 1,15 * /usr/local/bin/mycronjob.sh
+
+            # Run a task every 5 minutes
+            */5 * * * * /usr/local/bin/mycronjob.sh
+
+            # Run a task every 3 hours (3AM, 6AM, 9AM, ...)
+            00 */3 * * * /usr/local/bin/mycronjob.sh
+
+
+        - We can also do more complex scheduling.
+
+            # Run a task on the first Sunday of every month (any of these will work)
+            00 01 1-7 ∗ sun /usr/local/bin/mycronjob.sh
+            00 01 1-7 ∗ 0 /usr/local/bin/mycronjob.sh
+            00 01 1-7 ∗ 7 /usr/local/bin/mycronjob.sh
+
+            # Same, but we only want to run in months June-September (any of these will work)
+            00 01 1-7 jun,jul,aug,sept sun /usr/local/bin/mycronjob.sh
+            00 01 1-7 6,7,8,9 0 /usr/local/bin/mycronjob.sh
+            00 01 1-7 6-9 0 /usr/local/bin/mycronjob.sh
+
+
     - crontab Entries
+
+        - This entry creates backups at 1:01AM every day.  There are 2 backups to 2 different
+            locations.
+
+            01 01 ∗ ∗ ∗ /usr/local/bin/rsbu -vbd1 ; /usr/local/bin/rsbu -vbd2
+
+
+        - This entry sets the hardware clock on the computer using the system clock as the source 
+            of an accurate time. It runs at 05:03AM every day.
+
+            03 05 ∗ ∗ ∗ /sbin/hwclock --systohc
+
+        - This entry is used to install Fedora updates at 04:25AM on the first day of each month. 
+            The cron service has no option for “The last day of the month,” so we use the first day 
+            of the following month.
+
+            25 04 1 ∗ ∗ /usr/local/bin/doit
+
 
 
 - Other Scheduling Options
