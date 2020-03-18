@@ -195,25 +195,88 @@ CHAPTER 12 - NETWORKING
         5. Physical layer - Bits
 
 
-    - Simple Example
+
+- Simple TCP/IP Example
+
+        1. In the application layer, web browser sends an HTTP message to the remote host, 
+             www.example.com, to send back the web page data.
+
+
+        2. The transport layer encapsulates the message in a TCP datagram with the IP 
+             address of the remote web server as the destination.  
+
+           Along with the usual request packet, this packet now includes the source port from 
+             which the request will originate (usually a very high number random port) so 
+             that the return data knows which port the browser is listening on.  It also
+             includes the destination port on the remote host (80).
+
+
+        3. The internet layer encapsulates the TCP datagram in a packet that also contains the
+             internet packet in a frame that includes both the source and destination IP
+             addresses.
+
+
+        4. The data link layer uses the ARP (Address Resolution Protocol) to identify the physical
+             MAC address of the default router and encapsulates the internet packet in a frame
+             that includes both the source and destination MAC addresses.
+
+
+        5. The frame is sent over the wire (CAT5 or CAT6).  If a wireless NIC is communicating
+             with a wireless router, the wireless router is the default (gateway) router.
+
+
+        6. The default router opens the datagram and determines the destination IP address.  The
+             router uses its own routing table to determine the IP address of the next router 
+             that will take the frame on the next step of its journey.  
+
+           The router then re-encapsulates the frame in a new datagram that contains its own MAC
+             as the source and MAC of the next router as its destination.  
+
+
+        - Routers perform their routing tasks at Layer 3.  Switches are invisble to all protocols
+            at Layers 2 and above, so they do not affect the transmission of the data in any 
+            logical way.  
+
+          The function of a switch is only to provide a simple means to connect multiple hosts into
+            a single physical network via ethernet cables.
+
 
 
 - CIDR - Network Notation and Configuration
 
+    - CIDR (Classless Inter-Domain Routing) defines a notation methodology for network addressing
+        used to specify the network portion of an IP address.
+
+
     - Network Classes
+
+      Class  Start       End               Subnet Mask     CIDR   # of Networks    IP Addrs/Network
+      ----------------------------------------------------------------------------------------------
+      A      0.0.0.0     127.255.255.255   255.0.0.0       /8     128              16,177,216
+      B      128.0.0.0   191.255.255.255   255.255.0.0     /16    16,384           65,536
+      C      192.0.0.0   223.255.255.255   255.255.255.0   /24    2,097,152        256
+      D      224.0.0.0   239.255.255.255                          Undefined        Undefined
+      E      240.0.0.0   255.255.255.255                          Undefined        Undefined
+
+
+
     - Along Came a CIDR
     - Variable Length Subnet Masking
+
 
 
 - DHCP Client Configuration
 
 
+
 - NIC Naming Conventions
+
 
 
 - NIC Configuration Files
 
     - Create an Interface Configuration File
+
 
 
 - The Interface Configuration File
@@ -223,9 +286,11 @@ CHAPTER 12 - NETWORKING
     - Other Network Files
 
 
+
 - Network Startup
 
     - The NetworkManager Service
+
 
 
 - Name Services
@@ -234,12 +299,15 @@ CHAPTER 12 - NETWORKING
     - Using the /etc/hosts File
 
 
+
 - Introduction to Network Routing
 
     - The Routing Table
 
 
+
 - iptraf-ng
+
 
 
 - Cleanup
