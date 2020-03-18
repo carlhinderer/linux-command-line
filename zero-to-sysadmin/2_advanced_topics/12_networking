@@ -53,10 +53,107 @@ CHAPTER 12 - NETWORKING
              each layer of the TCP/IP stack.
 
 
-    - MAC Addresses
+
+- MAC Addresses
+
+    - A 'MAC address' is a unique hardware address assigned to each NIC that provides the
+        hardware as a means of identification.  They are hard-coded by the manufacturer,
+        but they can be spoofed in software.
 
 
-    - IP Addresses
+    - MAC addresses consist of 6 2-digit hex numbers, separated by colons.  The first 3
+        numbers identify the vendor, and last 3 are specific for that vendor.
+
+        08:00:27:81:ec:cc
+
+
+    - We can use the 'ip addr' command to see installed NICs with their MAC and IP addresses.
+
+        # Get NIC information
+        $ ip addr
+
+        1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+            link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+            inet 127.0.0.1/8 scope host lo
+               valid_lft forever preferred_lft forever
+            inet6 ::1/128 scope host
+               valid_lft forever preferred_lft forever
+        2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+            link/ether 08:00:27:e1:0c:10 brd ff:ff:ff:ff:ff:ff
+            inet 10.0.2.7/24 brd 10.0.2.255 scope global dynamic noprefixroute enp0s3
+               valid_lft 1057sec preferred_lft 1057sec
+            inet6 fe80::b7f2:97cf:36d2:b13e/64 scope link noprefixroute
+               valid_lft forever preferred_lft forever
+
+        The first entry is the local interface (lo) which is used by many Linux tasks and 
+          applications to communicate within the host.
+
+        The second entry, 'enp0s3', is how Linux sees the first virtual network adapter on a 
+          VirtualBox VM.  
+
+
+    - All networked devices have a MAC address, and the 'ip' command enables us to see
+        the MAC and IP addresses of the 'neighbor' hosts with which we have communicated.
+
+        # List neighbors
+        $ ip neigh
+        10.0.2.1 dev enp0s3 lladdr 52:54:00:12:35:00 REACHABLE
+
+        # If nothing comes up, force communication with the router/gateway and try again
+        $ ping -c2 _gateway ; ip neigh
+
+        The result we get is the virtual router in our virtual network.  
+
+
+    - We can also use the 'arp' command to view the MAC addresses.
+
+        # Display devices by DNS name
+        $ arp
+
+        # Display devices by IP address
+        $ arp -n
+
+
+    - The 'ip' command is designed to replace ifconfig, arp, and some other network commands.
+        For now, these other commands are still available (and probably will be for years).
+
+
+
+- IP Addresses
+
+    - An IPv4 address is 4 octets (32 bits total).
+
+        255.255.255.0
+        10.0.2.7
+
+
+    - An IPv6 address is 8 sections of 4 hex digits (128 bits total).
+
+        # Long version
+        2001:0db8:0000:0000:0000:ff00:0042:8329
+
+        # Short version (with leading zeros and consecutive sections of zeros omitted)
+        2001:db8::ff00:42:8329
+
+
+    - The loopback IPv4 address is 127.0.0.1 (::1/128 in IPv6).  We can ping both addresses.
+        The ping command sends a special ICMP data packet to the target IP address
+
+        # Ping ipv6 localhost
+        $ ping -c2 ::1
+
+        # Ping ipv4 localhost
+        $ ping -c2 127.0.0.1
+
+        # Note that we can also ping remote hosts
+        $ ping -c2 www.example.com
+
+
+    - The IANA (Internet Assigned Numbers Authority) is responsible for global coordination
+        and management of IP addresses.  The organization coordinates the assignment of
+        blocks of addresses to large geographic-political entities.  These entities assign
+        them to customers like ISPs.
+
 
 
 - TCP/IP
