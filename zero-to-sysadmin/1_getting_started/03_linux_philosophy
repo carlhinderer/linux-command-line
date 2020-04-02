@@ -36,7 +36,7 @@ CHAPTER 3 - THE LINUX PHILOSOPHY FOR SYSADMINS
 
     3. Everything is a File
 
-         - Everything can be the source of a data stream, the target of a data stream , or in many cases
+         - Everything can be the source of a data stream, the target of a data stream, or in many cases
              both.
 
          - For instance, this makes it possible to copy a boot record, a disk partition, or an entire

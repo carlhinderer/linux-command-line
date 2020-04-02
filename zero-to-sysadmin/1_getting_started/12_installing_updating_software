@@ -5,7 +5,7 @@ CHAPTER 12 - INSTALLING & UPDATING SOFTWARE
 - Dependency Hell
 
     - Dependency hell is the difficult process of resolving multiple layers of complex
-        dependencies.  It was a common problem before the development of moder package
+        dependencies.  It was a common problem before the development of modern package
         managers.
 
 

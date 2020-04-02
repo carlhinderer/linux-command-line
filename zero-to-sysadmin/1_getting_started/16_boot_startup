@@ -49,7 +49,7 @@ CHAPTER 16 - LINUX BOOT & STARTUP
     - GRUB
 
         - GRUB2 (Grand Unified Bootloader) is the newest version of the GRUB bootloader 
-            and is the standard bootloader for most common.  GRUB is the program that
+            and is the standard bootloader for most common systems.  GRUB is the program that
             makes the computer just smart enough to find the OS kernel and load it into
             memory.
 
@@ -102,7 +102,7 @@ CHAPTER 16 - LINUX BOOT & STARTUP
         ...
 
         # Examine the boot record of the boot drive
-        $ dd if =/dev/sda bs=512 count=1
+        $ dd if=/dev/sda bs=512 count=1
 
 
     - Note that the output is unreadable, since it is in a binary format.  For a
