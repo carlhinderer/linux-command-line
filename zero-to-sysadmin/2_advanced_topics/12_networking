@@ -427,19 +427,90 @@ CHAPTER 12 - NETWORKING
 
 - NIC Naming Conventions
 
+    - The naming conventions for NICs have changed several times over the years.  Currently,
+        the udev device manager detects when new devices (like NICs) have been added to the
+        system, and systemd renames them according to a hierarchical naming scheme.
+
+        # See renaming of NIC
+        $ dmesg | grep eth
+
+        [    4.791454] e1000 0000:00:03.0 eth0: (PCI:33MHz:32-bit) 08:00:27:e1:0c:10
+        [    4.791520] e1000 0000:00:03.0 eth0: Intel(R) PRO/1000 Network Connection
+        [    5.294678] e1000 0000:00:03.0 enp0s3: renamed from eth0
+
+
+    - There is now a convoluted 5-tier scheme for renaming the NICs:
+
+        1. Firmware or BIOS-provided index numbers (ie 'eno1')
+        2. Firmware or BIOS-provided PCI Express hot-plug slot indexes (ie 'ens1')
+        3. Names incorporating physical locations (ie 'enp2s0')
+        4. Names incorporating the interface's MAC address
+        5. Traditional kernel naming scheme (ie 'eth0')
+
 
 
 - NIC Configuration Files
 
-    - Create an Interface Configuration File
+    - By default, most current distro releases default to DHCP configuration.  Hosts using
+        DHCP for network configuration no longer requrire interface config files at all
+
+      However, non-standard configuration of the NICs is still accomplished with 'ifcfg-X' 
+        files in the /etc/sysconfig/network-scripts file.  For instance, our 'enp0s3' NIC
+        would have a config file named 'ifcfg-enp0s3'.
+
+      The 'nmcli' (Network Manager CLI) tool can be used to change the config file for an 
+        interface from the command line.
+
+
+    - Creating an Interface Configuration File
+
+        # Navigate to scripts directory (should be empty)
+        $ cd /etc/sysconfig/network-scripts/
+
+        # Create a new config script for enp0s3
+        $ nmcli connection add save yes type ethernet ifname enp0s3 con-name enp0s3
+
+
+        # Verify that enp0s3 has an ip address assigned
+        $ ip addr show enp0s3
+
+        # Turn enp0s3 off and verify it is off
+        $ ip link set enp0s3 down
+        $ ip addr show enp0s3
 
 
 
 - The Interface Configuration File
 
+    - Now, we can look at the newly created config file:  
+
+        # View contents of new config file
+        $ cat /etc/sysconfig/network-scripts/ifcfg-enp0s3
+
+        # Set primary and secondary DNS servers
+        $ nmcli connection modify enp0s3 IPv4.dns "10.0.2.1 8.8.8.8"
+
+
     - The Network File
+
+        The network file is old and deprecated, but you may still see it on older systems.
+          The hostname was set in this file.
+
+        Now, the hostname is set in the /etc/hostname file.
+
+
     - The Route-<Interface> File
+
+        This file may also be present in /etc/sysconfig/network-scripts, for instance named
+          'route-enp0s3'.  It allows defining routes to entire network.
+
+        It is rare on Linux clients, but will be present on a system like a router, for instance.
+
+
     - Other Network Files
+
+        In previous years, executable scripts were also found in the network-scripts directory,
+          but they were removed to comply with the FHS.
 
 
 
