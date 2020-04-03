@@ -46,7 +46,7 @@ CHAPTER 12 - NETWORKING
 
         5. At least one router on the network is the 'default gateway' to other networks or the
              rest of the internet.  If a data packet is sent by a host and there are no other routes
-             defined, the default gateway sends the pacekt to the next router on the way to its
+             defined, the default gateway sends the packet to the next router on the way to its
              final destination.
 
         6. A 'connection' is a logical link between 2 nodes on a network.  Connections exist at
@@ -392,6 +392,36 @@ CHAPTER 12 - NETWORKING
 
 
 - DHCP Client Configuration
+
+    - Each NIC on your computer provides a physical connection to your network.  Most computers
+        only have 1 NIC for a wired connection and 1 NIC for a wireless connection.
+
+      Some Linux machines have multiple wired NICs, and are used as inexpensive routers for 
+        internal networks.  
+
+
+    - On Fedora, the default is to use DHCP (Dynamic Host Configuration Protocol) for all network 
+        interfaces.  This requires a DHCP server to be located on the local network.  
+
+      On our VM, our virtual router on our virtual network provides DHCP services.
+
+
+    - The DHCP server can provide a large number of network configuration components.  These are
+        the ones that are absolutely necessary:
+
+        1. An IP address
+        2. The IP address of the router/gateway device
+        3. The IP address of at least 1 name server
+
+
+    - Other components that may be included:
+
+        - Up to 2 additional name server IP addresses
+
+        - The domain name of the local network, so that a command like ping doesn't require
+            the complete domain name.
+
+        - The subnet mask
 
 
 

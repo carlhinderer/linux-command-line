@@ -253,7 +253,7 @@ CHAPTER 11 - TIME AND AUTOMATION
     - For an example of how this works:
 
         - The crond service runs the cron job specified in /etc/cron.d/0hourly once an hour.
-            It runs all of the scripts localted in the /etc/cron.hourly directory.  
+            It runs all of the scripts located in the /etc/cron.hourly directory.  
 
             # Run the hourly jobs
             01 * * * * root run-parts /etc/cron.hourly

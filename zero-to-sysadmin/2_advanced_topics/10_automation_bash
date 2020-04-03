@@ -86,7 +86,6 @@ CHAPTER 10 - AUTOMATION WITH BASH SCRIPTS
         doUpdates
         --------------------------------------------------
         #!/usr/bin/bash
-        #
 
         ############################################
         # Initialize variables
@@ -111,7 +110,7 @@ CHAPTER 10 - AUTOMATION WITH BASH SCRIPTS
         grub2-mkconfig > /boot/grub2/grub.cfg
 
         # Reboot if necessary
-        if [ $doReboot ==1 ]
+        if [ $doReboot == 1 ]
         then
            reboot
         else

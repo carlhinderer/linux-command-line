@@ -247,7 +247,7 @@ CHAPTER 5 - SPECIAL FILESYSTEMS
         $ fdisk /dev/sdd
 
 
-        # Create new partiton with fdisk
+        # Create new partition with fdisk
         Command: t       # Specify partition type
 
         Hex code (type L to list all codes): L

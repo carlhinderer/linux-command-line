@@ -291,7 +291,7 @@ CHAPTER 7 - PRINTING
             $ od -c cpuHog.dos
 
             # Look at hex codes
-            $ od -x cpuHog.do
+            $ od -x cpuHog.dos
 
 
     - DOS2UNIX
