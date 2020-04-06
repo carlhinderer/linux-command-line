@@ -635,13 +635,85 @@ CHAPTER 12 - NETWORKING
         2. Send the packet to a different network
 
 
+    - Routing decisions are fairly simple for most hosts:
+
+        1. If the destination host is on the same network, send the data directly to the
+             destination host.
+
+        2. If the destination host is on a remote network that is reachable via a local 
+             gateway listed in the routing table, send it to the explicitly defined
+             gateway.
+
+        3. If the destination host is on a remote network and there is no other entry that
+             defines a route to that host, send the data to the default gateway.
+
+
 
 - The Routing Table
+
+    - All network devices need to make decisions about where to route TCP/IP packets.  The 
+        routing table provides the configuration information required to make those decisions.
+
+      The routing table for any host on the network is used to provide the single route 
+        available to that localhost and to determine whether to send packets to the default
+        gateway router.  
+
+
+    - There are a few different commands to display the routing table.  The 'route' and 'netstat'
+        commands were used historically, but are now deprecated.
+
+        # Old command to display routing table
+        $ route -n
+
+        # Another old command to display routing table
+        $ netstat -rn
+
+    
+    - Today, the 'ip' command is used to display the routing table:
+
+        # Display routing table
+        $ ip route
+
+
+    - The 'traceroute' command is used to view the complete route our packets will take to
+        a remote host.  
+
+        # Uses UDP, doesn't get good results
+        $ traceroute www.example.org
+
+        # Uses ICMP instead, gets better results
+        $ traceroute -I www.example.org
+
+
+    - The 'mtr' (Matt's traceroute) command is the modern successor to traceroute.
+
+        # Display names for hops
+        $ mtr example.org
+
+        # Display IP address for hops
+        $ mtr -n example.org
+
+
+    - The 'whois' command can be used to get information about who owns an IP address, but this
+        information is often wrong.
+
+        # Get information about an IP
+        $ whois 93.184.216.34
 
 
 
 - iptraf-ng
 
+    - In troubleshooting network connection problems, it can be helpful to use a tool like
+        'iptraf-ng' (IP Traffic Next Generation) to monitor network traffic on one or more
+        interfaces.
+
+        # Install iptraf-ng
+        $ dnf install iptraf-ng
 
 
-- Cleanup
+        # Ping the router from a terminal window
+        $ ping router
+
+        # Now, start iptraf-ng in another terminal window, should be able to see pings
+        $ iptraf-ng
