@@ -516,20 +516,127 @@ CHAPTER 12 - NETWORKING
 
 - Network Startup
 
-    - The NetworkManager Service
+    - With the advent of wireless networks and mobile devices, reconfiguring the NICs for 
+        each new wireless network became complicated and time-consuming.  
+
+      The NetworkManager service starts the network services during startup, and provides
+        a management interface while the host is running.
+
+
+    - The NetworkManager service (2004) simplifies and automates network configurations
+        and connections, especially wireless connections.
+
+      It integrates with udev and D-Bus to deal with pluggable devices and various wireless
+        networks.  
 
 
 
 - Name Services
 
-    - How a Name Search Works
-    - Using the /etc/hosts File
+    - The 'Domain Name System' provides the database to be used in the translation
+        from human-readable hostnames to IP addresses.
+
+      The primary function of the BIND (Berkeley Internet Name Domain) system is that of
+        a domain name resolver that uses this database.
+
+
+    - In small networks, the /etc/hosts file on each host can be used as a name resolver.
+        However, maintaining copies of this file on several hosts can become very 
+        time-consuming and error-prone.
+
+      So, it makes sense, even in small networks, to convert to running 
+
+
+
+- How a Name Search Works
+
+    1. First, I type 'www.example.com' into my web browser.
+
+    2. The browser sends the request to the OS.
+
+    3. The OS checks the /etc/hosts file to see if the name is defined there.  If so,
+         the IP address defined is returned to the browser.
+
+    4. If the name is not in /etc/hosts, the URL is sent to the first name server
+         specified in /etc/resolv.conf, which in this case is our local name server.  If 
+         the server has the name cached, it's IP address is returned.
+
+    5. Otherwise, the local name server sends the request to a remote name server.  This
+         remote server is either a forwarder (name server from ISP, Google, etc.) or a
+         top-level root name server.  The top-level server responds with the authoritative
+         server for that domain.
+
+    6. The local name server is configured to use the root name servers so that the 
+         authoritative server is returned.
+
+    7. The local name server sends the query to the authoritative name server, which returns
+         the IP address for www.example.com.
+
+    8. The browser uses the IP address to send a request to the web page.
+
+
+
+- Using the /etc/hosts File
+
+    - Most computers need little configuration to obtain name services, since the name server
+        in their /etc/resolv.conf is added through DHCP at boot time.
+
+      For hosts that are configured statically, the /etc/resolv.conf is usually configured
+        at installation time by the SysAdmin.
+
+
+    - Many name servers you'll find on public networks are not reliable.  So, we can add one
+        Google or Cloudflare name server to our /etc/resolv.conf to ensure we have a reliable
+        name server available.
+
+
+    - In the absence of centralized name services, we can add names to our /etc/hosts file:
+
+        # Initially, only the localhosts entries are present
+        $ cat /etc/hosts
+
+        127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+        ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+
+        # We can ping those predefined name entries
+        $ ping -c2 localhost
+        $ ping -c2 localhost4
+        $ ping -c2 localhost6
+
+
+    - Now, we can add an entry to /etc/hosts:
+
+        # Get our IP address
+        $ ip addr show enp0s3
+        ...
+        inet 10.0.2.7/24
+        ...
+
+
+        # And add an entry for our local machine to /etc/hosts
+        10.0.2.7        studentvm1 svm1 vm1 s1
+
+
+        # Now, we can ping these entries
+        $ ping -c2 studentvm1
+        $ ping -c2 svm1
+        $ ping -c2 vm1
 
 
 
 - Introduction to Network Routing
 
-    - The Routing Table
+    - Every computer attached to a network needs to know where to send TCP/IP packets when
+        they leave the localhost.  This is often straightforward, because many network 
+        environments only have 2 options for 
+
+        1. Send the packet to a device on the local network (technically the subnet its on)
+        2. Send the packet to a different network
+
+
+
+- The Routing Table
 
 
 
