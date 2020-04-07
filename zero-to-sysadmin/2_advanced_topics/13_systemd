@@ -4,14 +4,87 @@ CHAPTER 13 - SYSTEMD
 
 - Controversy
 
-    - Why I Prefer SystemV
-    - Why I Perfer systemd
-    - The Real Issue
+    - SystemV start scripts and the 'init' program are the old method of Linux startup
+        sequence.  systemd using targets is the new method.  The 'init' and 'systemd' 
+        programs start and manage all other processes.
+
+
+    - SystemV is more open.  Startup is accomplished using bash scripts, all of which are
+        open and easily understandable.  SystemV is simple and it does one thing well.
+
+
+    - systemd is also open source, but it is a complex system of large compiled binaries.  It
+        starts as many services as possible in parallel, which speeds up the overall startup.
+        It also manages hardware, processes, filesystem mounts, and much more.
+
+
+    - In any case, the choice has likely already been made for you by the developers of the 
+        distro.  
+
 
 
 - The systemd Suite
 
-    - Practical Structure
+    - The systemd suite is a large set of programs all designed to work together in order to
+        manage nearly every aspect of a running Linux system.
+
+
+    - There are many componenets in the systemd suite:
+
+        systemd Utilities
+          systemctl  journalctl  notify  analyze  cgls  cgtop  loginctl  nspawn
+
+        systemd Daemons
+          systemd  journald  networkd  logind  session
+
+        systemd Targets
+          bootmode  basic  shutdown  reboot
+          [Multi-user]  dbus  dlog  telephony  logind
+          [Graphical]  user-session
+          [User-session]  display-service  tizen-service
+
+        systemd Core
+          manager  systemd  namespace  cgroup  log  dbus
+          [Unit]  service  snapshot  timer  path  mount  socket  target  swap
+          [Login]  multiseat  session  inhibit  pam
+
+        systemd Libraries
+          dbus-1  libpam  libcap  libcryptsetup  tcpwrapper  libaudit  libnotify
+
+        Linux Kernel
+          cgroups  autofs  kdbus
+
+
+
+- Practical Structure
+
+    - The structure of systemd is contained in its many configuration files, known as 'Unit'
+        files.  Unit files are ASCII plain text files that can be created and modified by 
+        SysAdmins.
+
+        
+        systemd Unit         Description
+        ------------------------------------------------------------------------------------
+        .automount           Used to implement plug-and-play and mounting of filesystems
+
+        .device              Defines hardware and virtual devices available in /dev
+
+        .mount               Defines a mount point on the Linux filesystem
+
+        .scope               Defines and manages a set of system processes
+
+        .service             Defines processes that are managed by systemd
+
+        .slice               Defines a slice, a conceptual division of system resources
+
+        .socket              Defines IPC sockets such as network sockets
+
+        .swap                Defines swap devices or files
+
+        .target              Defines groups of unit files for sync points, runlevels, services
+
+        .timer               Defines timers that can initiate programs at specified times
+
 
 
 - systemctl
