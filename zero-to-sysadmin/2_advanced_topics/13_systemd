@@ -336,5 +336,47 @@ CHAPTER 13 - SYSTEMD
 
 - systemd-analyze
 
+    - The 'systemd-analyze' tool allows us to look at which processes take the most time 
+        to start up and other statistics.
+
+        # Get services that take the most time to initialize
+        $ systemd-analyze blame
+
+        # Create svg file graphing startup times
+        $ systemd-analyze plot > system.svg
+
+
 
 - Journals
+
+    - Fedora has a /var/log directory full of log files, all of which are composed of ASCII 
+        plain text and can be viewed by standard text tools.  
+
+      systemd keeps logs in files called journals with the '.journal' file extension.  These
+        journals are stored in a binary format in the /var/log/journal directory.  They are
+        accessed and processed into a readable format with the 'journalctl' utility.
+
+
+        # List all journal entries
+        $ journalctl
+
+
+        # Use the -t option to specify a syslog identifier (such as a service name)
+        $ journalctl -t kernel
+
+        # Show all kernel entries
+        $ journalctl -k
+
+
+        # Display messages by priority
+        $ journalctl -p2
+
+        # List all boots
+        $ journalctl --list-boots
+
+
+        # Display messages from a timeframe
+        $ journalctl -S "2019-05-10 01:00:00" -U "2019-05-10 01:10:05"
+
+        # Display all messages from dhcp client during a timeframe
+        $ journalctl -S "2019-05-10 01:00:00" -U "2019-05-10 01:10:05" -t dhclient
