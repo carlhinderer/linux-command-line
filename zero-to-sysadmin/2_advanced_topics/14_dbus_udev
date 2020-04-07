@@ -4,11 +4,58 @@ CHAPTER 14 - D-BUS & UDEV
 
 - /dev Chaos
 
+    - The /dev directory has always been the location for device files.  In the past, they
+        were created when the OS was created, so a new installation had tens of thousands of
+        device files, and keeping track of them became a mess.
+
+      With the development of D-Bus and udev, Linux now only needs to create device files 
+        when the device is installed or plugged into a running system.
+
+
     - About D-Bus
+
+        - D-Bus (2006) is a Linux software interface used for IPC.  D-Bus is a more system-wide
+            and complex form of IPC than things like named pipes.  It allows many kernel- and
+            system-level processes to send messages to the logical message bus.
+
+          Other messages listen to the messages on the bus and may choose to react to those
+            messages or not.
+
+
     - About udev
+
+        - At startup, udev creates entries in /dev only for those devices that actually currently 
+            exist or which have a high probability of actually existing on the host.
+
+
+        - When a new device is connected to the host:
+
+            1. The user plugs in a new device.
+
+            2. The kernel detects the new device and sends a message on D-Bus to announce it.
+
+            3. udev reads the message from D-Bus.
+
+            4. Based on properties and location, udev create a name for the new device if one 
+                 doesn't already exist.
+
+            5. The udev system creates the new device special file in /dev.
+
+            6. If a new device driver is required, it is loaded.
+
+            7. The device is initialized.
+
+            8. udev may send a notification to the Desktop, so it can possibly be displayed in
+                 a new icon.
+
 
 
 - Naming Rules
+
+    - udev stores its default naming rules in files in the /usr/lib/udev/rules.d directory.
+        Each file contains a set of rules for a specific device type.  These rules should
+        not be changed.
+
 
 
 - Making udev Work
