@@ -61,8 +61,108 @@ CHAPTER 14 - D-BUS & UDEV
 - Making udev Work
 
     - Using udev For Your Success
+
+        - udev is the subsystem that provides your computer with device events.  The best way
+            to work with it is in small chunks.
+
+
     - Basic Script
+
+        - Here is a basic script which will be run when our event is triggered:
+
+            # File /usr/local/bin/trigger.sh
+
+            #!/usr/bin/bash
+            /usr/bin/date >> /tmp/udev.log
+
+
+        - Now, make the script executable and run it:
+
+            # Make script executable
+            $ chmod +x /usr/local/bin/trigger.sh
+
+            # Run the script
+            $ /usr/local/bin/trigger.sh ; cat /tmp/udev.log
+
+
     - Unique Device Identification
+
+        - Now, in order for your script to be triggered by a device event, udev must know
+            under what conditions it should call the script.  udev identifies devices by
+            serial numbers, manufacturers, and vendor and product ID numbers.
+
+
+        - With the 'udevadm monitor' command, you can tap into udev in real time and see when
+            devices are plugged in.
+
+            # Watch udev events
+            $ udevadm monitor
+
+
+        - Once we have our device identifier, we can use the 'udevadm info' command to see
+            events with prettier formatting:
+
+            # Get the identifier for the device we just plugged in
+            $ dmesg | tail | grep -i sd*
+            ...
+            [265212.610157]  sde: sde1
+            ...
+
+            # See udev output for a device
+            $ udevadm info -a -n /dev/sde | less
+
+
+        - Now, we create a new rule so that our script gets run when an event is triggered
+            (in this case any time a block device is added):
+
+            # File /etc/udev/rules.d/80-local
+            SUBSYSTEM=="block", ACTION=="add", RUN+="/usr/local/bin/trigger.sh"
+
+
+        - Now, we'll reload the rules and make sure our log is getting written:
+
+            # Reload rules
+            $ udevadm control --reload
+
+            # Make sure log is being written
+            $ cat /tmp/udev.log
+
+
     - Refining the Rule into Something Useful
+
+        - A rule that fires when any block device is plugged in is not that useful.  We can
+            make the rule more specific by including the vendor id:
+
+            # File /etc/udev/rules.d/80-local
+            SUBSYSTEM=="block", ATTRS{idVendor}=="058f", ACTION=="add", RUN+="/usr/local/bin/trigger.sh"
+
+
+
     - Security
-    - Udev in the Real World
+
+        - There are many security concerns involved with automatically doing something when
+            a device is plugged in.  
+
+        - Once a udev script is working, spend time testing to ensure the script is only running
+            when you expect it to.
+
+
+
+- udev in the Real World
+
+    - For an example of using udev for something useful, we can trigger automated backups of 
+        thumb drives whenever they are plugged into our system.
+
+        # Backup script
+        # File /usr/local/bin/trigger.sh
+
+        #!/usr/bin/bash
+        mount /dev/safety1 /mnt/hd
+        sleep 2
+        rsync -az /mnt/hd/ /home/seth/backups/ && umount /dev/safety1
+
+
+    - Now, we add rules to cause the backup script to be run:
+
+        SUBSYSTEM=="block", ATTRS{idVendor}=="03f0", ACTION=="add", SYMLINK+="safety%n"
+        SUBSYSTEM=="block", ATTRS{idVendor}=="03f0", ACTION=="add", RUN+="/usr/local/bin/trigger.sh"
