@@ -89,8 +89,112 @@ CHAPTER 13 - SYSTEMD
 
 - systemctl
 
-    - Service Units
-    - Mount Units
+    - systemd provides the 'systemctl' command, which is used to start and stop services, 
+        configure whether to launch them at system startup, and monitor the current status
+        of all running services.  
+
+        # Look at systemctl logs
+        $ systemctl
+
+
+        # List unit files
+        $ systemctl list-unit-files
+
+        # List unit files for timers (either will work)
+        $ systemctl list-unit-files -t timer
+        $ systemctl list-timers
+
+
+        # List all service units (installed services, enabled or disabled)
+        $ systemctl --all -t service
+
+
+    - Unit files are stored in /usr/lib/systemd.  The /etc/systemd directory contains sym links
+        to the unit files necessary to the local config for this host.
+
+        # The 'default.target' unit file determines which runlevel target the system will boot to
+        $ cat /etc/systemd/system/default.target
+
+
+
+- Service Units
+
+    - Most of the time, a Fedora installation installs and starts a bunch of services that are
+        not actually needed.  This is a security risk, and these services should be stopped and
+        disabled, or possibly uninstalled.  
+
+
+        # List all installed services
+        $ systemctl --all -t service
+
+        UNIT                           LOAD      ACTIVE SUB        DESCRIPTION
+        <snip>
+        chronyd.service                loaded    active running    NTP client/server
+        crond.service                  loaded    active running    Command Scheduler
+        cups.service                   loaded    active running    CUPS Scheduler
+        dbus-daemon.service            loaded    active running    D-Bus System Message Bus
+        <snip>
+        ● ip6tables.service           not-found inactive dead     ip6tables.service
+        ● ipset.service               not-found inactive dead     ipset.service
+        ● iptables.service            not-found inactive dead     iptables.service
+        <snip>
+        firewalld.service              loaded    active   running  firewalld - dynamic firewall daemon
+        <snip>
+        ● ntpd.service                not-found inactive dead     ntpd.service
+        ● ntpdate.service             not-found inactive dead     ntpdate.service
+        pcscd.service                  loaded    active   running  PC/SC Smart Card Daemon
+
+
+      The 'not-found' services are the ones systemd is aware of but which are not installed.  If
+        we want to run them, the packages that contain them must be installed first.
+
+
+    - For instance, we see the 'pcscd.service' is running.  This is for smart card readers, which we
+        have no need for on our VM.  
+
+        # Check status of service
+        $ systemctl status pcscd.service
+
+        # Stop and disable the service, the re-check its status
+        $ systemctl stop pcscd ; systemctl disable pcscd
+        $ systemctl status pcscd
+
+
+    - We can also check the status of the system runlevel targets.
+
+        # Check runlevel targets
+        $ systemctl status multi-user.target
+        $ systemctl status graphical.target
+        $ systemctl status default.target
+
+
+
+- Mount Units
+
+    - A mount unit defines all the parameters necessary to mount a file system on a designated
+        mount point.  systemd can manage mount units with more flexibility than the /etc/fstab
+        file.
+
+      However, systemd still uses the /etc/fstab file for filesystem config and mounting.  It 
+        uses the 'systemd-fstab-generator' utility for creating transient mounts in the fstab
+        file.
+
+
+    - Here, we'll look at our previously created 'TestFS' filesystem and mount:
+
+        # Check status of unit
+        $ systemctl status TestFS.mount
+
+        # Unmount the unit
+        $ systemctl stop TestFS.mount ; systemctl status TestFS.mount
+
+        # Now remount it
+        $ systemctl start TestFS.mount ; systemctl status TestFS.mount
+
+
+    - Note that we could have accomplished the same thing using the regular 'mount' and 'umount'
+        commands.  Automating it with systemctl can save us some work, though.
+
 
 
 - systemd Timers
