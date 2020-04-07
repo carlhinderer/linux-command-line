@@ -199,8 +199,139 @@ CHAPTER 13 - SYSTEMD
 
 - systemd Timers
 
+    - We have already seen how we can use 'cron' and 'at' to run commands and scripts.  We
+        will now look at using systemd timers to accomplish a similar function.
+
+      There are a few things we can do with systemd timers that are not possible with cron.
+        Whereas cron can only be triggered by real-time dates and times, systemd can be
+        triggered based on other events.  
+
+      For instance, we can set an action to be performed a certain elapsed time after system boot.
+        These type of timers are called 'monotonic timers'.
+
+
+    - These are the timers available:
+
+        Timer               Monotonic     Definition
+        ---------------------------------------------------------------------------------
+        OnActiveSec=        Yes           Defines timer relative to moment the timer itself
+                                            is activated
+
+        OnBootSec=          Yes           Defines timer relative to when the machine was booted
+
+        OnStartupSec=       Yes           Defines timer relative to when systemd was started
+
+        OnUnitActiveSpec=   Yes           Defines timer relative to when the unit timer is activating
+                                            was last activated
+
+        OnUnitInactiveSpec= Yes           Defines timer relative to when the unit timer is activating
+                                            was last deactivated
+
+        OnCalendar                        Defines realtime workers with calendar event expressions
+
+
+
     - Time Specification
+
+        - The systemd specification for dates and times is different from cron's.  
+
+            DOW YYYY-MM-DD HH:MM:SS
+
+            DOW is optional, * can be used for the other 6 columns
+            Defalt: Today 00:00:00
+
+
+        - The 'systemd-analyze calendar' tool will parse an input date or time and convert
+            it to the systemd format.
+
+            # Get formatted date
+            $ systemd-analyze calendar 2030-06-17
+
+            # Get multiple dates
+            $ systemd-analyze calendar 2030-06-07 2032-08-19
+
+            # Get formatted date/time
+            $ systemd-analyze calendar "2030-06-17 15:21:16"
+
+
+
     - Timer Configuration
+
+        - Now, we'll create a timer that logs the results of the 'free' command.  First, we'll
+            create the script 'freemem.sh':
+
+            # File /usr/local/bin/freemem.sh
+
+            #!/usr/bin/bash
+            /usr/bin/date >> /tmp/freemem.log
+            /usr/bin/free >> /tmp/freemem.log
+
+
+        - Now, we'll create our service unit 'freemem.service':
+
+            # File /etc/systemd/system/freemem.service
+
+            [Unit]
+            Description=Logs free memory to /tmp/freemem.log
+            Wants=freemem.timer
+
+            [Service]
+            ExecStart=/usr/local/bin/freemem.sh
+
+            [Install]
+            WantedBy=multi-user.target
+
+
+        - Finally, we'll create the timer 'freemem.timer', which will cause the script to 
+            execute once a minute:
+
+            # File /etc/systemd/system/freemem.timer
+
+            [Unit]
+            Description=Logs free memory to /tmp/freemem.log
+            Requires=freemem.service
+
+            [Timer]
+            Unit=freemem.service
+            OnCalendar=∗-∗-∗ ∗:∗:00
+
+            [Install]
+            WantedBy=timers.target
+
+
+        - Now, we start the timer, and verify that our script is running:
+
+            # Start timer
+            $ systemctl start freemem.timer
+
+            # Verify that the timer is running
+            $ systemctl -t timer
+
+            # Verify the log file is being updated
+            $ tail -f /tmp/freemem.log
+
+
+        - We will notice in the script that the job is running at various random times within
+            each minute.  This is because the default accuracy time is 1 minute.  We can change
+            it to 0.1 seconds, which will make it run within 0.1 seconds of each minute.
+
+            # Add to [Timer] section of freemem.timer
+            [Timer]
+            AccuracySec=.01s
+
+            # Now, force systemd to reload all unit files
+            $ systemctl daemon-reload
+
+
+        - We can also enable or disable the timer to run on reboot:
+
+            # Enable on reboot
+            $ systemctl enable freemem.timer
+
+            # Stop and disable
+            $ systemctl stop freemem.timer
+            $ systemctl disable freemem.timer
+
 
 
 - systemd-analyze
