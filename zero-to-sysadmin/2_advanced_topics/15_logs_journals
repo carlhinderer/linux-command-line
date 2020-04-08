@@ -2,10 +2,114 @@
 CHAPTER 15 - LOGS & JOURNALS
 -----------------------------------------------------------
 
+- Logs Are Your Friend
+
+    - Log files help determine the source of problems and performance issues.  They contain 
+        large amounts of data.  The biggest troubleshooting mistake is not going to logs
+        sooner.
+
+
+    - In general and by default, log files are maintained for a period of 1 month, with each
+        log containing a maximum of 1 week of data.
+
+      If the amount of data passes a predefined threshold, the file may be rotated at that time.
+        The 'logrotate' facility manages log rotation and deletion.
+
+
+
 - SAR (System Activity Report)
+
+    - The SAR is a good place to start when looking for information about a Linux machine's
+        performance and performance-related problems.
+
+
+    - The SAR files are in a binary format and cannot be read directly.  The 'sar' command is used
+        to view them.
+
+        # Install sar if not already installed
+        $ dnf -y install sysstat
+
+        # Enable and start sar
+        $ systemctl enable sysstat
+        $ systemctl start sysstat
+
+    
+    - Now, we can view the reports:
+
+        # Display performance summaries in 10-minute intervals
+        $ sar | head -25
+
+        # The -A flag will display all data collected by sar
+        $ sar -A | less
+
+
+    - We can also look at an entire day's file
+
+        # List sar files
+        $ ls /var/log/sa
+
+        # View a particular day's logs
+        $ sar -A -f sa07 | less
+
 
 
 - logrotate
+
+    - The 'logrotate' is designed to remove logs after an interval so that disk space does 
+        not fill up.  It accomplishes this by rotating logs on a regular basis.  This can
+        be triggered by time parameters or by log file size.
+
+
+    - The maximum number of old log files to keep is defined in the config file for each
+        service.  The config for logrotate itself is stored in /etc/logrotate.conf.
+
+        # View logrotate configuration
+        $ cat /etc/logrotate.conf
+
+        /var/log/cron
+        /var/log/maillog
+        /var/log/messages
+        /var/log/secure
+        /var/log/spooler
+        {
+            missingok
+            sharedscripts
+            postrotate
+                /usr/bin/systemctl kill -s HUP rsyslog.service >/dev/null 2>&1 || true
+            endscript
+        }
+
+
+    - The file contains the list of logs for which this configuration covers, followed by a 
+        list of directives for the configuration:
+
+        Directive                  Purpose
+        --------------------------------------------------------------------------------------
+        missingok                  Just ignore and don't error if log files are missing
+
+        sharedscripts              Use same directives for all scripts listed
+
+        postrotate                 Specify script to run after log files are rotated
+
+        endscript                  Defines the end of the script
+
+        create mode owner group    Specifies mode and ownership of new log files
+
+        nocreate                   Prevents new logs from being created
+
+        compress                   Specifies whether to compress old log files
+
+        delaycompress              Delays compression of newly rotated log files
+
+        notifyempty                Do not rotate log file if empty
+
+        rotate X                   Defines number of old log files to keep
+
+        size Y                     Defines when to rotate based on log size       
+
+        hourly daily weekly        Define intervals on which to rotate the logs
+        monthly yearly
+
 
 
 - Mail Logs
