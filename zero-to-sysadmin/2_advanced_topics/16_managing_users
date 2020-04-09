@@ -60,74 +60,138 @@ CHAPTER 16 - MANAGING USERS
 
 
 
-    - The /etc/passwd File
+- The /etc/passwd File
 
-        - We'll switch to root and check our uid and gid:
+    - We'll switch to root and check our uid and gid:
 
-            # Root uid and gid
-            $ su -
-            $ id
-            uid=0(root) gid=0(root) groups=0(root)
+        # Root uid and gid
+        $ su -
+        $ id
+        uid=0(root) gid=0(root) groups=0(root)
 
-            # Look at information for student user
-            $ id 1000
-            uid=1000(student) gid=1000(student) groups=1000(student),5000(dev),5001(shared)
-
-
-        - Now, we'll look at the /etc/passwd file itself:
-
-            # File sorted on UID
-            #   -t  Specifies field delimiter character
-            #   -k  Specifies starting field (field 3, character 1)
-            #   -g  Specifies general numeric sort
-            $ cat /etc/passwd | sort -t: -k3.1 -g
-
-            root:x:0:0:root:/root:/bin/bash
-            bin:x:1:1:bin:/bin:/sbin/nologin
-            daemon:x:2:2:daemon:/sbin:/sbin/nologin
-            adm:x:3:4:adm:/var/adm:/sbin/nologin
-            lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin
-            sync:x:5:0:sync:/sbin:/bin/sync
-            shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown
-            halt:x:7:0:halt:/sbin:/sbin/halt
-            mail:x:8:12:mail:/var/spool/mail:/sbin/nologin
-            operator:x:11:0:operator:/root:/sbin/nologin
-            games:x:12:100:games:/usr/games:/sbin/nologin
-            ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin
-            ...
-            student:x:1000:1000:Student User:/home/student:/bin/bash
-            student1:x:1001:1001:Student1:/home/student1:/bin/bash
-            student2:x:1002:1002:Student User 2:/home/student2:/bin/bash
-            nobody:x:65534:65534:Kernel Overflow User:/:/sbin/nologin
+        # Look at information for student user
+        $ id 1000
+        uid=1000(student) gid=1000(student) groups=1000(student),5000(dev),5001(shared)
 
 
-        - For an example of the fields in each entry:
+    - Now, we'll look at the /etc/passwd file itself:
 
-            student:x:1000:1000:Student User:/home/student:/bin/bash
+        # File sorted on UID
+        #   -t  Specifies field delimiter character
+        #   -k  Specifies starting field (field 3, character 1)
+        #   -g  Specifies general numeric sort
+        $ cat /etc/passwd | sort -t: -k3.1 -g
+
+        root:x:0:0:root:/root:/bin/bash
+        bin:x:1:1:bin:/bin:/sbin/nologin
+        daemon:x:2:2:daemon:/sbin:/sbin/nologin
+        adm:x:3:4:adm:/var/adm:/sbin/nologin
+        lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin
+        sync:x:5:0:sync:/sbin:/bin/sync
+        shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown
+        halt:x:7:0:halt:/sbin:/sbin/halt
+        mail:x:8:12:mail:/var/spool/mail:/sbin/nologin
+        operator:x:11:0:operator:/root:/sbin/nologin
+        games:x:12:100:games:/usr/games:/sbin/nologin
+        ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin
+        ...
+        student:x:1000:1000:Student User:/home/student:/bin/bash
+        student1:x:1001:1001:Student1:/home/student1:/bin/bash
+        student2:x:1002:1002:Student User 2:/home/student2:/bin/bash
+        nobody:x:65534:65534:Kernel Overflow User:/:/sbin/nologin
 
 
-            Field   Field Name       Value          Description
-            ----------------------------------------------------------------------
-            1       Account name     student        User login name for account
-            2       Password         x              No longer used for pws, here for backwards comp
-            3       UID              1000           User id for account
-            4       GID              1000           Group id for account
-            5       GECOS            student        Text field with description
-            6       Home directory   /home/student  Home directory for user
-            7       Shell            /bin/bash      Default shell for user
+    - For an example of the fields in each entry:
+
+        student:x:1000:1000:Student User:/home/student:/bin/bash
 
 
-        - Storing passwords in account entries is no longer done, since this file needs to be
-            accessible for all user accounts.  For this reason, passwords were long ago moved
-            to the /etc/shadow file.  
+        Field   Field Name       Value          Description
+        ----------------------------------------------------------------------
+        1       Account name     student        User login name for account
+        2       Password         x              No longer used for pws, here for backwards comp
+        3       UID              1000           User id for account
+        4       GID              1000           Group id for account
+        5       GECOS            student        Text field with description
+        6       Home directory   /home/student  Home directory for user
+        7       Shell            /bin/bash      Default shell for user
+
+
+    - Storing passwords in account entries is no longer done, since this file needs to be
+        accessible for all user accounts.  For this reason, passwords were long ago moved
+        to the /etc/shadow file.  
 
 
 
-    - Nologin Shells
-    - The /etc/shadow File
-    - The /etc/group File
-    - The /etc/login.defs File
-    - Account Configuration Files
+- Nologin Shells
+
+    - Many of the system users in the /etc/passwd file has a nologin shell, /sbin/nologin.
+        This is a small shell that does not allow a login of any type.  
+
+      This is a security feature, as it prevents hackers from accessing a system by 
+        escalating privileges beyond these accounts.
+
+
+
+- The /etc/shadow File
+
+    - Passwords are stored in /etc/shadow.  This file is more secure, since it is 
+        readable only by root and system processes that run with the root user id.
+
+
+    - To look at the /etc/shadow file:
+
+        root:$6$/VoB.UfR5MtuBi7b$Wnf7nLT/.EFz4W4lA0GFRk7yIuh/    2pnKbNBbhz9n./y.::0:99999:7:::
+        bin:∗:17725:0:99999:7:::
+        daemon:∗:17725:0:99999:7:::
+        adm:∗:17725:0:99999:7:::
+        lp:∗:17725:0:99999:7:::
+        sync:∗:17725:0:99999:7:::
+        <snip>
+        sshd:!!:17833::::::
+        vboxadd:!!:17833::::::
+        dnsmasq:!!:17833::::::
+        tcpdump:!!:17833::::::
+        student:$6$81UxQUSj8Bs/rvyq5j3q/ BUG9SaAz.mAb8eW.nXewOoWJx4czjIMay6zbDKq0::0:99999:7:::
+
+
+    - For an example of the fields in each entry:
+
+        student:$6$81UxQUSOXI<snip>::0:99999:7:::
+
+
+        Field   Field Name          Value                 Description
+        ----------------------------------------------------------------------
+        1       Account name        student               The user login name for the account
+        2       Password            $6$81UxQUSOXI<snip>   Encrypted password (aka hash)
+        3       Last change date    Empty                 Date of last pw change in days
+        4       Minimum pw age      0                     # of days user must wait before changing pw
+        5       Maximum pw age      99999                 # of days pw will remain valid
+        6       Warning period      7                     # of days left until pw expires
+        7       Inactivity period   Empty                 # of days after expiration pw is accepted
+        8       Acct expiration     Empty                 # of days after which acct will expire
+        9       Reserved            Empty                 Reserved for future use
+
+
+    - If the encrypted password starts with a !, the account is locked.
+
+
+    - Here are examples of working with passwords:
+
+        # Change password for current user
+        $ passwd
+
+        # Change password of another user (as root)
+        $ passwd student
+
+
+
+- The /etc/group File
+
+
+
+- The /etc/login.defs File
+- Account Configuration Files
 
 
 - Password Security
