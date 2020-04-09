@@ -242,15 +242,132 @@ CHAPTER 16 - MANAGING USERS
 
 - Password Security
 
-    - Password Encryption
-    - Generating Good Passwords
-    - Password Quality
+    - It is a good security precaution for all users to change their passwords once a month.
+        If someone discovers it, they won't be able to use it for that long.
+
+
+    - Passwords should be protected and never written down.
+
+
+    - It is a best practice to require a pw of 8+ characters, and to make it include an 
+        uppercase, lowercase, number, and special character.  Such passwords would take over
+        325K years to crack given current computing power.
+
+      Note that if you make them any longer, people will definitely write them down on post-it
+        notes.
+
+
+
+- Password Encryption
+
+    - Passwords cannot be stored in plain text, as that would lead to incredibly easy hacking.
+        In order to keep user accounts secure, passwords are encrypted using the OpenSSL
+        encryption libraries.
+
+
+    - The 'openssl passwd' command-line utility allows encryption of a plain-text string into 
+        an encrypted password.  By default, this will truncate the password to 8 characters
+        and use the 'crypt' library, which is not that secure.
+
+        # Encrypt a password
+        $ openssl passwd mypasswd
+
+        Warning: truncating password to 8 characters
+        Gvp.W6K7c5FJc
+
+
+    - Now, if we look at the encrypted password in /etc/shadow, we can see that it is much longer:
+
+        student:$6$wVc137Z/fbPCOdrK$VhTwe4ooOxVrYWiZp3Z1mHDSpEBGopGjTho6Odj0YEbzkSNLeoSc5k7njmq
+        dSYbLadnkBqCQcXHxLF.f42sG..:18046:0:99999:7:::
+
+      We can see from the beginning '$6$' that this password was created usig the SHA512 algorithm.
+        To create passwords using SHA512, we use the -6 option:
+
+        # Encrypt with SHA512
+        $ openssl passwd -6 mypassword
+
+      Other options include SHA256 (-5), apr1, MD5, and crypt.
+
+
+    - If we run the previous command a few times:
+
+        # Run this a few times
+        $ openssl passwd -6 mypassword
+
+      We'll see that we get a different encrypted password each time.  This is because the
+        password encryption algorithms use a different random seed for each iteration.  This
+        is called the 'salt'.  
+
+
+    - Normally, the salt is taken from /dev/urandom.  But, we can pass in our own salt if we
+        want:
+
+        # Pass in a salt
+        $ openssl passwd -salt 123456 -6 mypassword
+
+        $6$123456$KKcK3jDXxN5TVYNLbMdEIjnfRjaSlbqj5X9bBgryaa4qLD04lrM9kswCpAZL
+        27/WXlbsDQcJ8kBxPjcpips781
+
+      Notice the salt is right after the hashing algotithm specifier:
+
+        $6$123456$...
+
+
+    - If a hacker does gain access to the hash, which has the salt string specified, a brute
+        force attack could be used to find the plain text that generated the hash.  This could
+        take anywhere from not-very-long to years, depending on the strength of the password.
+
+
+
+- Generating Good Passwords
+
+    - The 'pwgen' utility is useful for creating good passwords.
+
+        # Generates 160 random 8-character pws with upper/lower/numeric
+        $ pwgen
+
+        Iiqu4ahY Eeshu1ei raeZoo8o ahj6Sei3 Moo5ohTu ieGh6eit Is0Eisae eiVo5Ohv
+        Gooqu5ji ieX9VoN5 aiy3kiSo Iphaex4e Vait1thu oi5ruaPh eL7Mohch iel2Aih6
+        ...
+
+
+    - Whenever the data stream of pwgen is sent through a pipe, only a single password is 
+        returned.  This is much more useful in automation scripts.
+
+        # Generate a single pw
+        $ pwgen | sort
+        Eaphui7K
+
+        # Generate a desired number of pws
+        $ pwgen -N 6 | sort
+        boot6Ahr
+        Die2thah
+        nohSoh1T
+        reob9eiR
+        shahXoL6
+        Wai6aiph
+
+        # Generate 10 25-character pws
+        $ pwgen 25 10
+
+
+        # -s option generates more random, difficult to remember passwords
+        # -y option includes special characters
+        $ pwgen -sy 25 10
+
+
+
+- Password Quality
+
+    - The /etc/security/pwquality.conf file is used to define the quality requirements of
+        new passwords.  
+
 
 
 - Managing User Accounts
 
-    - Creating New Accounts
-    - The useradd Command
+    - Creating New Accounts with the useradd Command
     - Creating New Accounts by Editing the Files
     - Locking the Password
     - Deleting User Accounts
