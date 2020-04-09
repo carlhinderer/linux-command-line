@@ -188,10 +188,56 @@ CHAPTER 16 - MANAGING USERS
 
 - The /etc/group File
 
+    - The /etc/group file contains a list of all of the groups on the localhost.  This includes
+        standard system groups and groups created by the SysAdmin.  
+
+        # Create a group
+        $ groupadd -g 5000 dev
+
+        # Add a user to the group
+        $ usermod -G 5000 student
+
+
+    - Taking a look at the /etc/group file:
+
+        $ cat /etc/group
+        ...
+        ssl-cert:x:110:postgres
+        ...
+
+
+        Field   Field Name          Value                 Description
+        ----------------------------------------------------------------------
+        1       Group Name          ssl-cert              Name of the group
+        2       Password            Empty                 Password for group (not normally used)
+        3       GID                 110                   Group id
+        4       Group List          postgres              List of user names of members of group        
+
 
 
 - The /etc/login.defs File
+
+    - The /etc/login.des file is used to set certain default config items that are incorporated
+        when adding new users.  
+
+      The values in this file include the starting and maximum UIDs and GIDs for new users, the
+        default mail directory location, and the default pw expiration options.
+
+
+        # View config for new user creation
+        $ cat /etc/login.defs
+
+        PASS_MIN_LEN: 5           # Minimum pw length
+        PASS_MAX_DAYS: 99999      # Pw never expires
+
+
+
 - Account Configuration Files
+
+    - All user shell config files that are located in the /etc/skel directory, such as
+        ~/.bash_profile and ~/.bashrc, are copied into the new account home directory
+        whenever a new user is created.
+
 
 
 - Password Security
@@ -208,7 +254,7 @@ CHAPTER 16 - MANAGING USERS
     - Creating New Accounts by Editing the Files
     - Locking the Password
     - Deleting User Accounts
-student:x:1000:1000:Student User:/home/student:/bin/bash
+
 
 - Forcing Account Logoff
 
