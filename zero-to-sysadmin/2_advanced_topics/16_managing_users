@@ -4,15 +4,125 @@ CHAPTER 16 - MANAGING USERS
 
 - The root Account
 
+    - Many Linux systems today are essentially single-user systems.  Users do normal things
+        under their own account, then switch to root when necessary.  This means normal
+        users must still deal with 2 user accounts.
+
+      Otherwise, multiple users may log into a server to complete various tasks.
+
+
+    - The root account is present on all Linux computers, and it allows the person logged in 
+        to read, change, and delete any file.  They can change file permissions.  They can
+        change the passwords of other users.  
+
+      The only person who should have the root password is the SysAdmin.
+
+
 
 - Your Account
 
-    - Your Home Directory
+    - Your account can read and write files located in your home directory.  You cannot access
+        other users' home directories, and you cannot alter system files.  
+
+
+    - It is a common convention to create account names with the user's first initial and last
+        name (ie 'jsmith').
+
+
+    - When you create files in your home directory or any of it's subdirectories, they are 
+        created with the permissions for your user to read and write them.
+
 
 
 - User Accounts and Groups
 
+    - User accounts and groups are the first line of security on a Linux computer.  
+
+
+    - The root account is always UID 0 and the root group is always GID 0.
+
+      UID/GID Range         Description
+      ---------------------------------------------------------------
+      0                     root
+      1-99                  Historical system-level accounts
+      100-999               Application-level users
+      1000-4999             Human users
+      5000-9999             Miscellaneous
+      10000-65533           Open
+      65534                 nsfnobody (special NFS user used for access to remote files)
+
+
+    - For regular users, the UID and GID should be identical.  Since each user belongs to 
+        their own group, files are not shared.
+
+      Making files available to multiple users should be accomplished by secondary group
+        memberships.  Files' group ownership should then be changed to the secondary group.
+
+
+
     - The /etc/passwd File
+
+        - We'll switch to root and check our uid and gid:
+
+            # Root uid and gid
+            $ su -
+            $ id
+            uid=0(root) gid=0(root) groups=0(root)
+
+            # Look at information for student user
+            $ id 1000
+            uid=1000(student) gid=1000(student) groups=1000(student),5000(dev),5001(shared)
+
+
+        - Now, we'll look at the /etc/passwd file itself:
+
+            # File sorted on UID
+            #   -t  Specifies field delimiter character
+            #   -k  Specifies starting field (field 3, character 1)
+            #   -g  Specifies general numeric sort
+            $ cat /etc/passwd | sort -t: -k3.1 -g
+
+            root:x:0:0:root:/root:/bin/bash
+            bin:x:1:1:bin:/bin:/sbin/nologin
+            daemon:x:2:2:daemon:/sbin:/sbin/nologin
+            adm:x:3:4:adm:/var/adm:/sbin/nologin
+            lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin
+            sync:x:5:0:sync:/sbin:/bin/sync
+            shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown
+            halt:x:7:0:halt:/sbin:/sbin/halt
+            mail:x:8:12:mail:/var/spool/mail:/sbin/nologin
+            operator:x:11:0:operator:/root:/sbin/nologin
+            games:x:12:100:games:/usr/games:/sbin/nologin
+            ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin
+            ...
+            student:x:1000:1000:Student User:/home/student:/bin/bash
+            student1:x:1001:1001:Student1:/home/student1:/bin/bash
+            student2:x:1002:1002:Student User 2:/home/student2:/bin/bash
+            nobody:x:65534:65534:Kernel Overflow User:/:/sbin/nologin
+
+
+        - For an example of the fields in each entry:
+
+            student:x:1000:1000:Student User:/home/student:/bin/bash
+
+
+            Field   Field Name       Value          Description
+            ----------------------------------------------------------------------
+            1       Account name     student        User login name for account
+            2       Password         x              No longer used for pws, here for backwards comp
+            3       UID              1000           User id for account
+            4       GID              1000           Group id for account
+            5       GECOS            student        Text field with description
+            6       Home directory   /home/student  Home directory for user
+            7       Shell            /bin/bash      Default shell for user
+
+
+        - Storing passwords in account entries is no longer done, since this file needs to be
+            accessible for all user accounts.  For this reason, passwords were long ago moved
+            to the /etc/shadow file.  
+
+
+
     - Nologin Shells
     - The /etc/shadow File
     - The /etc/group File
@@ -34,7 +144,7 @@ CHAPTER 16 - MANAGING USERS
     - Creating New Accounts by Editing the Files
     - Locking the Password
     - Deleting User Accounts
-
+student:x:1000:1000:Student User:/home/student:/bin/bash
 
 - Forcing Account Logoff
 
