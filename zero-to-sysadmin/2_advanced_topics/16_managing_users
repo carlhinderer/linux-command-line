@@ -365,12 +365,103 @@ CHAPTER 16 - MANAGING USERS
 
 
 
-- Managing User Accounts
+- Creating New Accounts with the useradd Command
 
-    - Creating New Accounts with the useradd Command
-    - Creating New Accounts by Editing the Files
-    - Locking the Password
-    - Deleting User Accounts
+    - Note that the 'adduser' command can also be used, and is just a sym link to 'useradd'.
+        It is retained for backwards compatibility.
+
+    
+    - The 'useradd' command is flexible, and allows new users to get defaults for things
+        like pw expiration and the default shell.
+
+        # View defaults for new users
+        $ cat /etc/default/useradd
+
+        # useradd defaults file
+        GROUP=100
+        HOME=/home
+        INACTIVE=-1
+        EXPIRE=
+        SHELL=/bin/bash
+        SKEL=/etc/skel
+        CREATE_MAIL_SPOOL=yes
+
+
+    - Now, we can add a user using the default settings:
+
+        # -c option will set GECOS comment for new user
+        $ useradd -c "Test User 1" tuser1
+
+
+    - We can also override the default options:
+
+        # Specify a different home directory and default shell
+        $ useradd -c "Test User 1" -d /TestFS/tuser1 -s /usr/bin/zsh tuser1
+
+        # Specify pw expiration date
+        $ useradd -c "Test User 1" -e 2019-05-08 tuser1
+
+
+    - We can use the 'usermod' command to change attributies about the user:
+
+        # Change pw expiration date
+        $ usermod -e 2019-06-05 tuser1
+
+
+    - We can use the 'openssl passwd' command to generate an encrypted password for a new 
+        account:
+
+        # Create a user with an encrypted password
+        $ useradd -c "Test User 4" -p `openssl passwd -salt 123456 -6 mypassword` tuser4
+
+
+
+- Creating New Accounts by Editing the Files
+
+    - We can add new users by editing the files directly also.  To start, we add the new user
+        to /etc/passwd, etc/group, and etc/shadow.
+
+        # Add line to /etc/passwd
+        tuser5:x:1007:1007:Test User 5:/home/tuser5:/bin/bash
+
+        # Add line to etc/group
+        tuser5:x:1007:
+
+        # Add to /etc/shadow (generated with 'openssl passwd' command)
+        tuser5:$6$123456$KKcK3jDXxN5TVYNLbMdEIjnfRjaSlbqj5X9bBgryaa4qLD04lrM9kswCpAZL27/WXlb
+        sDQcJ8kBxPjcpips781:18044:0:99999:7:::
+
+
+    - Now, create a home directory for the new user.
+
+        # Create new home directory
+        $ cd /home ; mkdir tuser5
+
+        # Set the home directory permisions to 700
+        $ chmod 700 tuser5
+
+        # Copy the files from /etc/skel into the new home directory
+        $ cp -r /etc/skel/.[a-z*] /home/tuser5
+
+
+    - Now, set the ownership of the directory and its contents to the new user.
+
+        # Set ownerships
+        $ chown -R tuser5.tuser5 tuser5
+
+
+    - Now, we can switch to the new user account.
+
+        # Switch to new user account
+        $ su - tuser5
+        Password: mypassword
+
+
+
+- Locking the Password
+
+
+- Deleting User Accounts
 
 
 - Forcing Account Logoff
