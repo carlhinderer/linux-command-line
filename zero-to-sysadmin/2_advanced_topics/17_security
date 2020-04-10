@@ -4,18 +4,134 @@ CHAPTER 17 - SECURITY
 
 - Introduction
 
-    - Security By Obscurity
-    - What Is Security?
-    - Data Protection
+    - Linux is a very secure OS.  It provides a secure environment in which to work on and
+        store files.  However, good security can be a bit obtrusive.
+
+
+    - Security must not be an afterthought.  It must be an integral component of everything
+        we do as SysAdmins.  The security of our systems should be a major consideration,
+        if not the prime consideration, in everything we do.
+
+
+
+- Security By Obscurity
+
+    - We may assume that it isn't worth a hacker's time to attack or home or small office
+        network.  However, we cannot actually count on 'security by obscurity' to protect
+        our computers.  
+
+
+    - Many small businesses are subjected to attempts to hack into their firewall servers
+        hundreds of times per day.  Every computer connected to any network, especially the
+        internet, is a target.
+
+
+
+- Data Protection
+
+    - There are 3 major considerations to data protection, and each has different tools and 
+        strategies.
+
+        1. We want to protect against data loss.
+
+        2. We want to protect our data from unauthorized access.
+
+        3. We want to ensure our data is safe from unauthorized changes or corruption,
+             perhaps by malware or a disgruntled employee.  And, we want to protect against
+             ransomware that would encrypt our data.
+
 
 
 - Security Vectors
 
     - Self-Inflicted Problems
+
+        - The most common form is semi-intentional erasure of important files or directories.
+            We should obviously pay attention when deleting files, but we will still end up
+            deleting data we may need later.
+
+
+        - This category also includes things like:
+
+            - poor passwords
+            - leaving a USB with critical information in a public place
+            - leaving a laptop unattended in a public place
+            - using unencrypted wireless links
+
+
     - Environmental Problems
+
+        - Power failures can occur for many reasons.  When they happen, there is a danger of
+            losing data, especially from documents that have not been saved.  Modern hard
+            drives and filesystems minimize the probability of data loss, but it still happens.
+
+
+        - The lack of proper grounding can be a serious issue.
+
+
+        - EMI (Electromagnetic Interference) can interfere with the operation of any electronic
+            device.  Lightning, static electricity, microwaves, old CRTs, radar systems, and
+            radio frequency bursts can cause problems.  Proper grounding can help.
+
+
+        - Hard drive failures cause data loss.  Older mechanical hard drives have a much higher
+            failure rate.  Modern hard drives have SMART technology that predicts failures 
+            before they happen.
+
+
+        - We should always use Uninterruptable Power Supplies and ensure they are plugged into
+            properly grounded outlets.  
+
+
     - Physical Attacks
+
+        - Disgruntled employees can maliciously destroy data.
+
+
+        - Common theft can occur, like if your laptop gets stolen from your house.
+
+
+        - Natural disaster can destroy both computers and backups.  
+
+
+        - We should back up everything frequently, and the most recent backups should always be 
+            kept offsite.  For instance, we can store backups in a safe deposit box.  
+
+
     - Network Attacks
+
+        - Scripted attacks, usually simple brute force remote login attempts, are very common.
+            These attacks are useless against today's well-protected Linux hosts, which are
+            well-hardened at installlation and do not have SSH servers up and running.  They
+            are typically dictionary attacks against large ranges of hosts.
+
+
+        - Malware can be used for various malicious purposes, including destroying or deleting
+            your data.
+
+
+        - Ramsomeware is a specific form of malware that encrypts your data and holds it for
+            ransome.
+
+
+        - Drive-by malware is a malicious link in an apparently harmless ad on a legitimate web
+            page.  The link doesn't have to be clicked for your computer to be affected.
+
+
+        - Targeted login attacks are aimed directly at your organization.  They are carried out
+            by someone with some reason to target you.
+
+
+        - We should always keep systems up to date with the latest security patches.  We should
+            ensure that good firewalls are in place and properly configured.  And we should
+            check frequently for evidence of break-ins.
+
+
     - Software Vulnerabilities
+
+        - Many attacks on connected computers are aided and abetted by vulnerabilities in the
+            host's software.  
+
 
 
 - Linux and Security
