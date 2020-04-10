@@ -136,14 +136,120 @@ CHAPTER 17 - SECURITY
 
 - Linux and Security
 
+    - Linux in general, and Fedora with SELinux set to enforcing particularly, is very secure.
+        Linux is secure immediately upon installation.  
+
+
+    - There are only a couple minor services running that do not need to run, but none provide
+        external access from the internet.  The remaining ones can easily be turned off.
+        Unneeded services can be a vector for attack.
+
+
+    - Fedora has an excellent firewall in place, and the one service I use in all of my Linux
+        hosts, the SSHD server, is configured for outbound connections only.
+
+
 
 - Login Security
+
+    - Login security is your first line of defense.  Generating and using secure passwords is
+        the main tool we have to provide this security, whether a local or remote login.
+
 
 
 - Checking Logins
 
+    - Another tool we have is the list of user logins attempts.  The 'last' command displays all
+        successful logins.  The 'lastb' command displays a list of failed logins.  
+
+        # Display list of successful logins
+        $ last | less
+
+        # Display list of unsuccessful logins
+        $ lastb | less
+
+
+    - The 'journalctl --list-boots' command will display all boots, which can be useful in forensic
+        investigations.
+
+
 
 - Telnet
+
+    - Telnet is an old and well-known terminal emulator that provided a very easy way to connect
+        to remote hosts.  It was developed before the internet was in wide use.  
+
+
+    - All communications between hosts was in plain text ASCII with no encryption, including the
+        username and password.  As the internet grew, this became a problem.  
+
+      Looking at the protocol can provide insight in how easy it is to eavesdrop on an unencrypted
+        connection.  
+
+
+    - The 'tcpdump' tool is used to explore TCP packets and their contents.  
+
+        # Get ip address of our virtual router
+        $ ip route
+        ... default via 10.0.2.1
+
+        # In another terminal session as root, start tcpdump
+        $ tcpdump -i enp0s3
+
+        # Ping our virtual router to generate some packets, will see packet headers in tcpdump
+        $ ping 10.0.2.1
+
+
+    - Now, we can install telnet and xinetd.  xinetd is used to manage a number of older server
+        types, including telnet.  
+
+        # Install telnet and xinetd
+        $ dnf -y install telnet-server xinetd
+
+
+        # Add new file /etc/xinetd.d/telnet for config
+        service telnet
+        {
+                 flags           = REUSE
+                 socket_type     = stream
+                 wait            = no
+                 user            = root
+                 server          = /usr/sbin/in.telnetd
+                 log_on_failure  += USERID
+                 disable         = no
+        }
+
+
+    - Now, we need to allow Telnet through our firewall on port 23.  If we don't remember the
+        correct port number, we can get it in /etc/services.
+
+        # Get telnet port number
+        $ grep -i telnet /etc/services
+
+        # Add firewall exception
+        $ firewall-cmd --permanent --add-port=23/tcp
+
+        # Reload firewall rules
+        $ firewall-cmd --reload
+
+        # Verify port has been opened
+        $ firewall-cmd --list-ports
+
+        # Verify that xinetd service is up and running
+        $ systemctl status xinetd
+        $ systemctl start xinetd
+
+
+    - Now, we can use telnet:
+
+        # Start tcpdump (-A option dumps entire packet bodies in ASCII)
+        $ tcpdump -i lo port 23 -A
+
+        # Create virtual terminal into localhost
+        $ telnet localhost
+
+      We can see all the data in the packets.
+
 
 
 - SSH
