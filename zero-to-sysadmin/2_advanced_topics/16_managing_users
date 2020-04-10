@@ -460,11 +460,65 @@ CHAPTER 16 - MANAGING USERS
 
 - Locking the Password
 
+    - If one of your users is going to be away from work for a while, it may be smart to lock
+        their account.  This doesn't change their password in /etc/shadow, so the account can
+        be unlocked when they come back and they can resume using their password.
+
+        # Lock account
+        $ passwd -l tuser5
+
+
+        # Now, we see that their password in /etc/shadow begins with !!, indicating the lock
+        $ grep user5 /etc/shadow
+
+        tuser5:!!$6$123456$KKcK3jDXxN5TVYNLbMdEIjnfRjaSlbqj5X9bBgryaa4qLD04lrM9kswCpAZL2
+        7/WXlbsDQcJ8kBxPjcpips781:18044:0:99999:7:::
+
+
+        # Unlock the account
+        $ passwd -u tuser5
+
+
 
 - Deleting User Accounts
+
+    - Depending on the reason for an account being deleted, we can retain the user's home
+        directory or delete it.
+
+        # Delete a user but leave home directory
+        $ userdel tuser3
+
+        # Delete a user and their home directory
+        $ userdel -r tuser4
+
 
 
 - Forcing Account Logoff
 
+    - Sometimes, it may become necessary to force users to log off.  Maybe they left the
+        organization, the system needs to be updated with no users logged in, or maybe
+        the users owns runaway processes.
+
+        # Locate the running pids that belong to a user account
+        $ pgrep -U student1
+
+        # Kill all of these processes to force the user off the system
+        $ pkill -KILL -U student1
+
+        # Verify that all processes have been killed
+        $ pgrep -U student1
+
+
 
 - Setting Resource Limits
+
+    - The /etc/security/limits.conf file can be used to set limits on the amount that 
+        a user, users, or groups can consume.  
+
+
+    - There are soft or hard limits that can be set.  A soft limit sends a message when a 
+        limit has been met or exceeded.  A hard limit prevents completion of the command
+        that caused it.
+
+      The limits set in the limits.conf file are monitored and enforced by the PAM (Pluggable
+        Authentication Modules) system.  
