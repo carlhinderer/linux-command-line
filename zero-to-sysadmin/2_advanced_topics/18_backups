@@ -4,12 +4,71 @@ CHAPTER 18 - BACK UP EVERYTHING FREQUENTLY
 
 - Backups to the Rescue
 
+    - We will experience data loss for a variety of reasons.  Keeping decent backups will 
+        allow us to continue with minimal interruption.
+
+
     - The Problem
 
+        - Here, we look at an actual situation in which a drive failed.  The first sign that 
+            something was wrong was the emails from the SMART enabled hard drive on which
+            the home directory resides.  The emails indicated that some some sectors had
+            become defective and were replaced with reserved sectors.
 
-- Backup Options
 
-    - tar
+        - We use the 'smartctl' command to view internal statistics for the hard drive.
+
+            # View SMART information for drive
+            $ smartctl -x /dev/sd1 | less
+
+
+
+- Backups with tar
+
+    - The tar (Tape Archive) command is used to make arcives.
+
+        # Make backup of home directory
+        #   -c   Creates new tarball
+        #   -v   Verbose
+        #   -f   Specifies output filename
+
+        $ tar -cvf /tmp/student.tar .
+
+
+        # List the contents of the tarball we just made
+        #   -t   Displays table of contents
+        #   -v   Verbose
+        #   -f   Name of tarball
+
+        $ tar -tvf /tmp/student.tar
+
+
+        # Verify that the cpuHog.Linux file is in the archive
+        $ tar -tvf /tmp/student.tar | grep cpuHog
+
+
+    - Now, we can restore the file from the archive.  
+
+        # Extract the cpuHog.Linux file
+        #   (File will be extracted to /tmp)
+        #   -x   Specifies desired files to be extracted from archive 
+
+        $ tar -xvf /tmp/student.tar ./cpuHog.Linux
+
+
+    - Now, as root, we back up the /home and /etc directories to a tarball in /tmp.
+
+        # Back up /etc and /home
+        #   -p   Preserve file permissions and ownerships
+
+        $ time tar -cvpf /tmp/backup.tar /etc /home /root
+
+
+        # Same, but compress resulting archive
+        #   -z   Compress the results
+        
+        $ time tar -czvpf /tmp/backup.tgz /etc /home /root
+
 
 
 - Off-site Backups
