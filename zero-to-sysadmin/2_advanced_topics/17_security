@@ -16,7 +16,7 @@ CHAPTER 17 - SECURITY
 
 - Security By Obscurity
 
-    - We may assume that it isn't worth a hacker's time to attack or home or small office
+    - We may assume that it isn't worth a hacker's time to attack our home or small office
         network.  However, we cannot actually count on 'security by obscurity' to protect
         our computers.  
 
@@ -102,7 +102,7 @@ CHAPTER 17 - SECURITY
 
         - Scripted attacks, usually simple brute force remote login attempts, are very common.
             These attacks are useless against today's well-protected Linux hosts, which are
-            well-hardened at installlation and do not have SSH servers up and running.  They
+            well-hardened at installation and do not have SSH servers up and running.  They
             are typically dictionary attacks against large ranges of hosts.
 
 
@@ -254,14 +254,68 @@ CHAPTER 17 - SECURITY
 
 - SSH
 
-    - The SSH Server
+    - SSH stands for 'Secure Shell', but it isn't really a shell.  The 'ssh' command starts a
+        secure terminal link between itself as the client and another host with the SSHD server
+        running.  The actual shell is the default shell on the server side, usually bash.
+
+      SSH is a network protocol that creates a secure communications tunnel between 2 Linux hosts.
+        It is like a software VPN.
+
+
+    - The function of SSH, which is implemented in Linux by the OpenSSH package, is to enable 
+        secure, encrypted login connections to remote hosts using a command-line interface and
+        standard shell.
+
+      This prevents hackers from reading your password and the entire session in plain text.  The
+        SSH client and server work together to provide a session that is safely encrypted from
+        start to finish.
+
+
+
+- The SSH Server
+
+    - For our testing purposes, we will use an SSH client and server on our same host.
+        First, we'll make sure the sshd service is running (it should already be
+        installed).
+
+        # Verify the sshd service is running
+        $ systemctl start sshd
+        
+        # Now, we can open an SSH connection
+        $ ssh localhost
+
+
+    - The first time an SSH connection is made to any host, the authenticity message is 
+        displayed along with the fingerprint of the private key of the remote host.  
+      
+      We have to type 'yes' to accept the connection, then enter the password for the remote
+        account.
+
+      After accepting this key during the first connection, the connections will initialize
+        a little faster because the 2 computers now know each other and can identify 
+        themselves via keys.  To see these stored keys:
+
+        # Look at stored keys
+        $ cat ~/.ssh/known_hosts
+
+
+    - Now, we can watch the ssh login process with tcpdump.
+
+        # Watch traffic
+        $ tcpdump -i lo port 22 -A | tee /root/tcpdump-ssh.txt
+
+        # Connect to localhost
+        $ ssh localhost
+
 
 
 - Firewalls
 
-    - firewalld
+
+- firewalld
+
     - Understanding the Rules
-    - Deleting and Adding Rules
+    - Deleting and Adding 
 
 
 - IPTables
