@@ -73,18 +73,110 @@ CHAPTER 18 - BACK UP EVERYTHING FREQUENTLY
 
 - Off-site Backups
 
+    - Keeping all backups on premises is not recommended, as something like theft, fire, or
+        other disasters will destroy your backups along with the machines they came from.
+
+      Fireproof safes are one option, since they will protect against many threats.
+
+
+    - Most large companies prefer to keep current, off-site backups.  For instance, they can
+        go into a safe deposit box at a bank.  Or, it could be stored in the cloud somewhere.
+
+
+    - There are services that will store backups in a remote, high-security location with
+        climate-controlled vaults.  They will send armored trucks to your location to pick up
+        and transport your backup media, or provide high-speed network connections to send
+        the data directly.
+
+
+    - As far as cloud providers, we can be confident that providers such as Amazon, Google, or
+        Azure are trustworthy when it comes to security.  A smaller company might be more
+        vulnerable to attack, and it can be hard to assess the quality of their security.
+
+
 
 - Disaster Recovery Services
+
+    - Some companies will use full disaster recovery services, which will maintain a complete
+        computer and network environment that can replace your own at a moment's notice.
+
+      This usually includes everything from mainframes to servers and workstations.
+
 
 
 - Options
 
+    - Not every company needs a disaster recovery service or huge amounts of backup data 
+        storage.  For some individuals or small businesses, a couple USB drives kept at home
+        can be enough.
+
+
+    - For instance, we could have several 4TB external hard drives and rotate them each week.
+        The most current backup goes in the safe deposit box, and the one in the box goes home
+        and becomes part of the rotation.
+
+      Also, we keep a 4TB hard drive that we use to back up our workstation every night.
+
+
 
 - How Frequently?
 
-    - How frequently is frequently?
+    - How Frequently is Frequently?
+
+        - Always make a backup at least once every day.  No matter what.
+
+        - For banks, stock markets, agile development environments, scientific data collection,
+            or other environments, we might need near-instantaneous duplication of data.  We
+            might use RAID arrays, network storage devices, cloud storage, or remote storage
+            to accomplish this.
+
+
     - What Does Full Mean?
+
+        - Our backups should include all of the files we would need to rapidly recover from a
+            major disaster.  This includes all data files and all necessary config files.
+
+        - For data files, we back up the entire /home directory.  For config files, we back
+            up the entire /etc directory.  For servers, we may have data in /var, so it may
+            make sense to back that up also.
+
+        - We typically do not need to back up the entire OS itself, like /boot, /usr, /bin,
+            /sbin, or /lib.  A reinstallation of the OS or a snapshot of a VM can quickly
+            and easily recover these.
+
+
     - All vs Diff
+
+        - The 'tar' utility can add files that have been changed to the end of a tarball,
+            but the diff includes the entire changed file, not just the lines that 
+            changed.  So, with tar, it is often easier to delete the old backup and
+            recreate the tarball from scratch.
+
+        - Advanced tools like 'rsync' can be used to alter the changed portions of the 
+            files in the backup target.  So, it is easier to just create the diff.
+
+
     - Considerations for Automation of Backups
+
+        - Typically, backups should be scheduled using cron or systemd timers.  We should
+            think carefully about what time they should run.  
+
+        - We should be checking on and testing our backups on a regular basis.
+
+
     - Dealing with Offline Hosts
+
+        - We may have hosts that don't get backed up because they are offline.  In the simplest
+            case, we can just wait until the next backup runs.  If we need more assurance,
+            we may need to check them each day to make sure they were created, or get some
+            kind of alert when they occur.
+
+
     - Advanced Backups
+
+        - The 'rsync' tool allows for more advanced backup techniques.  It allows us to create
+            scripts that perform automated and repeated backups that only copy over the
+            altered portions of files.
+
+        - rsync handles dealing with missing backups, and restores are easy.  rsync is now
+            included as a core Linux utility in most distros.
