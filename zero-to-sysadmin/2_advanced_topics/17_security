@@ -311,11 +311,92 @@ CHAPTER 17 - SECURITY
 
 - Firewalls
 
+    - Firewalls can block any and all attempts to access our Linux hosts by way of networks
+        to which we are connected.  
+
+
+    - firewalld is the default firewall tool used in current versions of Fedora.  It replaced
+        IPTables, which has been around for many years.  Both firewalld and IPTables are
+        wrappers around the 'netfilter' functions in the Linux kernel.
+
+      The tools we use allow us to add, modify, and remove rules that are used by netfilter 
+        to examine each data packet and determine how to handle it.
+
+      
+    - By default, firewalld and IPTables block all incoming packets unless explicitly allowed.
+        This, plus the fact that most services that aren't needed are not installed or 
+        enabled, makes Linux very secure from installation.
+
+      Outbound packets are not blocked, so we don't need to add rules for protocols like email,
+        SSH, and web browsers.
+
+
+    - Each packet will be accepted, rejected, or dropped:
+
+        1. Accepted = passed to the port and a server to which it is addressed
+
+        2. Rejected = sent back to the originator with a message
+
+        3. Dropped = dropped and no further action is taken, also maintains the connection 
+                       for the timeout period on the sender's end, which can be useful by
+                       tying up spammers
+
+
 
 - firewalld
 
-    - Understanding the Rules
-    - Deleting and Adding 
+    - The firewalld service provides a complex and intricate set of rules for a firewall.  It
+        uses the concept of zones to collect related rules to create levels of trust.
+
+      Each zone represents a level of trust that can be independently modified without affecting
+        other zones.  Several zones are predefined with basic rules.
+
+
+    - To view current rules:
+
+        # View current firewall rules
+        $ iptables-save | less
+
+
+    - We see that the number of rules available is much more complex that necessary, unless the
+        host is being used as an edge router or firewall protecting the entire network.  
+
+
+    - To list the rules that are currently active:
+
+        # List the ports we have open
+        $ firewall-cmd --list-ports
+
+        # List ports permanently opened
+        $ firewall-cmd --list-ports --permanent
+
+
+    - To remove a rule:
+
+        # Remove rule for current session
+        $ firewall-cmd --remove-port=23/tcp
+
+        # Remove rule permanently
+        $ firewall-cmd --remove-port=23/tcp --permanent
+
+        # Remove based on service name
+        $ firewall-cmd --remove-service=mdns
+
+
+    - To add a rule:
+
+        # Add rule for current session
+        $ firewall-cmd --add-service=telnet
+
+
+    - To make the current configuration permanent:
+
+        # Make current config permanent
+        $ firewall-cmd --runtime-to-permanent
+
+        # Verify changes
+        $ firewall-cmd --list-services --permanent
+
 
 
 - IPTables
