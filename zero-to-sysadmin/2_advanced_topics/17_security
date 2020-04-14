@@ -401,9 +401,142 @@ CHAPTER 17 - SECURITY
 
 - IPTables
 
-    - Converting to IPTables
-    - Understanding the Rule Set
-    - Managing Rules with IPTables
+    - IPTables has a simpler rule set by default than firewalld does.  Many people prefer it
+        for this reason.  
+
+
+    - The advantage of firewalld is that it has already created the complex rule sets that
+        implement the arbitrary concept of zones for use in Linux hosts with multiple network
+        connections (such as firewalls and routers).  
+
+      The advantage of IPTables is that it uses a much simpler set of rules to accomplish the same 
+        thing on hosts with a single connection to the local network.
+
+
+
+- Converting to IPTables
+
+    - Converting from firewalld to IPTables is simple.  We just need to install one package,
+        'iptables-services', create a short set of rules, deactivate firewalld, and activate
+        iptables.
+
+        # Install iptables-services
+        $ dnf -y install iptables-services
+
+
+    - Now, we can look at the iptables config file, which does allow ssh by default.
+
+        # View iptables config file
+        $ cat /etc/sysconfig/iptables
+
+        # sample configuration for iptables service
+        # you can edit this manually or use system-config-firewall
+        # please do not ask us to add additional ports/services to this default configuration
+        ∗filter
+        :INPUT ACCEPT [0:0]
+        :FORWARD ACCEPT [0:0]
+        :OUTPUT ACCEPT [0:0]
+        -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+        -A INPUT -p icmp -j ACCEPT
+        -A INPUT -i lo -j ACCEPT
+        -A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
+        -A INPUT -j REJECT --reject-with icmp-host-prohibited
+        -A FORWARD -j REJECT --reject-with icmp-host-prohibited
+        COMMIT
+
+
+    - As a standard security step, we want to disable the network interface while the firewall
+        is down.
+
+        # Disable network interface
+        $ ip link set enp0s3 down
+
+
+    - Now, we can stop firewalld, then start and enable iptables.
+
+        # Stop and disable firewalld
+        $ systemctl stop firewalld
+        $ systemctl disable firewalld
+
+        # Start and enable iptables
+        $ systemctl start iptables
+        $ systemctl enable iptables
+
+
+    - We can check the current rule set, which shows that ssh is enabled.
+
+        # Check current rule set
+        $ iptables-save
+
+      To test that this is working as expected, we can connect to localhost via ssh, and it 
+        should work.  Then we can try with telnet, and it should not work.
+
+
+
+- Understanding the Rule Set
+
+    - IPTables rules are organized in chains.  There are 5 predefined tables consisting of 
+        multiple chains of rules, but SysAdmins can also define their own chains.  Each table
+        has a specific purpose:
+
+        1. Filter
+
+             The filter table is the one chain defined in the tiny default rule set.  It is used
+               to filter packets and discard or accept them.  It is most commonly used in very
+               simple firewalls.
+
+        2. NAT
+
+             The NAT table is used for network address translation.  
+
+        3. Mangle
+
+             The mangle table is used to change various portions of a packet.  For instance, it
+               can change the source IP address.  It can be used by hackers for DDOS attacks.
+
+        4. Raw
+
+             This table is used to configure exemptions to packet tracking rules.
+
+        5. Security
+
+             This table is used in conjunction with SELinux to implement Mandatory Access Controls.
+
+
+
+- Managing Rules with IPTables
+
+    - The easiest way to make changes to iptables is to edit the /etc/sysconfig/iptables
+        file directly.  We can use the 'iptables' command to make rules, but we may need
+        to edit the config file to make sure the new rule is in the right position.
+
+        # Backup iptables file
+        $ cp /etc/sysconfig/iptables /root
+
+        # Create rule allowing telnet traffic
+        $ iptables -A INPUT -p tcp -m state --state NEW -m tcp --dport 23 -j ACCEPT
+
+        # Verify the new rule
+        $ iptables-save
+
+
+    - We can also use the 'INPUT' command-line option to put the new rule into a specific
+        spot in the list.
+
+        # Delete new rule we just made, which is in position 6
+        $ iptables -D INPUT 6
+        $ iptables-save
+
+        # Add new rule in position 5 instead
+        $ iptables -I INPUT 5 -p tcp -m state --state NEW -m tcp --dport 23 -j ACCEPT
+        $ iptables-save
+
+
+    - To save our new configuration:
+
+        # Make new config permanent
+        $ iptables-save > /etc/sysconfig/iptables
+
 
 
 - Fail2Ban
