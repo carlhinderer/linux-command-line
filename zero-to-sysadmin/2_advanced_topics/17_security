@@ -541,8 +541,82 @@ CHAPTER 17 - SECURITY
 
 - Fail2Ban
 
+    - A dynamic firewall can adapt as threats change.  For instance, this can help to 
+        stem a large number of SSH attacks.
+
+      Fail2Ban has a complex series of configurable matching rules and actions that can be
+        taken when attampts are made to hack into a system.
+
+
+    - Fail2Ban works by detecting attacks, then adding a rule to the firewall that will block
+        further attempts from that specific IP for a specified and configurable amount of
+        time.
+
+
+    - To install and configure Fail2Ban:
+
+        # Install Fail2Ban
+        $ dnf -y install fail2ban gamin
+
+
+    - The default configuration is stored in the /etc/fail2ban/jail.conf file.  Since, this file
+        may get overwritten during updates, we want to create a copy of it,
+        /etc/fail2ban/jail.local, which will be used as the config if it is present.
+
+        # Create new config file
+        $ cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+
+
+        # Now update the ssh portion of config file to enable ssh rules
+        $ vim /etc/fail2ban
+
+        [sshd]
+        # To use more aggressive sshd modes set filter parameter "mode" in jail.local:
+        # normal (default), ddos, extra or aggressive (combines all).
+        # See "tests/files/logs/sshd" or "filter.d/sshd.conf" for usage example and details.
+        enabled = true
+        #mode   = normal
+        port    = ssh
+        logpath = %(sshd_log)s
+        backend = %(sshd_backend)s
+
+
+    - Now, we can start fail2ban:
+
+        # Start fail2ban
+        $ systemctl start fail2ban
+
+        # Try to log in with ssh 3 times with the wrong password, and w'll see we get blocked
+        $ ssh localhost
+        ssh: connect to host localhost port 22: Connection refused
+
+      We can see that the ssh jail is now working.
+
+
 
 - PAM (Pluggable Authentication Modules)
+
+    - PAM is a key component of security on Linux hosts.  It provides a dynamic and flexible means
+        to manage user access to accounts and resources.
+
+
+    - PAM divides the function of authentication into 4 parts:
+
+        1. Account management determines things like whether the user's password is expired or
+             locked, or whether the user is authorized to access a particular service.
+
+        2. Authentication management is the task of authenticating the user, verifying that the
+             user ID and password are correct.  This can include other authentication measures,
+             like biometric or smart cards.
+
+        3. Password management is used in the process of password updates.
+
+        4. Session management is used to enable user access to services such as their home
+             directory, resource allocation, and deals with logging for audit trails.
+
+
+    - PAM is configured in the /etc/pam.conf, and PAM will just use defaults if this file isn't
+        present.
 
 
 
